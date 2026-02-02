@@ -1,0 +1,14 @@
+Voice Note #10 - CTO Briefings & Deployment Tags
+Date: 2026-02-02
+
+---
+
+Now, I think that's more on the CTO level, is that every, the workspace of a CTO should
+have a way to be able to ask Claude or any other agent what has happened in this project
+in the last week or since the last time we checked in and it should discover everything
+and get and all of that to give him a brief.
+Also separately, every production deployment should get a tag to it so that we keep track
+of all the deployments that happened.
+Those are just for production deployments, staging deployments don't truly need them.
+When we're merging, staging to production, we should always prefer fast forward unless
+there's some reason you don't want to, which is so it's not necessary but it's always

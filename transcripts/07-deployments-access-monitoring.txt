@@ -1,0 +1,25 @@
+Voice Note #7 - Deployments, Access Control & Monitoring
+Date: 2026-02-02
+
+---
+
+Regarding deployments, you should have a very clear, stable build and deployment workflow that should not have much or any failures you should be able to measure your deployment failures and have clear visibility.
+Whenever you deploy, you should notify the whole team automatically. If the deployment failed, you should also be notifying the team and you should immediately work on fixing the deployment pipeline.
+The deployment, the build and deployment pipeline should be stable as thick. The build pipeline should be cashing as much as possible. It should be quick. It should be just like building locally in a local environment.
+You should be able to very quickly build and deploy. They should not be a log process.
+The dev environment could have dev mode enabled. The staging environment should have production mode enabled, just like production.
+When it comes to access to logs and so on, barely anyone should have access to production logs.
+It should be maybe one or two people on the team and they should have their security posture tested. That's another separate thing, but the city also should also have a standard on the security postures of the people who have access to production that's even tighter than the usual one.
+Staging logs could be seen by more people. Dev logs, obviously, could be seen by more people.
+That same applies for logs, just like the database. Not a lot of people should ask the database only if specific people that should be hard for them to access it.
+Regarding staging more people to access the database and the dev as well.
+Regarding migrations on the database, you should have some CI steps that checks that the migrations all work as expected.
+You should have some AI agent that looks at the each migration that's getting added to a project and make sure that it's actually safe to add.
+But altering any columns or changing or doing something would not hurt the business.
+So and that if an AI agent flagged something, there should be a validation set from a human saying, yes, this is fine because there's something else happening.
+We should also have visibility over other systems like credits.
+You should be able to monitor it, see that everything is happening correctly there.
+You should be able to monitor your database, make sure everything is correctly happening there, that the health is good, connection pools are good.
+The on the databases, you should be able to turn on slow queries, find queries that are not using indexes and are using a lot of CPUs.
+You should be monitoring all the CPU, this space of every service you have.
+So that's database, your compute, things running the app, you read is database every single thing.

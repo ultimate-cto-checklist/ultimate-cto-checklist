@@ -1,0 +1,35 @@
+Voice Note #6 - Development Workflow & Merge Strategy
+Date: 2026-02-02
+
+---
+
+When it comes to development workflow,
+developers should create a feature branch, do whatever they need to do testing there.
+They should open a clear port request. The port request should get reviewed,
+ideally by AI agent, as well as a person.
+A person can review it using an AI agent if they want.
+The feature branch should be able to deploy to a dev environment.
+So the deployment should have a production environment,
+the staging environment, and one or multiple dev environments to QA on.
+The dev environment and the staging environment must be protected with Cloud3.0 trust.
+Web hooks could be not protected, or bypass Cloud3.0 trust,
+but then they need to verify the signature of the web hook on them.
+So development workflow back again is you need to open a PR from a feature branch.
+Your commit messages need to follow a specific format you agree on in the project.
+The commit message should be clear.
+Once you get at least one other approval, you might require more if you want to.
+But you're merging using the regular merge strategy of Git.
+You do not rebase, you do not squash, you want the history from the PR.
+If you want to clean some history, you fix it in the branch in the PR,
+then you push it, and then you merge it.
+You do not fuck up the Git history, you want to know the Git history.
+Once you merge it, you merge it after it's tested on the dev environment,
+you can merge it to staging.
+Staging should be as stable as possible, and it's just a place where we stage stuff before,
+and test them all together before we deploy to production.
+The staging environment should be as close as possible to the production environment,
+running in production mode as well.
+You should be able to run and staging just like production,
+and there shouldn't be any really different environment variables,
+other than maybe payment gateways that would be in sandbox,
+or email keys that even email keys should not be in sandbox settings.

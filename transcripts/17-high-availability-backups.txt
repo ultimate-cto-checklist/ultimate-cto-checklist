@@ -1,0 +1,13 @@
+Voice Note #17 - High Availability & Backups
+Date: 2026-02-02
+
+---
+
+The production database whenever there's serious money involved in a project needs to move to high availability.
+Production server as well needs to have moved to at least two data center regions and not be tied to one place
+or at least have a way to immediately promote another place so that the server never goes down.
+The database needs to always get backed up and moved away from whatever plant provider is used.
+Ideally, this is some backup as we window that makes sense or that allows it.
+Or a read letter replica that's elsewhere as well, but this should not cost a lot of money to do.
+It should be just either read replica or SKL databases that could be easily SKL files.
+We should have point in time recovery for production as well.

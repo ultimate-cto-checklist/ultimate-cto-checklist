@@ -1,0 +1,26 @@
+Voice Note #13 - Front-End Performance & Client Storage
+Date: 2026-02-02
+
+---
+
+You also need to monitor the rendering of your pages,
+especially some that marketing needs for SEO.
+So you should be able to run lighthouse reports,
+make sure the first paint is quick,
+there's no cumulative layout shifts,
+that everything is working perfectly with your page loading.
+You should be using pre-load tags or headers for your fonts,
+and for your CSS,
+especially the ones that are above the fold.
+You should keep track of the load speed on the front end for the user.
+You should use server-only cookies when you need to,
+not JavaScript cookies.
+You should try to avoid using local storage unless it's something meaningless,
+like a preference for a user,
+try to use session storage wherever it makes sense.
+Whatever best practice there is for your GWT tokens,
+you do plan to use,
+make sure you're following those,
+make sure you write down your best practices,
+and all the trick that you call this following them every once in a while,
+and have it be part of the checklist.

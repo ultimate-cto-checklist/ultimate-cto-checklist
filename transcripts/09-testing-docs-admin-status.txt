@@ -1,0 +1,18 @@
+Voice Note #9 - Testing, Documentation, Admin & Status Pages
+Date: 2026-02-02
+
+---
+
+All right, let me think of for us another thing in the city of checklist is that for any commit that fixes a bug.
+There needs to be new tests introduced that test that this bug won't ever happen.
+Similarly for any new feature there needs to be a test that makes sure it's all good.
+The every project should have end-to-end tests that cover the main way that business is making money.
+Or the main thing that would make sure the user is not leaving the website.
+So anything that could be deemed as if it's necessary for the business critical path needs to hand and needs to have end-to-end tests.
+Other smaller features don't need as much.
+The website should have live documentation that document all the different features that it has for anybody to read through it and understand what the project is.
+Including for Claude's and agents to read it and understand more complex systems how they work.
+These are like payment gateways, order fulfillment, things in the admin for example.
+There should always be an admin feature created for any user-facing feature that gets pushed.
+There should be status pages that make sure the staging and the production deployments are always online and the proper alerts when they're not.
+Um...

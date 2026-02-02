@@ -1,0 +1,18 @@
+Voice Note #8 - HTTP Logs & Cloudflare
+Date: 2026-02-02
+
+---
+
+When it comes to HTTP logs, you should have logs of all the HTTP requests that happen in.
+You should be able to see patterns on which requests are they happening.
+You should also flag anytime you have 404s, you have 500s.
+404s, if there's a lot of them, should send a alert.
+500, if there's even a little amount of them, should be sending alerts as well.
+So this is we harness from the logs.
+All productions, production and staging and dev system should be behind Cloudflare.
+No IP should be exposed.
+The logs don't necessarily have to be from Cloudflare.
+They could be through a blah blah blah, so let's after Cloudflare.
+Logs don't need to be kept for a long time.
+You could keep them for two weeks at max.
+No need for more.

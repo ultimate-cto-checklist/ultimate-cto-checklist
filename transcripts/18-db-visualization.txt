@@ -1,0 +1,7 @@
+Voice Note #18 - Database Visualization
+Date: 2026-02-02
+
+---
+
+The team should have some tool to visualize the database diagram if they can also query
+some random data from any table that's also great.

@@ -1,0 +1,12 @@
+Voice Note #14 - Soft Deletes & Data Retention
+Date: 2026-02-02
+
+---
+
+Any data that's critical in your database should never be
+deletable. It should be soft deletables,
+where your query is just ignored the data,
+but the data is always there.
+And then you should have periodic reviews of the data that's
+deleted a long time ago and actually it's been
+it's project and deleted unless for legal reasons you have to keep it.

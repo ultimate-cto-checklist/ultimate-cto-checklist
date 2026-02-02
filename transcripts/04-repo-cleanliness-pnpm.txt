@@ -1,0 +1,18 @@
+Voice Note #4 - Repo Cleanliness & Package Manager
+Date: 2026-02-02
+
+---
+
+Also, in general, the GIT report should not have any files that are useless.
+It should have stuff that are needed or that are evergreen.
+So, you shouldn't have plans that were useful in the past,
+but are no longer useful, because anyway, we should look at the code,
+not the planning document.
+It shouldn't have any test results of something that was tested in time,
+those should be ignored.
+Also, the report should not have any special credentials.
+It should not have some local settings of some engineer working on the repo.
+All of these should be properly getting ignored.
+We should use PNPM and not NPM wherever possible when using node projects.
+Yeah.
+At the top.

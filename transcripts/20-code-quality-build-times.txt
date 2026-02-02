@@ -1,0 +1,10 @@
+Voice Note #20 - Code Quality Tools & Build Times
+Date: 2026-02-02
+
+---
+
+Tools that measure code quality and code duplication, code complexity should be set up.
+This is either part of the Crap score or part of something else as well.
+Or you should be able to always know if your code is healthy, is in good standing, is understandable.
+Or if there's any complexity you're closing your eyes to, that you need to solve as well.
+Building your project should not take long, it should be a couple of minutes and with proper caching, then a couple of seconds.

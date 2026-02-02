@@ -1,0 +1,18 @@
+Voice Note #3 - Database, Resilience & Health Endpoints
+Date: 2026-02-02
+
+---
+
+Your code should have optimized connections to your database through this proper database pool.
+It should not fail if a third party service is failed.
+So anytime we're doing a request to outside or we have some connection to the outside,
+we should be able to handle that service not being there.
+If your app should not crash, you should not get five hundred errors or fine.
+But other requests should still work.
+You should have a health endpoint that kind of gives us a bit of context of
+if all of the things are working, or if something is not working, what is it that's not working?
+You should have two health impacts.
+One that shows the health of the app itself.
+Another one, ideally with some special token that you need to put.
+So some security on it that tells you if the app is able to connect to all the services in the database,
+you write this database as any other third party you guys.

@@ -1,0 +1,8 @@
+Voice Note #5 - Test Coverage & CRAP Score
+Date: 2026-02-02
+
+---
+
+We should also have automated tests as I mentioned and those should have test coverage and we should try to achieve as close to 100% as possible in code coverage.
+We should also be calculating a crap score for all of our different components of our code base and try to have a benchmark or a baseline that keeps the crap score as possible for any specific project.
+They should be skills where they either do all of this, they should be skills that improve the fixed on how to run the tests, fix the crap score, run the linting, all of these should be agent skills or cloud skills.

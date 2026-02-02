@@ -1,0 +1,62 @@
+Voice Note #1 - Git Repo Setup & Best Practices
+Date: 2026-02-02
+
+---
+
+All right, so I'm going to record multiple voice notes for this.
+I suggest you transcribe them, put them in some files.
+That would be my raw text in that project,
+so I can transcribe file, and then add andize them
+from there to organize things.
+But at least they will be always a source of truth,
+which is my voice notes, and then you'll add your stuff.
+So I'm going to walk you through in this voice note
+a bit of some best practices as an ultimate STO.
+So one thing in the checklist is that whenever
+we have a Git repo, the Git repo,
+you need to be able to clone it and immediately
+have instructions to not run the project
+without having to go to any external systems
+to set up environment variables.
+The project should have all the sandbox environment
+variables already ready, so you can quickly clone it
+and start development.
+Or it should gracefully fail with some warnings,
+with features that aren't working if I keys are not working
+with proper warnings, telling you on the user why
+this isn't working.
+But you shouldn't need to get clone, and then you try
+to go build or serve it in dev mode,
+and then you get errors that you need this environment variable
+and that one, that should not be the case.
+Looking also just in general at the repo setup
+and GitHub as one, you should have branch protections,
+so you shouldn't be able to push to master or staging.
+You should always go through a pull request.
+A pull request should always have a one-approval review
+unless you're maybe the administrator you are allowed
+to bypass it if you want.
+Ideally, you're not allowed to bypass it.
+Nobody's allowed to bypass it.
+But you can have a note, like if you need to bypass it,
+now it's fine, but longer, you shouldn't be able to.
+Any other best practices, you should only
+have master, staging, branches, you should not
+have a dev branch, for example.
+And then you have feature branches.
+Your feature branches should be deleted as soon
+as you merge solution to keep stale branches.
+If some branch has not been pushed to for one month,
+let's say, or 45 days, you should look into it
+and see if you should delete it or actually do something
+about it and what's the situation with that branch.
+You should have CI jobs that lint and draw
+an automatic test of your code of your appos.
+You should have a readme, you should have a cloud.md
+or any similar agents.md.
+So agents nowhere to look at in your project.
+You should have automated test set up,
+linting set up, as I mentioned.
+You should have Docker compose to set up third-party services
+that your code needs to run, like Postgres database,
+Redis, let me think a bit about it.

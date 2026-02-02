@@ -1,0 +1,22 @@
+Voice Note #15 - Database Users & Admin Security
+Date: 2026-02-02
+
+---
+
+For databases, we should have a list of the users that are created.
+The app should not be able to connect with a user that can delete that the whole database.
+I would argue, even if it can just not run any delete command that we also just mark things for deletion and then some other service with delete them.
+Any admin users, if Redis is less critical because there shouldn't be any major data there.
+But if there is, then obviously also Redis connection to Redis should be a slightly different MySQL or database connections should be documented in some way as well.
+And keep blogs of them. For proper admin connection, you should be able to spin up something like the HBY admin in production and turn it off or not needed.
+And then the product that was cloud-fair zero-trust, being able to go in and then you enter the password for an installation of the database there.
+Or you go with the read-only password as well, if needed.
+Nobody should have the admin password except critical people in the organization and it shouldn't be easy to get as well from their accounts.
+The admins on the app administration panel should be frequently altered. They should have login, IPs and login frequency.
+You should ideally have some audit trail for any request they've done.
+The most recent requests they've done at least.
+You should be able to very easily disable a user immediately. They won't be able to do any requests to the admin.
+You should be able to not necessarily do the user, but at least disable them for a very long time.
+You should be able to pass through an audit every once in a while to make sure that everybody has access to the admin, should have access to the admin.
+And if not, then easily suspend them. They should be able to develop the admin itself or or a cloud skill you run.
+You can let the evidence for it and go for them.

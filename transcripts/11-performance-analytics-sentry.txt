@@ -1,0 +1,27 @@
+Voice Note #11 - Performance, Analytics & Error Reporting
+Date: 2026-02-02
+
+---
+
+The response time of any request needs to be reported. You should have graphs for
+response from the server and you should always look at what's taking the
+longest and see how to optimize it. Of course the memory of the app should be
+measured over time and if it goes up gradually you need to fix it and you can
+you you can do heap dumps temporarily on production to actually understand
+everything happening. Those should be protected using some security token or
+header. Your back end should not leak the headers of the technologies you're
+using. They should be minimum. You should have cloud-fair cloud-fair should
+respect the cash control of the server. There should be a whole thing about
+analytics. So anything to do with analytics needs to be server-side. You should do
+server-stri-tracking and own your data. They should be best practices on how to
+get the data to BigQuery, how to build reports with meta-based as well. You should
+be able to dump your GitHub stuff also into BigQuery, specifically data about
+poor requests and who's doing the commits in general. We could develop a whole
+strategy on analytics that would run on on GitRapos. You should have error
+reporting. So this is like something like century. You should always be
+monitoring it. Cloud should periodically look at it and see what it can improve
+on it and create poor requests. This should be automated using AI. You should have
+proper integration with century using personal data file information or not.
+Stacktraces uploaded or not. Source maps as well or not. You should integrate
+your deployments with centuries of century knows whenever something is deployed
+as well.

@@ -1,0 +1,11 @@
+Voice Note #16 - Intrusion Detection & Data Exfiltration
+Date: 2026-02-02
+
+---
+
+As part of the shooting studio checklist, we should look at how IDS infiltration detection
+systems work and see how that can be replicated for a smaller budget.
+But there should be some alerts in case there's some high gigabytes downloaded from some IPs
+to immediately detect that hey, somebody's exfiltrating data, or maybe if you get a lot
+of data from the database, there should be immediately some warnings sent out to concerned
+people and parties and then hey, you probably want to look at this.

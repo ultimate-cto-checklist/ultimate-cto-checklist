@@ -1,0 +1,24 @@
+Voice Note #12 - SSL, Email Infrastructure & Caching
+Date: 2026-02-02
+
+---
+
+You should have SSL transparency reports, so you know whenever a new SSL is issued for your domains.
+You should have proper email infrastructure, meaning proper MX records.
+SPF for the sender policy framework, DKIM for email encryption,
+DMARK as well to know if your emails are always passing these.
+You should not play around with this.
+Every once in a while, you should also do tests on the placement of your emails with new fresh Gmail accounts.
+Where are the emails placed?
+You should have something like a spam assassin to measure your email performance.
+You should be able to know every email that goes out of your domain.
+You need full control over your transactional emails and logs about them.
+You should be able to see the bounces there and the open rates and the click rates.
+For your email, your marketing emails as well, you should be able to have a place where you can log them
+and actually see who's it sent to.
+You don't need to give them for more than two weeks or a month at the latest.
+But being able to actively look at them and see their open rates, their click rates, that's critical.
+You should have headers to make sure that your website is always loaded using HPS.
+If you can have proper content hash on your script tags and CSS.
+Your JavaScript CSS images should be fully cached by Cloudflare.
+You should have cache busters on your resources if they change.

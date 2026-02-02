@@ -1,0 +1,37 @@
+Voice Note #2 - Dependencies, Auth & Environments
+Date: 2026-02-02
+
+---
+
+Whenever you can, you should have your dependencies up to date.
+So you should have some system that tracks that your dependencies are up to date.
+And you don't have all dependencies with CVEs.
+For example, security batches are very busted.
+You should try to use the newer libraries.
+You should try to use TypeScript and not regular JavaScript if possible.
+Your ESLinth rules or your Linting rules should be proper.
+So as a secondary thing, we'll talk about Linting rules.
+But you should follow the community best practices for solid code based.
+All right, when it comes to your code, probably it's accepting some user requests.
+Most likely these are going to be HTTP, although they could be WebSocket.
+Or some other way using speak mentions.
+Those should be documented.
+Those should be easily auditable.
+It should be very easy to understand the auth system of any project.
+It should not be convoluted.
+It should not have too many meeting moving pieces.
+The authentication system needs to be documented.
+AI agents need to be able to verify it.
+And it should be very easy for a human to follow and for an agent to follow.
+And you should have a televolvement test on your auth system.
+You should be mindful when you are reviewing your HTTP endpoints.
+Or I think similar and incoming stuff, including web hooks, for example,
+and verify that they're following any auth best practices that your project needs or have.
+Any business logic for the authentication needs to be there.
+There shouldn't be any heavy work that happens in a route that needs authentication.
+If the authentication is not valid to the authentication is not valid.
+It shouldn't cost us a lot of CPU.
+Or rather, of course.
+You should have a dev environment that shows a lot of logs and a prod environment
+that doesn't show a lot of logs in the generic art of the user.
+Or it gives an error that makes us the user.
