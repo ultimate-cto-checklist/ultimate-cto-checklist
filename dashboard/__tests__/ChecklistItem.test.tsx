@@ -53,13 +53,13 @@ describe('ChecklistItem', () => {
       expect(chip.className).toMatch(/bg-(red|orange)/);
     });
 
-    it('should render recommended severity chip with blue/gray styling', () => {
+    it('should render recommended severity chip with muted styling', () => {
       render(<ChecklistItem item={mockRecommendedItem} />);
 
       const chip = screen.getByText('Recommended');
       expect(chip).toBeInTheDocument();
-      // Check for blue/gray color classes (bg-blue or bg-gray)
-      expect(chip.className).toMatch(/bg-(blue|gray)/);
+      // Check for muted color classes (bg-zinc for recommended items)
+      expect(chip.className).toMatch(/bg-zinc/);
     });
   });
 
