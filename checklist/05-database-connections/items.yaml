@@ -1,0 +1,76 @@
+section: 05-database-connections
+title: Database & Connections
+description: Database configuration, migrations, users, and access controls
+
+items:
+  - id: DB-001
+    title: Connection pooling and optimization configured
+    severity: critical
+    type: auto
+    summary: |
+      Verify Prisma connection pool is explicitly configured with pool size,
+      connection timeout, and idle timeout settings.
+
+  - id: DB-002
+    title: CI verifies migrations on ephemeral test DB
+    severity: critical
+    type: auto
+    summary: |
+      CI pipeline must apply migrations to a Docker-based ephemeral test database,
+      not just dry-run or status checks.
+
+  - id: DB-003
+    title: AI-assisted migration review with human override
+    severity: recommended
+    type: auto+manual
+    summary: |
+      Migrations reviewed for risky patterns (DROP, ALTER COLUMN, DELETE, etc.)
+      with automated flagging and required human approval before merge.
+
+  - id: DB-004
+    title: Database users documented (including read-only user)
+    severity: critical
+    type: guided-manual
+    summary: |
+      All database users documented with purpose and permissions.
+      Must include a read-only user for safe debugging/reporting.
+
+  - id: DB-005
+    title: App user cannot DROP DATABASE
+    severity: critical
+    type: guided-manual
+    summary: |
+      Application database user must not have DROP privilege.
+      Verify via SHOW GRANTS output.
+
+  - id: DB-006
+    title: Soft delete pattern implemented
+    severity: recommended
+    type: auto+manual
+    summary: |
+      Data uses soft deletes (deleted_at column) rather than hard deletes.
+      Separate service handles permanent deletion after retention period.
+
+  - id: DB-007
+    title: Redis documented if storing critical data
+    severity: recommended
+    type: auto
+    summary: |
+      If Redis stores critical data (sessions, queues), connection and usage
+      must be documented. Cache-only usage is acceptable without documentation.
+
+  - id: DB-008
+    title: DB admin tools on-demand and Zero Trust protected
+    severity: critical
+    type: guided-manual
+    summary: |
+      Database admin tools (phpMyAdmin, Adminer, pgAdmin) must be on-demand only
+      (not always running) and protected behind Cloudflare Zero Trust when active.
+
+  - id: DB-009
+    title: Admin password restricted to critical people
+    severity: critical
+    type: guided-manual
+    summary: |
+      Database admin credentials limited to 1-2 critical people (CTO, DevOps lead).
+      Stored in secret manager, not shared broadly or in plain text.
