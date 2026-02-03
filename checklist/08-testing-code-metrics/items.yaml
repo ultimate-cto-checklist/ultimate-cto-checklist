@@ -1,0 +1,45 @@
+section:
+  id: "08"
+  name: Testing & Code Metrics
+  description: Test coverage, testing practices, and code quality metrics for maintaining reliable, maintainable code
+
+items:
+  # Test Coverage
+  - id: TEST-001
+    title: Automated tests with coverage tracking and CI threshold
+    description: Test framework configured with coverage reporting, thresholds set, and CI enforces coverage requirements
+    severity: critical
+    category: test-coverage
+
+  # Test Requirements
+  - id: TEST-002
+    title: Bug fix commits include regression tests
+    description: 80%+ of bug fix commits have associated test changes (same commit or ±1 commit) to prevent regressions
+    severity: critical
+    category: test-requirements
+
+  - id: TEST-003
+    title: New feature commits include tests
+    description: 80%+ of feature commits have associated test changes (same commit or ±1 commit)
+    severity: critical
+    category: test-requirements
+
+  - id: TEST-004
+    title: End-to-end tests for business-critical paths
+    description: E2e test framework configured with tests covering revenue, auth, and core user journeys
+    severity: critical
+    category: test-requirements
+
+  # Code Metrics
+  - id: TEST-005
+    title: CRAP score calculated with project baseline
+    description: Code complexity tooling configured with established baseline/threshold for the project
+    severity: recommended
+    category: code-metrics
+
+  # Agent Automation
+  - id: TEST-006
+    title: Agent skills for test automation
+    description: Agent-readable instructions exist for running tests, linting, and checking code quality metrics
+    severity: optional
+    category: agent-automation
