@@ -1,0 +1,50 @@
+section:
+  id: "02"
+  name: Dependencies & Code Quality
+  description: Dependency management, security scanning, language choices, and monorepo structure
+
+items:
+  # Dependency Management
+  - id: DEP-001
+    title: Dependencies secure and maintained
+    description: No critical/high vulnerabilities, lockfile updated regularly
+    severity: critical
+    category: dependency-management
+
+  - id: DEP-002
+    title: Dependency update system configured
+    description: Dependabot, Renovate, or documented manual process for tracking updates
+    severity: recommended
+    category: dependency-management
+
+  - id: DEP-003
+    title: No deprecated or unmaintained libraries
+    description: Critical dependencies are actively maintained, no deprecated packages
+    severity: recommended
+    category: dependency-management
+
+  # Language & Tooling
+  - id: DEP-004
+    title: TypeScript over JavaScript
+    description: TypeScript configured with strict mode, source files predominantly .ts/.tsx
+    severity: recommended
+    category: language-tooling
+
+  - id: DEP-005
+    title: Linting rules follow best practices
+    description: ESLint extends recommended configs, critical rules not disabled
+    severity: recommended
+    category: language-tooling
+
+  - id: DEP-006
+    title: pnpm over npm for Node projects
+    description: Using pnpm with lockfile and packageManager field set
+    severity: recommended
+    category: language-tooling
+
+  # Monorepo Structure
+  - id: DEP-007
+    title: Turborepo for monorepos
+    description: Monorepos use Turborepo with proper workspace config, no hidden apps
+    severity: recommended
+    category: monorepo-structure
