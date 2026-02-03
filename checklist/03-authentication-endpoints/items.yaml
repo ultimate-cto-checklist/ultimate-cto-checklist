@@ -1,0 +1,67 @@
+section:
+  id: "03"
+  name: Authentication & Endpoints
+  description: Auth system simplicity, documentation, testing, and HTTP endpoint security
+
+items:
+  # Auth System
+  - id: AUTH-001
+    title: Auth system is simple, not convoluted
+    description: Auth flow can be explained in 2-3 sentences, single entry point, obvious from code
+    severity: recommended
+    category: auth-system
+
+  - id: AUTH-002
+    title: Auth system is documented
+    description: Auth flow documented in README, docs/, or inline; matches actual implementation
+    severity: recommended
+    category: auth-system
+
+  - id: AUTH-003
+    title: AI agents can verify auth implementation
+    description: Auth source in repo (not compiled), no undocumented external dependencies
+    severity: recommended
+    category: auth-system
+
+  - id: AUTH-004
+    title: Comprehensive tests on auth system
+    description: Tests cover login, logout, expiry, invalid tokens, unauthorized access
+    severity: critical
+    category: auth-system
+
+  # HTTP Endpoints / Webhooks
+  - id: AUTH-005
+    title: All endpoints documented
+    description: OpenAPI/Swagger or markdown docs exist, not exposed in production unless intentional
+    severity: recommended
+    category: http-endpoints
+
+  - id: AUTH-006
+    title: Endpoints easily auditable
+    description: Routes listable via CLI or centralized files, no dynamic registration
+    severity: recommended
+    category: http-endpoints
+
+  - id: AUTH-007
+    title: Endpoints follow auth best practices
+    description: Default-deny pattern, authorization checks for privileged routes
+    severity: critical
+    category: http-endpoints
+
+  - id: AUTH-008
+    title: Fail fast - no heavy work before auth validation
+    description: No DB queries, file uploads, or external calls before auth check
+    severity: critical
+    category: http-endpoints
+
+  - id: AUTH-009
+    title: Auth check is cheap
+    description: JWT signature or cached session lookup, no DB hit per request
+    severity: recommended
+    category: http-endpoints
+
+  - id: AUTH-010
+    title: Webhooks verify signatures
+    description: All webhooks verify signatures before processing, or are behind Zero Trust
+    severity: critical
+    category: http-endpoints
