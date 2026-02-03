@@ -1,0 +1,151 @@
+section: 13
+title: Infrastructure Security
+description: >
+  Verify all environments are protected behind Cloudflare, origin servers are not
+  directly exposed, security headers are properly configured, and SSL certificate
+  issuance is monitored.
+
+items:
+  - id: SEC-001
+    title: All environments behind Cloudflare
+    severity: critical
+    category: Cloudflare Protection
+    description: >
+      All public-facing environments (production, staging, dev) should be proxied
+      through Cloudflare for DDoS protection, WAF, and edge caching.
+    verification:
+      - Check Cloudflare API for zones and proxied DNS records
+      - Verify cf-ray header present on all environment domains
+      - Confirm DNS resolves to Cloudflare IP ranges
+    pass_criteria:
+      - All environments show proxied: true in Cloudflare API
+      - All environments return cf-ray header
+    fail_criteria:
+      - Any public environment not proxied through Cloudflare
+      - Environment domains not in any Cloudflare zone
+
+  - id: SEC-002
+    title: No direct IP exposure
+    severity: critical
+    category: Cloudflare Protection
+    description: >
+      Origin server IPs should not be publicly accessible. All traffic must flow
+      through Cloudflare to prevent bypass attacks.
+    verification:
+      - Attempt direct connection to origin IP (should fail/timeout)
+      - Check firewall rules restrict 80/443 to Cloudflare IPs
+      - Search DNS history tools for leaked origin IPs
+    pass_criteria:
+      - Origin rejects direct connections
+      - Firewall allows only Cloudflare IP ranges
+      - No historical DNS leaks exposing origin
+    fail_criteria:
+      - Origin IP directly accessible on port 80/443
+      - No firewall restriction to Cloudflare IPs
+      - Origin IP discoverable via DNS history
+
+  - id: SEC-003
+    title: Cloudflare respects cache-control headers
+    severity: recommended
+    category: Cloudflare Protection
+    description: >
+      Cloudflare should respect the origin server's cache-control headers rather
+      than overriding them, unless explicitly configured otherwise.
+    verification:
+      - Check Browser Cache TTL setting (0 = respect headers)
+      - Review page rules for cache overrides
+      - Verify cf-cache-status matches expectations
+    pass_criteria:
+      - Browser Cache TTL = 0 or explicitly documented
+      - Page rules documented if overriding
+      - Cache behavior matches app's cache-control headers
+    fail_criteria:
+      - CF overrides cache headers without documentation
+      - Static assets not cached when they should be
+      - API responses cached when they shouldn't be
+
+  - id: SEC-004
+    title: Response header hygiene
+    severity: recommended
+    category: Security Headers
+    description: >
+      Response headers should not leak technology stack information. Remove or
+      sanitize headers that expose server software, versions, or frameworks.
+    verification:
+      - Check for X-Powered-By header
+      - Check Server header for version info
+      - Look for framework-specific headers
+      - Verify debug headers not present in production
+    pass_criteria:
+      - No X-Powered-By header
+      - Server header absent or version-less
+      - No framework-specific headers exposed
+    fail_criteria:
+      - Tech stack exposed via X-Powered-By
+      - Server version exposed (nginx/1.18.0)
+      - Debug headers leaking in production
+
+  - id: SEC-005
+    title: HTTPS-only headers (HSTS)
+    severity: critical
+    category: Security Headers
+    description: >
+      Strict-Transport-Security header must be present to ensure browsers always
+      use HTTPS, preventing downgrade attacks.
+    verification:
+      - Check for Strict-Transport-Security header
+      - Verify max-age is at least 1 year (31536000)
+      - Check includeSubDomains if subdomains exist
+      - Check HSTS preload status
+    pass_criteria:
+      - HSTS header present on production
+      - max-age >= 31536000 (1 year)
+      - includeSubDomains present if applicable
+    fail_criteria:
+      - No HSTS header on production
+      - max-age too short (< 6 months)
+      - HTTP accessible without redirect
+
+  - id: SEC-006
+    title: Subresource Integrity (SRI) and GTM controls
+    severity: recommended
+    category: Security Headers
+    description: >
+      External scripts from CDNs must have integrity hashes (SRI). If Google Tag
+      Manager is used, access must be controlled since GTM cannot have SRI.
+    verification:
+      - Check external scripts for integrity attribute
+      - Detect GTM usage
+      - Review GTM access controls if present
+      - Check CSP for script-src restrictions
+    pass_criteria:
+      - All external CDN scripts have integrity attribute
+      - crossorigin="anonymous" present with integrity
+      - GTM access restricted and audited (if GTM in use)
+    fail_criteria:
+      - External CDN scripts missing SRI
+      - GTM in use with no access controls
+      - No CSP restrictions on script sources
+    notes: >
+      Severity escalates to Critical if loading scripts from third-party CDNs
+      or if GTM is uncontrolled.
+
+  - id: SEC-007
+    title: SSL transparency reports
+    severity: recommended
+    category: SSL/Certificates
+    description: >
+      Monitor Certificate Transparency logs to receive alerts when new SSL
+      certificates are issued for your domains, detecting potential compromise.
+    verification:
+      - Check for CT monitoring service configuration
+      - Query crt.sh for current certificates
+      - Verify alerts route to security/ops team
+    pass_criteria:
+      - CT monitoring service configured
+      - Alerts route to appropriate team
+      - Can produce list of all valid certificates
+    fail_criteria:
+      - No CT monitoring in place
+      - Monitoring exists but no alerting
+      - Unknown certificates found in CT logs
