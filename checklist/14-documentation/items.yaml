@@ -1,0 +1,56 @@
+section: 14-documentation
+title: Documentation
+description: Ensure all features are documented, complex systems have dedicated explanations, and documentation stays current with the codebase.
+
+items:
+  - id: DOC-001
+    title: Feature documentation exists (human + AI readable)
+    severity: recommended
+    description: >
+      Documentation exists covering major features, accessible to both humans and AI agents.
+      In-repo docs preferred; external (Notion, GitBook, wiki) acceptable if accessible.
+    check_type: semi-automatic
+    pass_criteria:
+      - Documentation exists covering major features
+      - In-repo docs preferred; external acceptable if accessible
+      - Docs structured for both humans and AI agents
+    fail_criteria:
+      - No feature documentation anywhere
+      - Only setup instructions, no feature descriptions
+      - External docs exist but AI agents cannot access them
+
+  - id: DOC-002
+    title: Complex systems documented
+    severity: critical
+    description: >
+      Complex systems (e.g., payment gateways, order fulfillment, admin features, third-party integrations)
+      have dedicated documentation explaining flows, edge cases, and integration points.
+    check_type: semi-automatic
+    cross_references:
+      - DOC-001
+      - "TODO: Section 3 item ID (Auth system documented)"
+      - "TODO: Section 15 item ID (Admin features)"
+    pass_criteria:
+      - Each complex system has dedicated documentation
+      - Docs explain the flow, not just API reference
+      - Includes edge cases, error handling, integration points
+    fail_criteria:
+      - Complex system exists in code but no corresponding documentation
+      - Only code comments, no prose explanation
+      - Docs exist but are outdated (describe old flow)
+
+  - id: DOC-003
+    title: Documentation is current
+    severity: recommended
+    description: >
+      Documentation is kept up to date with the codebase. Source files referenced in docs
+      have not changed significantly since the doc was last updated.
+    check_type: semi-automatic
+    pass_criteria:
+      - Docs modified within reasonable timeframe relative to code changes
+      - No obvious staleness markers (TODO, outdated)
+      - Referenced source files have not changed significantly since doc last updated
+    fail_criteria:
+      - Docs untouched for 6+ months while referenced code actively changed
+      - Docs describe features/files that no longer exist
+      - Source files referenced in docs changed substantially after doc's last update
