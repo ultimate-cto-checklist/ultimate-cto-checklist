@@ -1,0 +1,78 @@
+section: 11-access-control
+title: Access Control
+description: Verify access control model with tiered permissions, minimal production access, and security requirements for access holders
+
+items:
+  - id: ACCESS-001
+    title: Tiered access model documented and approved
+    severity: critical
+    category: Tiered Access
+    automated: partial
+    checks:
+      - Cloud IAM bindings per environment (GCP/AWS/Azure)
+      - GitHub repository collaborators and teams
+      - Database users per environment
+      - Access documentation in repo
+    pass_criteria:
+      - Access lists are documented
+      - Access lists are approved by appropriate person
+      - Prod has fewer users than staging
+      - Staging has fewer users than dev
+      - Principle of least privilege visible
+    fail_criteria:
+      - No documented access list
+      - Access exists but not approved/reviewed
+      - Same users everywhere (flat access)
+      - Prod has more users than staging (inverted)
+    cross_references:
+      - DB-004
+      - ADMIN-002
+
+  - id: ACCESS-002
+    title: Production access is minimal
+    severity: critical
+    category: Production Access
+    automated: partial
+    checks:
+      - Count production log access (target 1-2 people)
+      - Count production database access
+      - Count production infrastructure access
+      - Verify justification for each access holder
+    pass_criteria:
+      - Production log access limited to 1-2 people
+      - Production DB access limited to essential personnel
+      - Each person with prod access has documented justification
+      - No broad "everyone has prod access" patterns
+    fail_criteria:
+      - More than 2-3 people with prod log access
+      - Broad prod DB access (entire team)
+      - No justification for who has access
+      - Service accounts with unnecessary prod access
+    cross_references:
+      - ACCESS-001
+      - ACCESS-003
+
+  - id: ACCESS-003
+    title: Production access holders meet security requirements
+    severity: critical
+    category: Security Requirements
+    automated: minimal
+    checks:
+      - Security requirements documentation exists
+      - Device security (encryption, MDM, endpoint protection)
+      - Account security (MFA, hardware keys, password manager)
+      - Access security (VPN/Zero Trust, logging, periodic review)
+    pass_criteria:
+      - Security requirements for prod access are documented
+      - Requirements are enforced (not just written down)
+      - Compliance is verified periodically
+      - Clear process for revoking access if requirements not met
+    fail_criteria:
+      - No documented security requirements
+      - Requirements exist but not enforced
+      - No verification process
+      - Prod access granted without security vetting
+    cross_references:
+      - ACCESS-001
+      - ACCESS-002
+      - ENV-004
