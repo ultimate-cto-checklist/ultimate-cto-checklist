@@ -1,0 +1,17 @@
+section: 16-cto-workspace
+title: CTO Workspace
+description: CTO workspace tooling for AI-assisted project briefings and status updates
+
+items:
+  - id: CTO-001
+    title: AI-assisted project briefings
+    severity: recommended
+    category: Project Briefings
+    description: >
+      Claude skill or CLAUDE.md documentation exists for getting project status briefings on demand.
+      Must query git log (commits), gh pr list (PRs), and gh run list (deployments).
+      Output should be a synthesized brief, not raw command output.
+    automated: partial
+    cross_references:
+      - DEPLOY-001
+      - FLOW-001
