@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getSection } from '@/lib/checklist';
-import ChecklistItem from '@/components/ChecklistItem';
-import GuidePanel from '@/components/GuidePanel';
+import SectionContent from '@/components/SectionContent';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/checklist';
 
 interface SectionPageProps {
@@ -97,49 +96,12 @@ export default async function SectionPage({ params }: SectionPageProps) {
       </header>
 
       {/* Two-column layout: items + guide */}
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Items panel (main content on left) */}
-        <main className="flex-1 min-w-0">
-          <div className="space-y-8">
-            {sortedCategories.map((category) => (
-              <section key={category}>
-                {/* Category header */}
-                <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4 capitalize">
-                  {category}
-                </h2>
-
-                {/* Items in this category */}
-                <div className="space-y-3">
-                  {itemsByCategory[category].map((item) => (
-                    <ChecklistItem key={item.id} item={item} />
-                  ))}
-                </div>
-              </section>
-            ))}
-
-            {/* Empty state */}
-            {section.items.length === 0 && (
-              <p className="text-zinc-500 dark:text-zinc-500 italic">
-                No items in this section yet.
-              </p>
-            )}
-          </div>
-        </main>
-
-        {/* Guide panel (sidebar on right) */}
-        {section.guide && (
-          <aside className="lg:w-96 flex-shrink-0">
-            <div className="lg:sticky lg:top-8">
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
-                Verification Guide
-              </h2>
-              <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 bg-zinc-50 dark:bg-zinc-900">
-                <GuidePanel markdown={section.guide} collapsed={true} />
-              </div>
-            </div>
-          </aside>
-        )}
-      </div>
+      <SectionContent
+        items={section.items}
+        guide={section.guide}
+        itemsByCategory={itemsByCategory}
+        sortedCategories={sortedCategories}
+      />
     </div>
   );
 }

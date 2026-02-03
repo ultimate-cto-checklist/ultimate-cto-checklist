@@ -5,6 +5,8 @@ import type { ChecklistItem as ChecklistItemType } from '@/lib/checklist';
 
 interface ChecklistItemProps {
   item: ChecklistItemType;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }
 
 /**
@@ -18,11 +20,16 @@ interface ChecklistItemProps {
  *
  * @param props.item - The checklist item data
  */
-export default function ChecklistItem({ item }: ChecklistItemProps) {
+export default function ChecklistItem({ item, isSelected, onSelect }: ChecklistItemProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const handleToggle = () => {
     setIsExpanded(prev => !prev);
+  };
+
+  const handleSelect = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelect?.();
   };
 
   // Severity chip styles based on severity level
@@ -36,39 +43,61 @@ export default function ChecklistItem({ item }: ChecklistItemProps) {
     recommended: 'Recommended',
   } as const;
 
+  const borderClass = isSelected
+    ? 'border-zinc-400 dark:border-zinc-600 ring-1 ring-zinc-400 dark:ring-zinc-600'
+    : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700';
+
   return (
-    <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-      <button
-        type="button"
-        onClick={handleToggle}
-        aria-expanded={isExpanded}
-        className="w-full text-left p-4"
-      >
-        {/* Header: ID badge, title, and severity chip */}
-        <div className="flex items-center gap-3">
-          {/* ID Badge */}
-          <span className="font-mono text-xs px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded flex-shrink-0">
-            {item.id}
-          </span>
+    <div className={`border rounded-lg bg-white dark:bg-zinc-900 transition-colors ${borderClass}`}>
+      <div className="flex items-center">
+        <button
+          type="button"
+          onClick={handleToggle}
+          aria-expanded={isExpanded}
+          className="flex-1 text-left p-4"
+        >
+          {/* Header: ID badge, title, and severity chip */}
+          <div className="flex items-center gap-3">
+            {/* ID Badge */}
+            <span className="font-mono text-xs px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded flex-shrink-0">
+              {item.id}
+            </span>
 
-          {/* Title */}
-          <span className="flex-1 min-w-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {item.title}
-          </span>
+            {/* Title */}
+            <span className="flex-1 min-w-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              {item.title}
+            </span>
 
-          {/* Severity chip */}
-          <span
-            className={`text-xs px-2 py-0.5 rounded font-medium flex-shrink-0 ${severityStyles[item.severity]}`}
+            {/* Severity chip */}
+            <span
+              className={`text-xs px-2 py-0.5 rounded font-medium flex-shrink-0 ${severityStyles[item.severity]}`}
+            >
+              {severityLabel[item.severity]}
+            </span>
+
+            {/* Expand/collapse indicator */}
+            <span className="text-zinc-400 dark:text-zinc-500 flex-shrink-0 text-xs">
+              {isExpanded ? '▼' : '▶'}
+            </span>
+          </div>
+        </button>
+
+        {/* Guide button */}
+        {onSelect && (
+          <button
+            type="button"
+            onClick={handleSelect}
+            className={`px-3 py-4 text-xs font-medium border-l transition-colors ${
+              isSelected
+                ? 'text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-600'
+                : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-zinc-200 dark:border-zinc-800'
+            }`}
+            title="Show verification guide"
           >
-            {severityLabel[item.severity]}
-          </span>
-
-          {/* Expand/collapse indicator */}
-          <span className="text-zinc-400 dark:text-zinc-500 flex-shrink-0 text-xs">
-            {isExpanded ? '▼' : '▶'}
-          </span>
-        </div>
-      </button>
+            Guide
+          </button>
+        )}
+      </div>
 
       {/* Expanded description */}
       {isExpanded && item.description && (
