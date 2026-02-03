@@ -1,0 +1,16 @@
+section:
+  id: "06"
+  name: Resilience
+  description: Application resilience to third-party service failures and graceful degradation
+
+items:
+  - id: RES-001
+    title: Third-party service resilience
+    description: App handles external service failures gracefully - doesn't crash, other requests still work, affected features return errors instead of crashing the process
+    severity: critical
+    category: third-party-services
+    merged_from:
+      - App doesn't crash if external service fails
+      - Graceful degradation - other requests still work
+      - Handle unavailable dependencies without full failure
+      - 500s okay for affected features, but app stays up
