@@ -1,0 +1,91 @@
+section: 09-development-workflow
+title: Development Workflow
+description: PR processes, commit conventions, and merge strategies
+
+items:
+  - id: FLOW-001
+    title: Feature branch workflow enforced
+    severity: critical
+    category: PR Process
+    summary: PRs come from feature branches with meaningful descriptions
+    checks:
+      - Recent PRs originated from feature branches
+      - PRs have non-empty, meaningful descriptions
+      - No direct commits bypassing PRs
+    cross_references:
+      - GIT-004
+      - GIT-005
+      - GIT-006
+
+  - id: FLOW-002
+    title: PRs reviewed by AI agent + human
+    severity: recommended
+    category: PR Process
+    summary: AI review tooling configured alongside human reviewers
+    checks:
+      - AI review bot present (CodeRabbit, Copilot, etc.)
+      - Human reviewers also participate
+      - AI feedback addressed, not ignored
+    cross_references:
+      - GIT-006
+      - FLOW-001
+
+  - id: FLOW-003
+    title: PRs tested on dev environment before merge
+    severity: critical
+    category: PR Process
+    summary: Feature branches deploy to dev for testing before merge
+    checks:
+      - CI workflow deploys PR branches to dev
+      - Dev deployments occur before merge timestamps
+      - Dev environment accessible for testing
+    cross_references:
+      - ENV-001
+      - ENV-002
+      - ENV-003
+      - FLOW-001
+
+  - id: FLOW-004
+    title: Commit messages follow project conventions
+    severity: recommended
+    category: Commit Conventions
+    summary: Documented and enforced commit message format
+    checks:
+      - Convention documented or commitlint configured
+      - Recent commits follow consistent pattern
+      - Messages are descriptive, not vague
+    cross_references:
+      - GIT-001
+      - TEST-002
+      - TEST-003
+
+  - id: FLOW-005
+    title: Merge strategy preserves history
+    severity: critical
+    category: Merge Strategy
+    summary: Regular merges used, no squash/rebase that loses history
+    checks:
+      - allow_merge_commit enabled
+      - Squash merge disabled or used sparingly
+      - Merge commits show full history preserved
+      - No force-pushes to protected branches
+    cross_references:
+      - GIT-004
+      - GIT-005
+      - FLOW-001
+
+  - id: FLOW-006
+    title: Branch flow documented
+    severity: recommended
+    category: Merge Strategy
+    summary: Feature → dev → staging → production flow documented
+    checks:
+      - Branch flow documented in repo
+      - Actual branches match documentation
+      - CI workflows reflect promotion path
+    cross_references:
+      - ENV-001
+      - ENV-002
+      - ENV-003
+      - FLOW-003
+      - GIT-007
