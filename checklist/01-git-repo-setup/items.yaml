@@ -1,0 +1,126 @@
+section:
+  id: "01"
+  name: Git Repo Setup
+  description: Repository configuration, branch strategy, CI/CD, and cleanliness standards
+
+items:
+  # Clone & Run
+  - id: GIT-001
+    title: Clone and run immediately
+    description: Repository can be cloned, built, and run without external system setup
+    severity: critical
+    category: clone-and-run
+
+  - id: GIT-002
+    title: Sandbox env vars ready
+    description: Sandbox/development environment variables provided in .env.example or .env
+    severity: critical
+    category: clone-and-run
+
+  - id: GIT-003
+    title: Graceful failure with clear warnings
+    description: Missing keys produce clear warnings with helpful error messages
+    severity: recommended
+    category: clone-and-run
+
+  # Branch Protection
+  - id: GIT-005
+    title: Branch protections configured
+    description: Protected branches with PR requirements, no force push, and documented admin bypass
+    severity: critical
+    category: branch-protection
+
+  # Branch Strategy
+  - id: GIT-006
+    title: Clean branch structure
+    description: Only main/staging as long-lived branches, no dev/develop branch
+    severity: recommended
+    category: branch-strategy
+
+  - id: GIT-007
+    title: Feature branches for all work
+    description: All development work happens in feature branches via PRs
+    severity: critical
+    category: branch-strategy
+
+  - id: GIT-008
+    title: Feature branches deleted after merge
+    description: Merged feature branches are promptly deleted
+    severity: recommended
+    category: branch-strategy
+
+  - id: GIT-009
+    title: Stale branch audit
+    description: Branches with no push for 30-45 days are reviewed and cleaned up
+    severity: recommended
+    category: branch-strategy
+
+  # CI/CD
+  - id: GIT-010
+    title: Linting configured
+    description: Linting tools configured locally and in CI, runs on PRs
+    severity: critical
+    category: ci-cd
+
+  - id: GIT-011
+    title: Testing configured
+    description: Test framework configured locally and in CI, runs on PRs
+    severity: critical
+    category: ci-cd
+
+  # Documentation
+  - id: GIT-012
+    title: README.md present
+    description: Repository has a README with accurate setup instructions
+    severity: critical
+    category: documentation
+
+  - id: GIT-013
+    title: AI agent context file
+    description: CLAUDE.md or AGENTS.md provides context for AI agents
+    severity: recommended
+    category: documentation
+
+  # Local Development
+  - id: GIT-014
+    title: Docker Compose for services
+    description: Third-party services available via Docker Compose with matching env vars
+    severity: recommended
+    category: local-dev
+
+  # Repo Cleanliness
+  - id: GIT-015
+    title: No useless/outdated files
+    description: No backup files, dated reports, or outdated planning documents
+    severity: recommended
+    category: repo-cleanliness
+
+  - id: GIT-016
+    title: Test results gitignored
+    description: Test output, coverage reports not committed
+    severity: critical
+    category: repo-cleanliness
+
+  - id: GIT-017
+    title: No credentials in repo
+    description: No production secrets in repository or git history
+    severity: critical
+    category: repo-cleanliness
+
+  - id: GIT-018
+    title: Sandbox keys rotation documented
+    description: Sandbox keys have rotation schedule and last rotation date in comments
+    severity: recommended
+    category: repo-cleanliness
+
+  - id: GIT-019
+    title: No local engineer settings
+    description: IDE configs and personal settings not committed
+    severity: recommended
+    category: repo-cleanliness
+
+  - id: GIT-020
+    title: Proper .gitignore configured
+    description: .gitignore covers all standard patterns for the project type
+    severity: critical
+    category: repo-cleanliness
