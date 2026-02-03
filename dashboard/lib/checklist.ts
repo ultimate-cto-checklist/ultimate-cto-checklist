@@ -70,7 +70,7 @@ function getChecklistDir(): string {
 }
 
 // Helper: Check if cache is valid
-function isCacheValid<T>(entry: CacheEntry<T> | null): entry is CacheEntry<T> {
+function isCacheValid<T>(entry: CacheEntry<T> | null | undefined): entry is CacheEntry<T> {
   if (!shouldCache() || !entry) return false;
   return Date.now() - entry.timestamp < CACHE_TTL;
 }
