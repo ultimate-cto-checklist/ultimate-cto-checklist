@@ -85,9 +85,7 @@ export default function SectionContent({
                     key={item.id}
                     item={item}
                     isSelected={item.id === selectedItemId}
-                    onSelect={() => setSelectedItemId(
-                      item.id === selectedItemId ? null : item.id
-                    )}
+                    onSelect={() => setSelectedItemId(item.id)}
                   />
                 ))}
               </div>
