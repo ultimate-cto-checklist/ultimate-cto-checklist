@@ -1,0 +1,111 @@
+section: 12-monitoring
+title: Monitoring
+description: >
+  Audit checklist for monitoring infrastructure metrics, database performance,
+  HTTP logging, alerting, log retention, and status pages.
+
+items:
+  - id: MON-001
+    title: Infrastructure metrics collection
+    severity: critical
+    description: >
+      All services have monitoring configured collecting CPU, memory, disk metrics.
+      Service inventory documented from CLI. Database connection pools and Redis
+      specifically monitored. Coverage matrix shows no gaps.
+    verify:
+      - Get service inventory from CLI (kubectl, docker, aws, gcloud)
+      - Check monitoring config exists (Prometheus, Datadog, CloudWatch, etc.)
+      - Verify CPU, memory, disk metrics for compute
+      - Verify connection pool metrics for databases
+      - Verify Redis metrics if Redis in use
+    cross_references:
+      - DB-001
+      - HEALTH-002
+
+  - id: MON-002
+    title: Database performance monitoring
+    severity: critical
+    description: >
+      Slow query logging enabled with reasonable threshold. Query analysis tooling
+      available (pg_stat_statements, Performance Schema, etc.). Dashboard or report
+      exists showing slow queries, OR audit record shows regular review.
+    verify:
+      - Check slow query logging is enabled
+      - Verify threshold is set (e.g., 1-2 seconds)
+      - Check query analysis extension/tool is available
+      - Verify dashboard exists OR audit record of reviews
+      - Confirm last review was within 3 months
+    cross_references:
+      - DB-001
+      - MON-001
+
+  - id: MON-003
+    title: HTTP request logging and analysis
+    severity: critical
+    description: >
+      HTTP requests are logged (any source: app, CDN, LB, APM). Logs include
+      timestamp, method, path, status code, response time. Analysis tool exists
+      to query/visualize. Can filter by status code and see traffic patterns.
+    verify:
+      - Check application logging configuration
+      - Check CDN/Load Balancer logging
+      - Check APM tools
+      - Verify analysis capability exists
+      - Confirm 4xx/5xx errors are surfaceable
+    cross_references:
+      - MON-004
+      - Section 13
+
+  - id: MON-004
+    title: HTTP error alerting
+    severity: critical
+    description: >
+      Alert on high volume of 404s (team-defined threshold). Alert on any 500s
+      within 1-minute window. Alerts route to appropriate channel. Alert delivery
+      verified.
+    verify:
+      - Check 404 alert exists with volume threshold
+      - Check 500 alert exists with ~1 per minute sensitivity
+      - Verify alert notification channel
+      - Confirm alerts have fired and been received
+    cross_references:
+      - MON-003
+      - Section 35
+      - Section 19
+
+  - id: MON-005
+    title: Log retention policy
+    severity: recommended
+    description: >
+      Log retention is configured with minimum 2 weeks. Retention policy is
+      documented. Consistent across systems.
+    verify:
+      - Check CloudWatch/GCP/Elasticsearch retention settings
+      - Verify retention is at least 14 days
+      - Check for retention policy documentation
+      - Verify consistency across log systems
+    cross_references:
+      - Section 37
+      - Section 38
+
+  - id: MON-006
+    title: Status pages and downtime alerts
+    severity: critical
+    description: >
+      Production status page exists and is accessible. Staging status page exists
+      (recommended). Uptime monitoring configured checking health endpoints.
+      Downtime alerts route to appropriate channel.
+    verify:
+      - Check production status page exists
+      - Check staging status page exists (recommended)
+      - Verify uptime monitoring is configured
+      - Confirm monitors check health endpoints
+      - Verify downtime alert routing
+    cross_references:
+      - HEALTH-001
+      - HEALTH-002
+      - Section 35
+      - DEPLOY-002
+    severity_notes:
+      - Production status page is Critical
+      - Staging status page is Recommended
