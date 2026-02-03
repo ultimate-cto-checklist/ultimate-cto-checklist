@@ -1,0 +1,62 @@
+section: 10-deployments
+title: Deployments
+description: Deployment pipeline stability, notifications, build performance, and release tagging
+
+items:
+  - id: DEPLOY-001
+    title: Clear, stable deployment workflow
+    severity: critical
+    category: Pipeline Stability
+    summary: Documented deployment workflow that runs reliably
+    checks:
+      - Deployment workflow exists (GitHub Actions or other CI)
+      - Workflow is documented in README/CLAUDE.md
+      - Triggers are clear (main = prod, staging = staging)
+      - Pipeline currently passing
+      - Recent failure rate < 10%
+    cross_references:
+      - FLOW-006
+      - ENV-001
+      - ENV-002
+      - ENV-003
+
+  - id: DEPLOY-002
+    title: Deployment failures tracked and team notified
+    severity: critical
+    category: Pipeline Stability
+    summary: Team notified on both deployment success and failure
+    checks:
+      - Notifications configured (Slack, Discord, email, etc.)
+      - Both success and failure trigger notifications
+      - Deployment events tracked in CI history
+      - Failure rate visible and monitored
+    cross_references:
+      - DEPLOY-001
+
+  - id: DEPLOY-003
+    title: Build performance optimized
+    severity: recommended
+    category: Build Performance
+    summary: Caching and parallelization keep builds fast
+    checks:
+      - Dependency caching configured
+      - Cache keys include lockfile hash
+      - Build times under 10 minutes typical
+      - Docker layer caching (if applicable)
+      - Parallelization used where beneficial
+    cross_references:
+      - DEPLOY-001
+
+  - id: DEPLOY-004
+    title: Production deployments tagged
+    severity: critical
+    category: Release Management
+    summary: Every production deployment gets a tag for traceability
+    checks:
+      - Production deployments have corresponding tags
+      - Consistent tag naming convention (v1.2.3, etc.)
+      - Tagging is automated in deployment workflow
+      - Staging deployments are NOT tagged
+    cross_references:
+      - DEPLOY-001
+      - FLOW-005
