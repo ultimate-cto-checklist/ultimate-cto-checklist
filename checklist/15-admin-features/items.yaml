@@ -1,6 +1,7 @@
-section: 15-admin-features
-title: Admin Features
-description: Admin feature parity and admin panel security controls
+section:
+  id: "15"
+  name: Admin Features
+  description: Admin feature parity and admin panel security controls
 
 items:
   - id: ADM-001

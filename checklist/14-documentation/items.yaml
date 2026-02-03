@@ -1,6 +1,7 @@
-section: 14-documentation
-title: Documentation
-description: Ensure all features are documented, complex systems have dedicated explanations, and documentation stays current with the codebase.
+section:
+  id: "14"
+  name: Documentation
+  description: Ensure all features are documented, complex systems have dedicated explanations, and documentation stays current with the codebase.
 
 items:
   - id: DOC-001

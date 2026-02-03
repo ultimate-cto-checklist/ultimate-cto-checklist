@@ -1,0 +1,96 @@
+section:
+  id: "18"
+  name: Analytics
+  description: Server-side tracking, data pipelines, reporting, and engineering metrics
+
+items:
+  - id: ANA-001
+    title: Server-side analytics and data ownership
+    severity: recommended
+    category: Server-Side Tracking
+    description: >
+      Analytics events sent from server (not just client-side). Data accessible
+      in a warehouse you control or self-hosted solution. Can query raw event
+      data with SQL.
+    checks:
+      - Look for server-side analytics packages (PostHog, Segment, Mixpanel backend SDKs)
+      - Check for analytics events in backend code (not just frontend)
+      - Verify data goes to owned warehouse or self-hosted solution
+      - Flag client-only analytics (GA4 without server-side) as fail
+    cross_references:
+      - ANA-002
+
+  - id: ANA-002
+    title: Analytics data flows to data warehouse
+    severity: recommended
+    category: Data Pipeline
+    description: >
+      Raw analytics data flows to a queryable warehouse (BigQuery, Snowflake, etc.)
+      via automated pipeline. Data is queryable via SQL.
+    checks:
+      - Check for BigQuery client libraries and credentials
+      - Look for Dataform config and .sqlx transformation files
+      - Check for ETL tools (Fivetran, Airbyte, Segment warehouse)
+      - Verify pipeline is automated (not manual exports)
+    cross_references:
+      - ANA-001
+      - ANA-004
+    recommendations:
+      - "Warehouse: BigQuery (recommended), Snowflake, Redshift, ClickHouse"
+      - "Transformation: Dataform (recommended), dbt"
+      - "ETL: Fivetran, Airbyte"
+
+  - id: ANA-003
+    title: GitHub data flows to warehouse
+    severity: optional
+    category: Data Pipeline
+    description: >
+      GitHub data (PRs, commits, contributors) flows to warehouse for
+      engineering metrics and correlation with product analytics.
+    checks:
+      - Look for GitHub API usage for data extraction
+      - Check for webhooks feeding GitHub events to warehouse
+      - Look for GitHub tables in Dataform/dbt models
+      - Check for engineering analytics tools (LinearB, Sleuth, Swarmia)
+    cross_references:
+      - ANA-002
+      - ANA-005
+
+  - id: ANA-004
+    title: BI reporting layer
+    severity: recommended
+    category: Data Pipeline
+    description: >
+      BI tool connected to data warehouse. Non-engineers can view dashboards
+      and ideally create their own reports (self-serve).
+    checks:
+      - Check for Metabase config or Docker service
+      - Look for alternative BI tools (Looker, Superset, Redash, Tableau)
+      - Verify non-engineers have access
+      - Check for embedded analytics if customer-facing
+    cross_references:
+      - ANA-002
+    recommendations:
+      - "Metabase (recommended) - open source, easy to deploy"
+      - "Looker - enterprise, strong semantic layer"
+      - "Superset - open source alternative"
+
+  - id: ANA-005
+    title: Engineering/git analytics visibility
+    severity: optional
+    category: Git Analytics
+    description: >
+      Visibility into PR activity, cycle time, and contributor metrics.
+      Can answer "What's our average PR cycle time?" and "Who are top contributors?"
+    checks:
+      - Look for dedicated git analytics tools (LinearB, Sleuth, Swarmia)
+      - Check for custom engineering metrics in warehouse
+      - Look for DORA metrics tracking
+      - Verify ability to track trends over time (not just GitHub Insights)
+    cross_references:
+      - ANA-003
+      - ANA-004
+    recommendations:
+      - "Quick start: LinearB, Sleuth, Swarmia"
+      - "Custom: Build from GitHub data in warehouse + Metabase"
+      - "North star: DORA metrics (deployment frequency, lead time, MTTR, change failure rate)"

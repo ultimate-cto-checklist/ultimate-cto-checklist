@@ -1,6 +1,7 @@
-section: 09-development-workflow
-title: Development Workflow
-description: PR processes, commit conventions, and merge strategies
+section:
+  id: "09"
+  name: Development Workflow
+  description: PR processes, commit conventions, and merge strategies
 
 items:
   - id: FLOW-001

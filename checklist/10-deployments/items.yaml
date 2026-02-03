@@ -1,6 +1,7 @@
-section: 10-deployments
-title: Deployments
-description: Deployment pipeline stability, notifications, build performance, and release tagging
+section:
+  id: "10"
+  name: Deployments
+  description: Deployment pipeline stability, notifications, build performance, and release tagging
 
 items:
   - id: DEPLOY-001

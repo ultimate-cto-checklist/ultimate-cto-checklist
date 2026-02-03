@@ -1,9 +1,10 @@
-section: 13
-title: Infrastructure Security
-description: >
-  Verify all environments are protected behind Cloudflare, origin servers are not
-  directly exposed, security headers are properly configured, and SSL certificate
-  issuance is monitored.
+section:
+  id: "13"
+  name: Infrastructure Security
+  description: >
+    Verify all environments are protected behind Cloudflare, origin servers are not
+    directly exposed, security headers are properly configured, and SSL certificate
+    issuance is monitored.
 
 items:
   - id: SEC-001

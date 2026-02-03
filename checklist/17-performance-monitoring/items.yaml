@@ -1,0 +1,66 @@
+section:
+  id: "17"
+  name: Performance Monitoring
+  description: Response time tracking, memory monitoring, and leak detection
+
+items:
+  - id: PERF-001
+    title: Response time monitoring
+    severity: recommended
+    category: response-time
+    summary: Graph response times for all endpoints with slowest endpoint visibility
+    checks:
+      - APM or monitoring tool configured (Datadog, New Relic, Prometheus, etc.)
+      - Response times graphed per endpoint
+      - Can identify top slowest endpoints
+    warning_threshold:
+      - Any endpoint averaging >500ms flagged for optimization review
+    cross_references:
+      - MON-001
+
+  - id: PERF-002
+    title: Memory usage tracking over time
+    severity: recommended
+    category: memory-monitoring
+    summary: Track memory usage with historical trends visible
+    checks:
+      - Memory metrics collected (heap, RSS, etc.)
+      - Historical data available (minimum 24h)
+      - Trends visible over time, not just point-in-time
+    cross_references:
+      - PERF-001
+      - MON-001
+
+  - id: PERF-003
+    title: Memory leak detection alerting
+    severity: recommended
+    category: memory-monitoring
+    summary: Automated alerts for memory growth or threshold breaches
+    checks:
+      - Alert configured for memory exceeding threshold
+      - OR alert configured for memory growth rate
+      - Alert notifies team automatically
+    fail_conditions:
+      - No automated alerting
+      - Only OOM-kill as detection
+      - Manual review process only
+    cross_references:
+      - PERF-002
+      - MON-005
+
+  - id: PERF-004
+    title: Heap dump capability
+    severity: optional
+    category: memory-monitoring
+    summary: Protected mechanism to capture heap dumps for debugging memory leaks
+    checks:
+      - Heap dump mechanism exists (endpoint, CLI, or cloud feature)
+      - If exists, protected by token/header and/or Zero Trust
+      - Not publicly accessible
+    notes:
+      - Only needed when debugging memory leaks
+      - Acceptable to not have this capability
+      - Unprotected heap dump endpoint is a security fail
+    cross_references:
+      - PERF-003
+      - SEC-001

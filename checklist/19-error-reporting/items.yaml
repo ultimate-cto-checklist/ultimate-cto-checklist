@@ -1,0 +1,53 @@
+section:
+  id: "19"
+  name: Error Reporting (Sentry)
+  description: Error tracking, configuration, deployment integration, and AI-driven error handling
+
+items:
+  - id: ERR-001
+    title: Error tracking tool installed and configured
+    severity: critical
+    category: Setup
+    summary: Sentry or similar error tracking SDK installed, initialized early, and DSN configured
+
+  - id: ERR-002
+    title: PII handling configured
+    severity: recommended
+    category: Setup
+    summary: Personal data handling is intentional - either scrubbed or enabled with documented rationale
+
+  - id: ERR-003
+    title: Stack traces configured
+    severity: recommended
+    category: Setup
+    summary: Stack traces enabled and useful; performance tracing configured with appropriate sample rate
+
+  - id: ERR-004
+    title: Source maps configured
+    severity: recommended
+    category: Setup
+    summary: Source maps generated, uploaded to Sentry via CI/CD, stack traces show original source
+
+  - id: ERR-005
+    title: Deployment integration with Sentry
+    severity: recommended
+    category: Setup
+    summary: Releases created in Sentry, deploy notifications sent, errors filterable by release
+
+  - id: ERR-006
+    title: AI periodically reviews Sentry errors
+    severity: recommended
+    category: AI-Driven Error Handling
+    summary: Scheduled AI/Claude review of errors with actionable output (Slack, issues, or PRs)
+
+  - id: ERR-007
+    title: Auto-create PRs for fixes
+    severity: recommended
+    category: AI-Driven Error Handling
+    summary: AI identifies fixable errors and creates labeled PRs requiring human review
+
+  - id: ERR-008
+    title: Automated error triage
+    severity: recommended
+    category: AI-Driven Error Handling
+    summary: Errors prioritized by impact, routed to owners, known errors filtered, issue tracker integration

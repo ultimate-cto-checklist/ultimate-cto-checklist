@@ -1,6 +1,7 @@
-section: 05-database-connections
-title: Database & Connections
-description: Database configuration, migrations, users, and access controls
+section:
+  id: "05"
+  name: Database & Connections
+  description: Database configuration, migrations, users, and access controls
 
 items:
   - id: DB-001

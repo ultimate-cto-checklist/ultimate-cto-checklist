@@ -1,6 +1,7 @@
-section: 11-access-control
-title: Access Control
-description: Verify access control model with tiered permissions, minimal production access, and security requirements for access holders
+section:
+  id: "11"
+  name: Access Control
+  description: Verify access control model with tiered permissions, minimal production access, and security requirements for access holders
 
 items:
   - id: ACCESS-001

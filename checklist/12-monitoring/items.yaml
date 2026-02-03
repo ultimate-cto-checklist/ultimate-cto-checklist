@@ -1,8 +1,9 @@
-section: 12-monitoring
-title: Monitoring
-description: >
-  Audit checklist for monitoring infrastructure metrics, database performance,
-  HTTP logging, alerting, log retention, and status pages.
+section:
+  id: "12"
+  name: Monitoring
+  description: >
+    Audit checklist for monitoring infrastructure metrics, database performance,
+    HTTP logging, alerting, log retention, and status pages.
 
 items:
   - id: MON-001

@@ -1,6 +1,7 @@
-section: 16-cto-workspace
-title: CTO Workspace
-description: CTO workspace tooling for AI-assisted project briefings and status updates
+section:
+  id: "16"
+  name: CTO Workspace
+  description: CTO workspace tooling for AI-assisted project briefings and status updates
 
 items:
   - id: CTO-001
