@@ -1,0 +1,84 @@
+section: 15-admin-features
+title: Admin Features
+description: Admin feature parity and admin panel security controls
+
+items:
+  - id: ADM-001
+    title: Admin feature parity
+    severity: recommended
+    category: Admin Parity
+    description: >
+      Every major user-facing feature has corresponding admin capability
+      for viewing, managing, and debugging. Admins can troubleshoot user
+      issues without direct database queries.
+    checks:
+      - Find admin routes/controllers in codebase
+      - Compare user-facing features to admin features
+      - Identify coverage gaps
+    cross_references:
+      - DOC-002
+
+  - id: ADM-002
+    title: Admin access auditing
+    severity: recommended
+    category: Admin Panel Security
+    description: >
+      Can enumerate all admin users, periodic process exists to review
+      who has access, and easy to suspend users who shouldn't have access.
+    checks:
+      - Find admin user management functionality
+      - Check for activity tracking fields (last_login)
+      - Look for role/permission system
+    cross_references:
+      - ACCESS-001
+      - ACCESS-002
+
+  - id: ADM-003
+    title: Track login IPs and login frequency
+    severity: recommended
+    category: Admin Panel Security
+    description: >
+      Admin logins are tracked with timestamp, IP address, and success/failure.
+      Login history is viewable for security review.
+    checks:
+      - Find login event logging
+      - Check for IP capture on login
+      - Look for login frequency/count tracking
+
+  - id: ADM-004
+    title: Audit trail for admin requests
+    severity: recommended
+    category: Admin Panel Security
+    description: >
+      Admin actions (especially destructive ones) are logged with who, what,
+      when, and affected resource. Recent history is queryable.
+    checks:
+      - Find audit log implementation
+      - Check for admin middleware logging
+      - Verify what fields are captured
+    cross_references:
+      - MON-005
+
+  - id: ADM-005
+    title: Easy to disable admin users immediately
+    severity: recommended
+    category: Admin Panel Security
+    description: >
+      Admin users can be disabled via UI (not DB), disable takes effect
+      immediately with session invalidation, no code deploy required.
+    checks:
+      - Find disable/suspend functionality
+      - Check for session invalidation on disable
+      - Verify UI exists for user management
+
+  - id: ADM-006
+    title: Claude skill to audit admin access
+    severity: optional
+    category: Admin Panel Security
+    description: >
+      Automated tooling or clear runbook exists for auditing admin access.
+      Can identify inactive admins, over-privileged users, missing MFA.
+    checks:
+      - Look for audit scripts or skills
+      - Check for API access to admin data
+      - Find existing runbooks
