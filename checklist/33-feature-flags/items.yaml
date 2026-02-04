@@ -1,0 +1,14 @@
+section: 33-feature-flags
+title: Feature Flags & Rollouts
+description: Audit guide for feature flag systems, gradual rollouts, A/B testing, and kill switches.
+
+items:
+  - id: FF-001
+    title: Feature flag system configured
+    severity: recommended
+    summary: Feature flag system exists (env vars for small projects, GrowthBook for larger) with capabilities for percentage rollouts, A/B testing, sticky assignment, and user segment targeting
+
+  - id: FF-002
+    title: Kill switches for quick disable
+    severity: recommended
+    summary: Critical features have kill switches that can be toggled in < 5 minutes without deploy, with documented procedures and controlled access
