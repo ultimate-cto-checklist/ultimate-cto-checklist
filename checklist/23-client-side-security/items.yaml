@@ -1,0 +1,22 @@
+section: 23-client-side-security
+title: Client-Side Security & Storage
+description: Cookie configuration, browser storage usage, and JWT handling practices
+
+items:
+  - id: CSS-001
+    title: Cookies use HttpOnly for sensitive data
+    severity: critical
+    category: Cookies
+    summary: Auth/session cookies configured with HttpOnly flag to prevent XSS attacks from stealing tokens
+
+  - id: CSS-002
+    title: Browser storage used appropriately
+    severity: recommended
+    category: Storage
+    summary: localStorage limited to preferences/UI state; no tokens, secrets, or PII in browser storage
+
+  - id: CSS-003
+    title: JWT handling practices documented and followed
+    severity: recommended
+    category: JWT Handling
+    summary: JWT practices documented including expiration, storage, refresh flow; implementation matches docs
