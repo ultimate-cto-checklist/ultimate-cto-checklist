@@ -1,0 +1,19 @@
+section: 30-rate-limiting
+title: Rate Limiting
+description: Audit guide for rate limiting configuration, behavior, and documentation.
+
+items:
+  - id: RATE-001
+    title: Rate limiting configured
+    severity: critical
+    summary: Rate limiting exists at infrastructure or application level with proper client isolation
+
+  - id: RATE-002
+    title: Graceful 429 handling
+    severity: recommended
+    summary: Rate-limited requests return proper 429 responses with helpful information
+
+  - id: RATE-003
+    title: Rate limits documented
+    severity: recommended
+    summary: API consumers can discover rate limits via documentation or response headers
