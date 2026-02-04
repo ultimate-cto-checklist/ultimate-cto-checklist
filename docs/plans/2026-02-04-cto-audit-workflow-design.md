@@ -1,0 +1,528 @@
+# CTO Audit Workflow Design
+
+**Date:** 2026-02-04
+**Status:** Approved
+**Author:** Claude + Rodric
+
+## Overview
+
+A Claude Code-powered system for CTOs to run structured audits against the Ultimate CTO Checklist. CTOs clone a private workspace, configure their org/projects, and work through audit items interactively with Claude.
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CTO's Audit Workspace                        │
+│  (Private repo - my-company-audits/)                           │
+│                                                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │   org.yaml   │  │  projects/   │  │   audits/    │          │
+│  │  + docs/     │  │  *.yaml      │  │  results     │          │
+│  └──────────────┘  └──────────────┘  └──────────────┘          │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────┐          │
+│  │  checklist/  (git submodule)                     │          │
+│  │  ├── checklist/   ← items.yaml + guide.md        │          │
+│  │  ├── skills/      ← /audit-* commands            │          │
+│  │  └── dashboard/   ← Next.js app                  │          │
+│  └──────────────────────────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      Claude Code CLI                            │
+│  - Reads workspace config                                       │
+│  - Runs audit skills                                            │
+│  - Executes verification commands                               │
+│  - Writes audit results                                         │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      Dashboard (Optional)                       │
+│  - Browse checklist items                                       │
+│  - View audit results                                           │
+│  - Connected via AUDIT_WORKSPACE env var                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Key principles:**
+- Checklist repo stays clean (no CTO-specific data)
+- Workspace is private to each organization
+- Submodule allows versioned updates
+- Claude Code does the heavy lifting
+
+## Workspace Structure
+
+```
+my-company-audits/
+├── CLAUDE.md                    # Master index - tells Claude where everything is
+├── STATUS.md                    # Dynamic stats, updated after audits
+│
+├── docs/
+│   ├── org-context.md           # "We use AWS because..." - prose context
+│   ├── audit-workflow.md        # How to run audits in this workspace
+│   ├── commands.md              # /audit-* command reference
+│   └── preferences.md           # "Check staging first", verbosity, etc.
+│
+├── org.yaml                     # Structured org data (cloud, tools, etc.)
+│
+├── projects/
+│   ├── backend-api.yaml         # Project config + metadata
+│   ├── mobile-app.yaml
+│   └── internal-tools.yaml
+│
+├── audits/
+│   ├── _org/                    # Org-level audit results
+│   │   └── 2026-02-04/
+│   │       ├── COST-001.md
+│   │       └── COST-002.md
+│   ├── backend-api/
+│   │   ├── 2026-01-15/          # First audit
+│   │   │   ├── GIT-001.md
+│   │   │   └── ...
+│   │   └── 2026-02-04/          # Second audit
+│   │       ├── GIT-001.md
+│   │       └── ...
+│   └── mobile-app/
+│       └── 2026-02-04/
+│
+├── waivers/
+│   ├── AUTH-003.md              # Global waiver
+│   └── backend-api/
+│       └── TEST-002.md          # Project-specific waiver
+│
+├── custom-items/
+│   └── compliance.yaml          # Company-specific checklist items
+│
+└── checklist/                   # Git submodule → ultimate-cto-checklist
+    ├── checklist/
+    ├── skills/
+    └── dashboard/
+```
+
+**File ownership:**
+
+| Generated by | Files |
+|--------------|-------|
+| `/audit-init` | CLAUDE.md, docs/*, org.yaml |
+| `/audit-add-project` | projects/*.yaml |
+| `/audit-start`, `/audit-continue` | audits/*/*.md |
+| CTO manually | waivers/*, custom-items/* |
+| `/audit-status` | STATUS.md |
+
+## Configuration Files
+
+### org.yaml
+
+```yaml
+name: Acme Corp
+created_at: 2026-02-04
+
+cloud_providers:
+  - aws
+  - gcp
+
+source_control:
+  provider: github
+  type: enterprise
+  org: acme-corp
+
+infrastructure:
+  iac: terraform
+  compute:
+    - kubernetes
+    - lambda
+
+observability:
+  monitoring: datadog
+  errors: sentry
+  logging: cloudwatch
+
+secrets: vault
+
+ci_cd: github-actions
+
+auth: auth0
+```
+
+### projects/backend-api.yaml
+
+```yaml
+name: backend-api
+path: /Users/cto/code/backend-api
+created_at: 2026-02-04
+
+repo: acme-corp/backend-api
+
+type: backend
+stack:
+  - node
+  - typescript
+  - postgres
+
+environments:
+  - dev
+  - staging
+  - prod
+
+urls:
+  production: https://api.acme.com
+  health: https://api.acme.com/health
+
+scope:
+  include_sections: all
+  exclude_sections:
+    - 15
+```
+
+### waivers/AUTH-003.md
+
+```markdown
+---
+item_id: AUTH-003
+status: not-applicable
+applies_to:
+  - internal-tools
+  - admin-dashboard
+approved_by: Jane Smith (CTO)
+approved_at: 2026-01-15
+review_date: 2026-07-15
+---
+
+## Reason
+
+Internal tools are only accessible via VPN and protected by corporate SSO.
+Adding application-level auth would be redundant.
+
+## Conditions
+
+This waiver is void if:
+- Tools become accessible outside VPN
+- SSO provider changes
+```
+
+## Audit Result Format
+
+### Individual Item Result
+
+`audits/backend-api/2026-02-04/GIT-005.md`:
+
+```markdown
+---
+item_id: GIT-005
+title: Branch protections configured
+status: pass
+severity: critical
+section: 01-git-repo-setup
+audited_at: 2026-02-04T10:30:00Z
+auditor: claude-session
+---
+
+## Evidence
+
+Branch protection verified via GitHub API:
+
+\`\`\`bash
+$ gh api repos/acme-corp/backend-api/branches/main --jq '.protected'
+true
+
+$ gh api repos/acme-corp/backend-api/branches/main/protection --jq '{
+  required_reviews: .required_pull_request_reviews.required_approving_review_count,
+  dismiss_stale: .required_pull_request_reviews.dismiss_stale_reviews,
+  force_push: .allow_force_pushes.enabled
+}'
+{
+  "required_reviews": 2,
+  "dismiss_stale": true,
+  "force_push": false
+}
+\`\`\`
+
+## Notes
+
+Using GitHub branch rulesets (new feature) instead of classic branch protection.
+Requires 2 approvals - exceeds baseline requirement of 1.
+```
+
+### Status Values
+
+| Status | Meaning |
+|--------|---------|
+| `pass` | Item verified, meets criteria |
+| `fail` | Item checked, does not meet criteria |
+| `partial` | Some criteria met, others not |
+| `skip` | Intentionally skipped this audit (with reason) |
+| `not-applicable` | Item doesn't apply (should have waiver) |
+| `blocked` | Can't verify - dependency or access issue |
+
+## Scope Model
+
+Section-level defaults with per-item overrides:
+
+```yaml
+section:
+  id: "38"
+  name: Cost Monitoring & Budget Alerts
+  description: Audit cloud budgets...
+  default_scope: org
+
+items:
+  - id: COST-001
+    title: Cloud provider budget alerts configured
+    severity: critical
+    # scope: org (inherited)
+
+  - id: COST-005
+    title: Per-project cost tagging
+    severity: recommended
+    scope: project  # override
+```
+
+### Scope Values
+
+| Scope | Meaning | Results Location |
+|-------|---------|------------------|
+| `org` | Audit once per organization | `audits/_org/` |
+| `project` | Audit once per project | `audits/<project>/` |
+| `both` | Org-level policy + project compliance | Both locations |
+
+### Default Scopes by Section
+
+| Sections | Default Scope | Rationale |
+|----------|---------------|-----------|
+| 01-04 (Repo, Deps, Auth, Env) | `project` | Per-codebase setup |
+| 05-06 (Database) | `project` | Per-service databases |
+| 07-14 (Monitoring, Deploy, Observability) | `project` | Per-service config |
+| 15-16 (Admin, Management) | `org` | Company-wide tools |
+| 21-27 (Infra, HA, DR) | `both` | Org policy + project compliance |
+| 30-35 (API, Security) | `project` | Per-service security |
+| 36-39 (Ops, Compliance) | `org` | Company-wide processes |
+| 40-42 (Team, Dev) | `org` | Org-wide practices |
+
+## Skills
+
+Skills live in the checklist repo (submodule):
+
+```
+checklist/
+└── skills/
+    ├── audit-tutorial/
+    │   └── SKILL.md
+    ├── audit-init/
+    │   └── SKILL.md
+    ├── audit-add-project/
+    │   └── SKILL.md
+    ├── audit-start/
+    │   └── SKILL.md
+    ├── audit-continue/
+    │   └── SKILL.md
+    ├── audit-status/
+    │   └── SKILL.md
+    ├── audit-item/
+    │   └── SKILL.md
+    ├── audit-skip/
+    │   └── SKILL.md
+    ├── audit-section/
+    │   └── SKILL.md
+    ├── audit-summary/
+    │   └── SKILL.md
+    ├── audit-history/
+    │   └── SKILL.md
+    ├── audit-diff/
+    │   └── SKILL.md
+    └── audit-waiver/
+        └── SKILL.md
+```
+
+### Skill Reference
+
+| Command | What it does |
+|---------|--------------|
+| `/audit-tutorial` | Onboarding walkthrough |
+| `/audit-init` | Org setup wizard → generates configs |
+| `/audit-add-project` | Add new project interactively |
+| `/audit-start backend-api` | Begin new audit |
+| `/audit-continue` | Resume in-progress audit |
+| `/audit-status` | Show progress, pass rate, blockers |
+| `/audit-item GIT-005` | Jump to specific item |
+| `/audit-skip GIT-005` | Skip with reason |
+| `/audit-section 01` | Focus on one section |
+| `/audit-summary` | Generate `_summary.md` |
+| `/audit-history backend-api` | List past audits |
+| `/audit-diff 2026-01-15 2026-02-04` | Compare audits |
+| `/audit-waiver AUTH-003` | Create waiver interactively |
+
+### Auto-Detection
+
+On session start in a workspace:
+1. Check for `org.yaml` → if missing, offer `/audit-init`
+2. Check for in-progress audit → if found, offer `/audit-continue`
+3. Otherwise, show available commands
+
+## Audit History & Comparison
+
+### `/audit-history backend-api`
+
+```
+Audit History: backend-api
+
+| Date       | Items | Pass | Fail | Skip | Rate  |
+|------------|-------|------|------|------|-------|
+| 2026-02-04 | 45    | 41   | 2    | 2    | 91.1% |
+| 2026-01-15 | 42    | 32   | 8    | 2    | 76.2% |
+| 2025-12-01 | 38    | 25   | 10   | 3    | 65.8% |
+
+Trend: +25.3% improvement over 3 audits
+```
+
+### `/audit-diff backend-api 2026-01-15 2026-02-04`
+
+```
+Audit Comparison: backend-api
+From: 2026-01-15 → To: 2026-02-04
+
+## Improvements (6 items fixed)
+- GIT-003: Branch naming convention → pass (was: fail)
+- AUTH-002: Token rotation → pass (was: fail)
+- DB-004: Connection pooling → pass (was: fail)
+...
+
+## Regressions (0)
+None 🎉
+
+## New items audited (3)
+- COST-001: Budget alerts → pass
+- COST-002: Anomaly detection → fail
+...
+
+## Still failing (2)
+- SEC-005: WAF configuration
+- MON-003: Alert escalation
+
+Summary: 76.2% → 91.1% (+14.9%)
+```
+
+### Regression Detection
+
+When running `/audit-status` or `/audit-continue`, Claude automatically flags:
+- Items that passed in last audit but fail now
+- Prompts CTO to investigate
+
+## Dashboard Integration
+
+### Environment Variable
+
+```bash
+# In dashboard/.env.local
+AUDIT_WORKSPACE=/path/to/my-company-audits
+```
+
+### New Pages
+
+| Route | Purpose |
+|-------|---------|
+| `/audits` | Project list with audit status |
+| `/audits/[project]` | Audit history for project |
+| `/audits/[project]/[date]` | Single audit results |
+| `/audits/_org` | Org-level audit results |
+
+### Data Flow
+
+```
+Dashboard reads:
+├── checklist/checklist/*/items.yaml    → Item definitions
+├── checklist/checklist/*/guide.md      → Verification guides
+├── $AUDIT_WORKSPACE/projects/*.yaml    → Project list
+├── $AUDIT_WORKSPACE/audits/            → Audit results
+└── $AUDIT_WORKSPACE/waivers/           → Waiver info
+```
+
+### Fallback Behavior
+
+- `AUDIT_WORKSPACE` not set → browse-only mode (current behavior)
+- Set but invalid → warning, browse-only mode
+- Set and valid → full audit view enabled
+
+## Interactive Setup
+
+### Org Setup Questions (`/audit-init`)
+
+| Category | Questions |
+|----------|-----------|
+| Identity | Organization name? |
+| Cloud | AWS / GCP / Azure / Other / Tell later (multi-select) |
+| Source Control | GitHub / GitLab / Bitbucket? Cloud or self-hosted? |
+| Infrastructure | Terraform / Pulumi / CloudFormation? K8s / ECS / Lambda / VMs? |
+| Observability | Monitoring? Error tracking? (multi-select, tell later OK) |
+| Secrets | Vault / AWS Secrets Manager / 1Password / doppler? |
+| CI/CD | GitHub Actions / CircleCI / Jenkins / GitLab CI? |
+| Auth | Auth0 / Okta / Cognito / Firebase Auth / Custom? |
+
+"Tell later" options are asked when Claude hits a relevant item.
+
+### Project Setup Questions (`/audit-add-project`)
+
+| Field | Required |
+|-------|----------|
+| Project name | Yes |
+| Path to codebase | Yes |
+| Type (backend/frontend/mobile/library/infra/monorepo) | Yes |
+| GitHub repo (owner/repo) | Optional |
+| Stack (languages/frameworks) | Optional |
+| Environments | Optional |
+| URLs (production, health) | Optional |
+| Scope (include/exclude sections) | Optional |
+
+### Audit Flow Preference (`/audit-start`)
+
+CTO chooses their preferred flow:
+- **Sequential**: Sections in order (1 → 2 → 3...)
+- **Priority-based**: Critical items first across all sections
+- **Section-at-a-time**: Pick a section, complete it, pick next
+- **Free-form**: Jump around, Claude tracks what's done
+
+## Implementation Plan
+
+### Phase 1: Core Infrastructure
+
+1. Add `default_scope` to all section items.yaml files (subagents, one per section)
+2. Create skill directory structure in `checklist/skills/`
+3. Write core skills: `audit-init`, `audit-add-project`, `audit-tutorial`
+
+### Phase 2: Audit Execution
+
+4. Write `audit-start` skill
+5. Write `audit-continue` skill
+6. Write `audit-item` skill
+7. Write `audit-skip` skill
+8. Write `audit-section` skill
+
+### Phase 3: Reporting
+
+9. Write `audit-status` skill
+10. Write `audit-summary` skill
+11. Write `audit-history` skill
+12. Write `audit-diff` skill
+13. Write `audit-waiver` skill
+
+### Phase 4: Dashboard
+
+14. Add `AUDIT_WORKSPACE` env var support to dashboard
+15. Create `/audits` page - project list
+16. Create `/audits/[project]` page - history
+17. Create `/audits/[project]/[date]` page - results
+18. Create `/audits/_org` page - org-level results
+
+### Phase 5: Polish
+
+19. Test full workflow end-to-end
+20. Write README for the workflow
+21. Create example workspace for reference
+
+## Notes
+
+- **Subagents for bulk updates**: When adding `default_scope` to items.yaml files, use subagents (one per section) to avoid context waste
+- **Org vs Project scope is independent**: No dependencies between org-level and project-level items
+- **Waivers scope is CTO's choice**: Can be global or project-specific
+- **Custom items get their own sections**: Not mixed with standard checklist items
