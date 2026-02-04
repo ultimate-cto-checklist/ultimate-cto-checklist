@@ -1,0 +1,165 @@
+section: 35-incident-response
+title: Incident Response
+description: On-call coverage, escalation procedures, runbooks, and post-mortem practices
+
+items:
+  - id: IR-001
+    title: On-call rotation defined
+    severity: recommended
+    category: on-call-escalation
+    summary: >
+      When incidents happen outside business hours, someone needs to be responsible.
+      A defined rotation ensures 24/7 coverage without burning out individuals.
+    pass_criteria:
+      - On-call rotation documented (even if it's "founder handles everything for now")
+      - Clear who is responsible at any given time
+      - OR explicitly no after-hours coverage needed (side project, internal tool)
+    fail_criteria:
+      - Nobody knows who's on call
+      - Verbal-only rotation
+      - Single point of failure with no backup
+    cross_references:
+      - IR-002
+      - IR-004
+      - section-12
+
+  - id: IR-002
+    title: Escalation paths documented
+    severity: recommended
+    category: on-call-escalation
+    summary: >
+      When the on-call person can't resolve an issue alone, they need to know who
+      to escalate to. Clear paths prevent panic during incidents.
+    pass_criteria:
+      - Written escalation path (Tier 1 → Tier 2 → management)
+      - Clear criteria for when to escalate
+      - Contact info for each tier
+    fail_criteria:
+      - No escalation path
+      - Escalation exists but criteria undefined
+      - Single tier only - nowhere to go if stuck
+    cross_references:
+      - IR-001
+      - IR-003
+      - IR-004
+
+  - id: IR-003
+    title: Contact list for emergencies
+    severity: critical
+    category: on-call-escalation
+    summary: >
+      During an incident, you shouldn't be hunting for phone numbers. A readily
+      accessible contact list with multiple reach methods saves critical minutes.
+    pass_criteria:
+      - Contact list exists with key people
+      - Multiple contact methods per person (phone + Slack/email)
+      - Accessible during outages (not solely in a system that could be down)
+    fail_criteria:
+      - No contact list
+      - List exists but only has email
+      - List is only in production systems
+    cross_references:
+      - IR-001
+      - IR-002
+      - IR-004
+      - section-12
+
+  - id: IR-004
+    title: PagerDuty/Opsgenie or similar
+    severity: recommended
+    category: on-call-escalation
+    summary: >
+      Incident management tools handle alerting, on-call scheduling, escalation,
+      and incident tracking in one place.
+    pass_criteria:
+      - Using an incident management tool (PagerDuty, Opsgenie, incident.io, etc.)
+      - Tool is integrated with monitoring/alerting systems
+      - On-call schedules managed in the tool
+    fail_criteria:
+      - No incident management tool (relying on Slack mentions or manual calls)
+      - Tool exists but not integrated with monitoring
+      - Tool exists but nobody uses it properly
+    notes: >
+      For small teams/early stage: not having PagerDuty is fine if you have a
+      simple contact list and Slack alerts. Becomes more critical as team grows.
+    cross_references:
+      - IR-001
+      - IR-002
+      - IR-003
+      - section-12
+
+  - id: IR-005
+    title: Common incidents have runbooks
+    severity: critical
+    category: runbooks
+    summary: >
+      Runbooks turn tribal knowledge into documented steps anyone can follow.
+      During an incident isn't the time to figure out procedures.
+    pass_criteria:
+      - Runbooks exist for the most common/critical incident types
+      - Runbooks are step-by-step (not just "fix the database")
+      - Runbooks are accessible during outages
+      - Team knows where to find them
+    fail_criteria:
+      - No runbooks
+      - Runbooks exist but are outdated/wrong
+      - Runbooks only in one person's head
+      - Runbooks stored only in systems that could be down
+    minimum_coverage:
+      - Server/app down
+      - Database issues
+      - High traffic/load
+      - Security incident
+    cross_references:
+      - section-34
+      - IR-001
+      - IR-002
+      - section-12
+
+  - id: IR-006
+    title: Blameless post-mortems after incidents
+    severity: recommended
+    category: post-mortems
+    summary: >
+      Post-mortems turn incidents into learning opportunities. Blameless means
+      focusing on systems and processes, not individuals.
+    pass_criteria:
+      - Post-mortems written for significant incidents
+      - Blameless culture (focus on systems, not people)
+      - Documents what happened, why, and how to prevent
+      - Template or consistent format used
+    fail_criteria:
+      - No post-mortems
+      - Blame-focused culture
+      - Post-mortems written but superficial
+      - Only for major outages
+    post_mortem_sections:
+      - Timeline
+      - Impact
+      - Root cause (5 whys)
+      - Contributing factors
+      - What went well
+      - Action items
+    cross_references:
+      - IR-007
+      - section-34
+
+  - id: IR-007
+    title: Action items tracked to completion
+    severity: recommended
+    category: post-mortems
+    summary: >
+      Post-mortems are worthless if action items never get done. Action items
+      must be tracked in a system with clear ownership.
+    pass_criteria:
+      - Action items go into a tracked system (Linear, Jira, GitHub issues)
+      - Someone owns following up on completion
+      - Most action items actually get done
+    fail_criteria:
+      - Action items stay in the post-mortem doc only
+      - No ownership of follow-through
+      - Pattern of same issues recurring
+      - '"We''ll get to it" culture'
+    cross_references:
+      - IR-006
+      - section-40
