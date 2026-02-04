@@ -1,0 +1,212 @@
+section: 36-load-stress-testing
+title: Load & Stress Testing
+description: Performance baselines, capacity planning, load testing practices, and resilience under extreme conditions
+
+items:
+  - id: LST-001
+    title: Load testing tool configured
+    severity: recommended
+    category: load-testing-setup
+    summary: >
+      You can't do load testing without a tool. Modern options like k6, Artillery, or Locust
+      make it easy to script realistic traffic patterns and measure system behavior.
+    pass_criteria:
+      - Load testing tool configured with scripts in repo
+      - OR scripts managed externally but documented (k6 Cloud, Grafana Cloud)
+      - OR explicit reason load testing isn't needed (internal tool, low traffic)
+    fail_criteria:
+      - No load testing tool configured
+      - '"We should do that" but never have'
+      - Tool installed but no scripts written
+    tools:
+      - k6
+      - Artillery
+      - Locust
+      - Gatling
+      - JMeter
+      - autocannon
+      - vegeta
+    cross_references:
+      - LST-002
+      - LST-003
+      - LST-004
+
+  - id: LST-002
+    title: Baseline performance metrics established
+    severity: recommended
+    category: load-testing-setup
+    summary: >
+      You can't know if performance degraded if you don't know what "normal" looks like.
+      Baselines are the reference point for all performance work.
+    pass_criteria:
+      - Key metrics documented (response times, throughput, error rates)
+      - Baselines established from actual measurements (not guesses)
+      - Team knows where to find baseline data (APM tool, docs, etc.)
+    fail_criteria:
+      - No idea what "normal" performance looks like
+      - Baselines exist but are outdated (pre-major changes)
+      - Only anecdotal ("it feels fast")
+    key_metrics:
+      - p50/p95/p99 response time
+      - Throughput (RPS)
+      - Error rate
+      - Resource utilization at normal load
+    cross_references:
+      - LST-001
+      - LST-005
+      - section-17
+
+  - id: LST-003
+    title: Load testing before major releases
+    severity: recommended
+    category: pre-release-testing
+    summary: >
+      Performance regressions should be caught before they reach production.
+      Load testing before significant releases validates that new code doesn't break under realistic traffic.
+    pass_criteria:
+      - Documented process for when load testing is required
+      - Evidence of recent load tests before releases
+      - Clear criteria for what constitutes "major"
+    fail_criteria:
+      - No process ("we just ship and hope")
+      - Process exists but never followed
+      - Only load test after production issues
+    when_to_load_test:
+      - New database queries or schema changes
+      - Changed caching strategy
+      - Infrastructure changes
+      - Expected traffic increase
+      - Major refactoring of hot paths
+    cross_references:
+      - LST-001
+      - LST-002
+      - LST-004
+      - section-10
+
+  - id: LST-004
+    title: Automated smoke load tests in CI
+    severity: optional
+    category: pre-release-testing
+    summary: >
+      Quick, lightweight load tests running in CI catch obvious regressions automatically.
+      Not full production-scale tests, but sanity checks.
+    pass_criteria:
+      - Smoke-level load tests run in CI (quick, low concurrency)
+      - Tests catch obvious regressions (10x slower response, errors under light load)
+      - Results visible in CI output or dashboard
+    fail_criteria:
+      - No automated load tests (all manual)
+      - Tests exist but don't run in CI
+      - Tests run but nobody looks at results
+    smoke_test_characteristics:
+      - Low concurrency (10-50 virtual users)
+      - Short duration (30-60 seconds)
+      - Key endpoints only
+      - Fast feedback (< 5 minutes)
+    cross_references:
+      - LST-001
+      - LST-003
+      - section-5
+
+  - id: LST-005
+    title: Capacity limits documented
+    severity: recommended
+    category: capacity-planning
+    summary: >
+      "How much traffic can we handle?" is a question every team should be able to answer.
+      Documented capacity limits inform scaling decisions, incident response, and business planning.
+    pass_criteria:
+      - Capacity limits documented per service/endpoint
+      - Limits based on actual testing (not guesses)
+      - Team knows the bottleneck (database, CPU, memory, external API)
+    fail_criteria:
+      - No idea what limits are ("never tested")
+      - Limits documented but never validated
+      - Only discovered limits during outages
+    cross_references:
+      - LST-002
+      - LST-006
+      - section-21
+      - section-30
+
+  - id: LST-006
+    title: Breaking points identified (stress testing)
+    severity: recommended
+    category: stress-testing
+    summary: >
+      Stress testing pushes beyond normal capacity to understand how the system fails.
+      Not just "it slows down" but understanding specific failure modes and cascades.
+    pass_criteria:
+      - Stress tests have been run to find breaking points
+      - Failure modes documented (what breaks first, how it manifests)
+      - Team understands the cascade (DB fails → API queues → timeouts → user errors)
+    fail_criteria:
+      - Never stress tested ("afraid to break things")
+      - Only discovered breaking points during real incidents
+      - Breaking points unknown
+    common_failure_modes:
+      - Connection pool exhaustion
+      - Memory exhaustion (OOM)
+      - CPU saturation
+      - Database locks
+      - External API rate limits
+    cross_references:
+      - LST-005
+      - LST-007
+      - section-26
+
+  - id: LST-007
+    title: Graceful degradation under load
+    severity: recommended
+    category: stress-testing
+    summary: >
+      When load exceeds capacity, good systems degrade gracefully instead of crashing completely.
+      They shed load, return cached responses, or disable non-critical features.
+    pass_criteria:
+      - Degradation strategy documented and implemented
+      - Circuit breakers protect against cascading failures
+      - Non-critical features can be disabled (feature flags, config)
+      - System returns errors gracefully rather than hanging/crashing
+    fail_criteria:
+      - System crashes or hangs completely under overload
+      - No circuit breakers (one slow dependency takes down everything)
+      - "We just hope it doesn't happen"
+      - Degradation is uncontrolled (random failures)
+    degradation_strategies:
+      - Circuit breakers
+      - Load shedding
+      - Feature flags / kill switches
+      - Cached fallbacks
+      - Queue limits / backpressure
+    cross_references:
+      - LST-006
+      - LST-008
+      - section-30
+      - section-19
+      - section-33
+
+  - id: LST-008
+    title: Auto-scaling triggers tested
+    severity: recommended
+    category: stress-testing
+    summary: >
+      Auto-scaling that's never been triggered is theoretical. It might not scale fast enough,
+      might have permission issues, or might hit account limits. If you rely on auto-scaling, test it.
+    pass_criteria:
+      - Auto-scaling configured with appropriate triggers
+      - Scaling has been tested under load (not just configured and hoped)
+      - Scale-up time is known and acceptable
+      - Account/quota limits checked (won't hit "max instances" unexpectedly)
+    fail_criteria:
+      - Auto-scaling configured but never tested
+      - Scaling triggers misconfigured (scales on wrong metric, too slow)
+      - Hits account limits during scale-up
+      - No auto-scaling when traffic is unpredictable
+    notes: >
+      Not all systems need auto-scaling. Fixed capacity is fine if traffic is predictable
+      and you've sized appropriately. The key is: if you're relying on auto-scaling, test it.
+    cross_references:
+      - LST-006
+      - LST-007
+      - section-26
+      - section-38
