@@ -1,0 +1,16 @@
+section: 21-caching
+title: Caching
+description: Static asset caching via CDN and content hash-based cache invalidation
+
+items:
+  - id: CACHE-001
+    title: Static assets cached by CDN
+    severity: recommended
+    category: Static Asset Caching
+    summary: JS, CSS, images, and fonts served through CDN with appropriate Cache-Control headers
+
+  - id: CACHE-002
+    title: Content hashes for cache invalidation
+    severity: recommended
+    category: Static Asset Caching
+    summary: Asset filenames include content hashes enabling long TTLs with automatic invalidation on changes
