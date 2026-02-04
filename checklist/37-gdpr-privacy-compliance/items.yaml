@@ -1,0 +1,119 @@
+section: 37-gdpr-privacy-compliance
+title: GDPR & Privacy Compliance
+description: User rights, consent management, and privacy documentation for regulatory compliance
+
+items:
+  - id: GDPR-001
+    title: Data deletion request mechanism
+    severity: critical
+    category: Right to Be Forgotten
+    description: >
+      Users have the right to request deletion of their personal data.
+      A mechanism must exist (self-service or documented request process)
+      and internal handling procedures must be documented.
+    check_type: hybrid
+
+  - id: GDPR-002
+    title: Deletion request audit trail
+    severity: recommended
+    category: Right to Be Forgotten
+    description: >
+      Deletion requests must be logged for compliance inquiries.
+      Track who requested, when, what was deleted, and who processed it.
+    check_type: hybrid
+
+  - id: GDPR-003
+    title: Deletion timelines defined
+    severity: critical
+    category: Right to Be Forgotten
+    description: >
+      GDPR requires response within one month. Define and communicate
+      timelines, track requests against deadlines.
+    check_type: hybrid
+
+  - id: GDPR-004
+    title: Cross-service data deletion
+    severity: critical
+    category: Right to Be Forgotten
+    description: >
+      User data exists in many places (database, analytics, CRM, payment processor, etc.).
+      Deletion must cover all services. Maintain a data map of where user data lives.
+    check_type: hybrid
+    cross_references:
+      - GDPR-010
+      - GDPR-011
+
+  - id: GDPR-005
+    title: Data export / portability
+    severity: critical
+    category: Data Export
+    description: >
+      GDPR Article 20 requires users can receive their data in machine-readable format.
+      Provide JSON/CSV export covering all user data, via self-service or request.
+    check_type: hybrid
+
+  - id: GDPR-006
+    title: Consent enforced before tracking
+    severity: critical
+    category: Consent Management
+    description: >
+      No tracking before consent. Configure GTM consent mode (or equivalent),
+      ensure backend respects consent flags, verify no scripts fire pre-consent.
+    check_type: hybrid
+    cross_references:
+      - section-22
+      - section-32
+
+  - id: GDPR-007
+    title: Consent stored and auditable
+    severity: critical
+    category: Consent Management
+    description: >
+      Store consent decisions server-side (not just cookies). Record who consented,
+      when, to what categories, and which policy version. Enable retrieval for audits.
+    check_type: hybrid
+
+  - id: GDPR-008
+    title: Consent withdrawal mechanism
+    severity: critical
+    category: Consent Management
+    description: >
+      Withdrawal must be as easy as giving consent. Provide persistent access
+      to consent settings (footer link, settings page). Verify withdrawal stops tracking.
+    check_type: hybrid
+
+  - id: GDPR-009
+    title: Privacy policy current and complete
+    severity: critical
+    category: Privacy Documentation
+    description: >
+      Privacy policy must exist, be current (updated within 12 months or after changes),
+      and include GDPR-required disclosures (controller, purposes, legal basis, rights, etc.).
+    check_type: hybrid
+
+  - id: GDPR-010
+    title: Data processing records maintained
+    severity: critical
+    category: Privacy Documentation
+    description: >
+      GDPR Article 30 requires Record of Processing Activities (ROPA).
+      Document all processing activities with purposes, data categories,
+      recipients, retention periods, and security measures.
+    check_type: hybrid
+    cross_references:
+      - GDPR-004
+      - GDPR-011
+
+  - id: GDPR-011
+    title: Third-party processors documented
+    severity: critical
+    category: Privacy Documentation
+    description: >
+      Maintain list of all third parties processing user data. Have DPAs
+      with each processor. Disclose processors in privacy policy.
+      Vet new vendors for GDPR compliance.
+    check_type: hybrid
+    cross_references:
+      - GDPR-004
+      - GDPR-009
+      - GDPR-010
