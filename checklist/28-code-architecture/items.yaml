@@ -1,0 +1,62 @@
+section: 28-code-architecture
+title: Code Architecture
+description: SOLID principles compliance, code quality tooling, and build performance
+
+items:
+  - id: ARCH-001
+    title: SOLID Principles Audited Regularly
+    severity: Recommended
+    category: SOLID Principles
+    summary: Code follows SOLID principles and is regularly audited for compliance, preferably by AI agents
+    checks:
+      - AI code review integration (CLAUDE.md, GitHub Actions)
+      - Architecture documentation (ADRs, coding standards)
+      - Proxy metrics (file sizes, import counts, god classes)
+    pass_criteria:
+      - AI agent is part of code review process
+      - Architecture principles documented
+      - No major SOLID violations in critical paths
+      - Evidence of recent architecture review
+    cross_references:
+      - ARCH-002
+      - TEST-005
+      - FLOW-002
+
+  - id: ARCH-002
+    title: Code Quality Measurement Tools
+    severity: Recommended
+    category: Code Quality
+    summary: Tooling to measure code health - duplication, complexity, and overall quality with visible results
+    checks:
+      - Quality tools in dependencies (SonarQube, CodeClimate, jscpd, Plato)
+      - Duplication detection configured
+      - Complexity measurement (ESLint rules or dedicated tools)
+      - CI integration with visibility
+    pass_criteria:
+      - At least one code quality tool configured
+      - Duplication detection available
+      - Complexity metrics accessible
+      - Results visible to team
+      - Team actively reviews and acts on findings
+    cross_references:
+      - ARCH-001
+      - TEST-005
+      - DEP-001
+
+  - id: ARCH-003
+    title: Build Performance
+    severity: Recommended
+    category: Build Performance
+    summary: Builds complete quickly - under 3 minutes clean, under 30 seconds cached
+    checks:
+      - Build caching configuration (Turbo, Nx, Webpack cache)
+      - CI caching (GitHub Actions cache, node_modules)
+      - Actual build time measurement
+    pass_criteria:
+      - Clean build < 3 minutes
+      - Cached build < 30 seconds
+      - Build caching configured
+      - No unnecessary rebuilds
+    cross_references:
+      - DEPLOY-003
+      - DEP-007
