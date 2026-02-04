@@ -1,0 +1,52 @@
+section: 34-rollback-recovery
+title: Rollback & Recovery
+description: Deployment rollback, database migration rollback, and disaster recovery capabilities
+
+items:
+  - id: RR-001
+    title: Rollback procedure documented
+    severity: critical
+    category: rollback-strategy
+    summary: Written procedure for how to rollback a bad deployment
+
+  - id: RR-002
+    title: Rollback tested regularly
+    severity: recommended
+    category: rollback-strategy
+    summary: Rollback procedure tested at least quarterly with multiple team members
+
+  - id: RR-003
+    title: Can rollback in < 2 minutes
+    severity: critical
+    category: rollback-strategy
+    summary: Rollback execution time under 2 minutes with no blocking approval gates
+
+  - id: RR-004
+    title: Database migration rollback plan
+    severity: critical
+    category: rollback-strategy
+    summary: Strategy for rolling back database migrations including destructive changes
+
+  - id: RR-005
+    title: Recovery from backups documented
+    severity: critical
+    category: emergency-recovery
+    summary: Step-by-step procedure to restore full stack from backups
+
+  - id: RR-006
+    title: Recovery procedure tested
+    severity: critical
+    category: emergency-recovery
+    summary: Full recovery drill completed at least annually including database restore
+
+  - id: RR-007
+    title: Know RTO (Recovery Time Objective)
+    severity: recommended
+    category: emergency-recovery
+    summary: Maximum acceptable downtime defined and achievable with current infrastructure
+
+  - id: RR-008
+    title: Know RPO (Recovery Point Objective)
+    severity: recommended
+    category: emergency-recovery
+    summary: Maximum acceptable data loss defined with backup frequency to support it
