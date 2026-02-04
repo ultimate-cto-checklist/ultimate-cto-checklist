@@ -1,0 +1,34 @@
+section: 24-data-retention
+title: Data Retention
+description: Soft delete implementation, data cleanup processes, and legal retention compliance
+
+items:
+  - id: RET-001
+    title: Critical data uses soft deletes
+    severity: critical
+    category: Soft Delete Implementation
+    summary: Critical business data uses soft deletes (deleted_at column) instead of hard DELETE operations
+
+  - id: RET-002
+    title: Soft delete queries exclude deleted records by default
+    severity: critical
+    category: Soft Delete Implementation
+    summary: Queries automatically filter out soft-deleted records via ORM feature or global middleware; escape hatch exists for admin/audit
+
+  - id: RET-003
+    title: Periodic review of old soft-deleted data
+    severity: recommended
+    category: Data Cleanup
+    summary: Process exists (automated or manual) to periodically review soft-deleted records for permanent deletion
+
+  - id: RET-004
+    title: Hard delete after review period
+    severity: recommended
+    category: Data Cleanup
+    summary: Capability exists to permanently purge reviewed soft-deleted data; retention period defined; purges are auditable
+
+  - id: RET-005
+    title: Legal retention requirements respected
+    severity: critical
+    category: Legal Compliance
+    summary: Compliance requirements documented; legal hold mechanism prevents deletion of legally-required data; purge respects holds
