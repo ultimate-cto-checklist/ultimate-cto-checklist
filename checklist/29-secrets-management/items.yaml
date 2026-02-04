@@ -1,0 +1,125 @@
+section: 29-secrets-management
+title: Secrets Management
+description: How secrets are stored, loaded, and protected across environments
+
+items:
+  - id: SEC-001
+    title: Use Secret Manager or Equivalent
+    severity: Critical
+    category: Secret Storage
+    summary: Production secrets managed by dedicated secret manager with rotation and audit capabilities
+    checks:
+      - Secret manager SDK in dependencies (GCP, AWS, Vault, Doppler, etc.)
+      - Deployment configs use secret injection (Kubernetes secretRef, etc.)
+      - CI/CD uses secrets context (not hardcoded)
+      - Rotation support configured
+    pass_criteria:
+      - Production secrets managed by dedicated secret manager
+      - Rotation capability exists
+      - Audit trail available for secret access
+    cross_references:
+      - SEC-002
+      - SEC-003
+      - GIT-016
+
+  - id: SEC-002
+    title: Secrets Loaded into Process Environment
+    severity: Critical
+    category: Secret Storage
+    summary: Secrets injected into process environment at startup, not read from files at runtime
+    checks:
+      - Application reads from process.env / os.environ
+      - Centralized config with env validation at startup
+      - Deployment passes env vars (not files)
+      - dotenv only used for local development
+    pass_criteria:
+      - Application reads secrets via environment variables
+      - Secrets injected at deploy time (not read from files)
+      - Centralized config validates required env vars at startup
+      - dotenv dev-only, not used in production
+    cross_references:
+      - SEC-001
+      - SEC-003
+      - ENV-002
+
+  - id: SEC-003
+    title: Not Stored on File System
+    severity: Critical
+    category: Secret Storage
+    summary: Secrets exist only in memory after environment injection - no files on production servers
+    checks:
+      - No .env files in deployment artifacts
+      - .gitignore covers secret patterns
+      - Dockerfile doesn't copy secret files
+      - No file-based secret loading in production code
+      - TLS certs managed by infrastructure, not committed
+    pass_criteria:
+      - No .env or secret files deployed to production
+      - Secrets exist only in memory
+      - No file-based secret loading in production
+      - TLS certificates managed by infrastructure or secret manager
+    cross_references:
+      - SEC-001
+      - SEC-002
+      - GIT-016
+
+  - id: SEC-004
+    title: No Secrets Committed to Git
+    severity: Critical
+    category: Secret Security
+    summary: Secret scanning in place to prevent commits and detect past leaks
+    checks:
+      - Pre-commit hooks for secret detection (gitleaks, trufflehog)
+      - GitHub secret scanning enabled
+      - .gitignore covers secret patterns
+      - Scan for secrets in current codebase and history
+    pass_criteria:
+      - Secret scanning tool in place (pre-commit or CI)
+      - GitHub secret scanning enabled
+      - .gitignore covers common secret patterns
+      - No secrets in codebase or history
+    cross_references:
+      - SEC-001
+      - GIT-016
+      - SEC-003
+
+  - id: SEC-005
+    title: Different Secrets Per Environment
+    severity: Recommended
+    category: Secret Security
+    summary: Each environment has completely separate credentials - compromising one doesn't expose others
+    checks:
+      - Environment-specific secret naming in code
+      - Deployment configs use different secret sources per env
+      - CI/CD has separate secrets per environment
+      - Environment detection determines which secrets load
+    pass_criteria:
+      - Each environment has its own set of secrets
+      - Compromising one environment doesn't expose others
+      - Secret manager organized by environment
+      - CI/CD uses environment-specific secret contexts
+    cross_references:
+      - SEC-001
+      - ENV-001
+      - ENV-003
+
+  - id: SEC-006
+    title: Least Privilege Access to Secrets
+    severity: Recommended
+    category: Secret Security
+    summary: Secret access follows least privilege - dedicated service accounts, limited human access, audit trails
+    checks:
+      - Secret manager IAM/access policies
+      - Role-based access patterns in Terraform/IaC
+      - Dedicated service accounts for applications
+      - No overly broad access patterns (allUsers, admin roles)
+    pass_criteria:
+      - Production secrets accessible only to prod workloads + limited humans
+      - Applications use dedicated service accounts
+      - Developers cannot read prod secrets without approval
+      - Access changes are logged/auditable
+    cross_references:
+      - SEC-001
+      - ACCESS-001
+      - ACCESS-002
+      - ADMIN-002
