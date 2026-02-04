@@ -1,0 +1,16 @@
+section: 27-database-tooling
+title: Database Tooling
+description: Developer tools for database visibility - schema visualization and data exploration
+
+items:
+  - id: DBT-001
+    title: Tool to visualize database diagrams (ERD)
+    severity: recommended
+    category: Visualization
+    summary: Team has accessible way to view database schema visually; new developers can quickly understand table relationships
+
+  - id: DBT-002
+    title: Ability to query/explore data from any table
+    severity: recommended
+    category: Exploration
+    summary: Developers can browse data in dev/staging; production access controlled and audited; documented tooling available
