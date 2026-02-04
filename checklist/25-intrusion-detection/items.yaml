@@ -1,0 +1,32 @@
+section: 25-intrusion-detection
+title: Intrusion Detection
+description: Intrusion detection systems, data exfiltration monitoring, and security alerting for smaller budgets
+
+items:
+  - id: IDS-001
+    title: Intrusion detection system evaluated/deployed
+    severity: recommended
+    severity_note: Critical for big projects handling sensitive data or at scale
+    category: General Security Monitoring
+    summary: Some IDS solution in place (WAF, SIEM, cloud-native security, or open-source); appropriate for project scale and budget
+
+  - id: IDS-002
+    title: Network-level data transfer monitoring
+    severity: recommended
+    severity_note: Critical for big projects handling sensitive data or at scale
+    category: Data Exfiltration Detection
+    summary: Monitors outbound data volume per IP/session; thresholds defined for unusual activity; alerts configured
+
+  - id: IDS-003
+    title: Database query anomaly detection
+    severity: recommended
+    severity_note: Critical for big projects handling sensitive data or at scale
+    category: Data Exfiltration Detection
+    summary: Database queries logged with row counts; thresholds defined for unusual query sizes; alerts on large result sets
+
+  - id: IDS-004
+    title: Exfiltration alert routing configured
+    severity: recommended
+    severity_note: Critical for big projects handling sensitive data or at scale
+    category: Alerting
+    summary: Security alerts reach right people immediately with actionable context; escalation path exists; not batched
