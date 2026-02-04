@@ -1,0 +1,43 @@
+section: 26-high-availability-backups
+title: High Availability & Backups
+description: High availability configuration for databases and servers, backup strategies, point-in-time recovery, and off-site storage
+
+items:
+  - id: HA-001
+    title: Production database HA configured
+    severity: recommended
+    severity_note: Critical when serious money involved
+    category: High Availability
+    summary: Database has automatic failover to standby; Multi-AZ, regional HA, or replication configured; failover tested
+
+  - id: HA-002
+    title: Multi-region server deployment with failover
+    severity: recommended
+    severity_note: Critical when serious money involved
+    category: High Availability
+    summary: Servers in 2+ regions/data centers OR single region with quick-failover capability; traffic can route away from failed region
+
+  - id: HA-003
+    title: Production database backup configured
+    severity: critical
+    category: Backups
+    summary: Automated backups enabled; retention period defined (minimum 7 days); backups verified running; restore tested
+
+  - id: HA-004
+    title: Off-site backup storage (outside primary provider)
+    severity: recommended
+    severity_note: Critical when serious money involved
+    category: Backups
+    summary: Backups stored with different provider than production (not just cross-region); sync automated; external restore tested
+
+  - id: HA-005
+    title: Point-in-time recovery enabled
+    severity: critical
+    category: Backups
+    summary: PITR enabled for production database; recovery window appropriate (7-35 days); team knows how to perform PITR restore
+
+  - id: HA-006
+    title: Backup window appropriate for RPO
+    severity: recommended
+    category: Backups
+    summary: Backup window intentional (low-traffic period); frequency aligns with business RPO; no performance impact during backups
