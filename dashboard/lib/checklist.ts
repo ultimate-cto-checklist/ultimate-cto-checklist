@@ -315,3 +315,177 @@ export async function getSection(slug: string): Promise<Section> {
 
   return section;
 }
+
+// === Workspace / Audit Support ===
+
+const WORKSPACE_PATH = process.env.AUDIT_WORKSPACE;
+
+export function hasWorkspace(): boolean {
+  if (!WORKSPACE_PATH) return false;
+  try {
+    // Use sync check since this is called in component render
+    const fsSync = require('fs');
+    return fsSync.existsSync(path.join(WORKSPACE_PATH, 'org.yaml'));
+  } catch {
+    return false;
+  }
+}
+
+export interface Project {
+  name: string;
+  path: string;
+  type: string;
+  repo?: string;
+  lastAudit?: string;
+  lastAuditScore?: number;
+}
+
+export interface AuditResult {
+  itemId: string;
+  title: string;
+  status: 'pass' | 'fail' | 'partial' | 'skip' | 'not-applicable' | 'blocked';
+  severity: 'critical' | 'recommended';
+  section: string;
+  auditedAt: string;
+  evidence?: string;
+  notes?: string;
+}
+
+export interface AuditHistoryEntry {
+  date: string;
+  total: number;
+  pass: number;
+  fail: number;
+  skip: number;
+  score: number;
+}
+
+export async function listProjects(): Promise<Project[]> {
+  if (!WORKSPACE_PATH) return [];
+
+  const projectsDir = path.join(WORKSPACE_PATH, 'projects');
+  try {
+    const files = await fs.readdir(projectsDir);
+    const yamlFiles = files.filter(f => f.endsWith('.yaml'));
+
+    return Promise.all(yamlFiles.map(async (file) => {
+      const content = await fs.readFile(path.join(projectsDir, file), 'utf-8');
+      const data = YAML.parse(content);
+
+      // Get last audit info
+      const auditDir = path.join(WORKSPACE_PATH!, 'audits', data.name);
+      let lastAudit: string | undefined;
+      let lastAuditScore: number | undefined;
+
+      try {
+        const audits = await fs.readdir(auditDir);
+        const dateDirs = audits
+          .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+          .sort()
+          .reverse();
+
+        if (dateDirs.length > 0) {
+          lastAudit = dateDirs[0];
+          lastAuditScore = await calculateAuditScore(data.name, dateDirs[0]);
+        }
+      } catch {
+        // No audits directory yet
+      }
+
+      return {
+        name: data.name,
+        path: data.path,
+        type: data.type,
+        repo: data.repo,
+        lastAudit,
+        lastAuditScore,
+      };
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getAuditResults(
+  project: string,
+  date: string
+): Promise<AuditResult[]> {
+  if (!WORKSPACE_PATH) return [];
+
+  const auditDir = path.join(WORKSPACE_PATH, 'audits', project, date);
+  try {
+    const files = await fs.readdir(auditDir);
+    const resultFiles = files.filter(f => f.endsWith('.md') && !f.startsWith('_') && !f.startsWith('.'));
+
+    return Promise.all(resultFiles.map(async (file) => {
+      const content = await fs.readFile(path.join(auditDir, file), 'utf-8');
+      const { data, body } = parseFrontmatter(content);
+
+      return {
+        itemId: data.item_id || '',
+        title: data.title || '',
+        status: data.status || 'blocked',
+        severity: data.severity || 'recommended',
+        section: data.section || '',
+        auditedAt: data.audited_at || '',
+        evidence: extractMarkdownSection(body, 'Evidence'),
+        notes: extractMarkdownSection(body, 'Notes'),
+      };
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getAuditHistory(project: string): Promise<AuditHistoryEntry[]> {
+  if (!WORKSPACE_PATH) return [];
+
+  const auditDir = path.join(WORKSPACE_PATH, 'audits', project);
+  try {
+    const entries = await fs.readdir(auditDir);
+    const dates = entries
+      .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+      .sort()
+      .reverse();
+
+    return Promise.all(dates.map(async (date) => {
+      const results = await getAuditResults(project, date);
+      const pass = results.filter(r => r.status === 'pass').length;
+      const fail = results.filter(r => r.status === 'fail').length;
+      const skip = results.filter(r => r.status === 'skip').length;
+
+      return {
+        date,
+        total: results.length,
+        pass,
+        fail,
+        skip,
+        score: results.length > 0 ? Math.round((pass / results.length) * 100) : 0,
+      };
+    }));
+  } catch {
+    return [];
+  }
+}
+
+async function calculateAuditScore(project: string, date: string): Promise<number> {
+  const results = await getAuditResults(project, date);
+  if (results.length === 0) return 0;
+  const passed = results.filter(r => r.status === 'pass').length;
+  return Math.round((passed / results.length) * 100);
+}
+
+function parseFrontmatter(content: string): { data: Record<string, any>; body: string } {
+  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!match) return { data: {}, body: content };
+  return {
+    data: YAML.parse(match[1]) || {},
+    body: match[2],
+  };
+}
+
+function extractMarkdownSection(content: string, heading: string): string | undefined {
+  const regex = new RegExp(`## ${heading}\\n([\\s\\S]*?)(?=\\n## |$)`);
+  const match = content.match(regex);
+  return match ? match[1].trim() || undefined : undefined;
+}
