@@ -28,19 +28,20 @@ function extractItemGuide(markdown: string, itemId: string): string | null {
 
   const match = markdown.match(pattern);
   if (match) {
-    return match[1] + match[2].trim();
+    // Return content without the heading (we already show the item title)
+    return match[2].trim();
   }
 
   return null;
 }
 
 /**
- * Extract the intro/overview section (everything before the first item section)
+ * Extract the intro/overview section (everything before the horizontal rule divider)
  */
 function extractIntroGuide(markdown: string): string {
-  // Find first ### heading that looks like an item ID (e.g., ### DEP-001)
-  const itemPattern = /\n###\s+[A-Z]+-\d+/;
-  const match = markdown.search(itemPattern);
+  // The --- horizontal rule separates intro from item sections
+  const hrPattern = /\n---\n/;
+  const match = markdown.search(hrPattern);
 
   if (match > 0) {
     return markdown.slice(0, match).trim();
@@ -55,84 +56,64 @@ export default function SectionContent({
   itemsByCategory,
   sortedCategories,
 }: SectionContentProps) {
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
 
-  // Get the guide content to display
-  const guideContent = selectedItemId
-    ? extractItemGuide(guide, selectedItemId) || guide
-    : extractIntroGuide(guide);
+  // Get intro guide content
+  const introGuide = extractIntroGuide(guide);
 
-  const selectedItem = selectedItemId
-    ? items.find((item) => item.id === selectedItemId)
-    : null;
+  // Build a map of item guides
+  const getItemGuide = (itemId: string) => extractItemGuide(guide, itemId);
+
+  const handleItemToggle = (itemId: string) => {
+    setExpandedItemId(expandedItemId === itemId ? null : itemId);
+  };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8">
-      {/* Items panel (main content on left) */}
-      <main className="flex-1 min-w-0">
-        <div className="space-y-8">
-          {sortedCategories.map((category) => (
-            <section key={category}>
-              {/* Category header */}
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4 capitalize">
-                {category.replace(/-/g, ' ')}
-              </h2>
+    <div>
+      {/* Overview guide at top */}
+      {introGuide && (
+        <div className="rounded-xl px-5 py-5 mb-10 bg-white border border-slate-200 shadow-sm">
+          <GuidePanel markdown={introGuide} showToc={false} />
+        </div>
+      )}
 
-              {/* Items in this category */}
-              <div className="space-y-3">
-                {itemsByCategory[category].map((item) => (
-                  <ChecklistItem
-                    key={item.id}
-                    item={item}
-                    isSelected={item.id === selectedItemId}
-                    onSelect={() => setSelectedItemId(item.id)}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+      {/* Items grouped by category */}
+      <div className="space-y-8">
+        {sortedCategories.map((category) => (
+          <section
+            key={category}
+            className="rounded-xl px-5 py-5 bg-white border border-slate-200 shadow-sm"
+          >
+            {/* Category header */}
+            <h2 className="text-base font-bold text-slate-800 mb-5 capitalize tracking-tight flex items-center gap-2">
+              <span className="w-1 h-5 rounded-full bg-gradient-to-b from-teal-500 to-cyan-500"></span>
+              {category.replace(/-/g, ' ')}
+            </h2>
 
-          {/* Empty state */}
-          {items.length === 0 && (
-            <p className="text-zinc-500 dark:text-zinc-500 italic">
+            {/* Items in this category */}
+            <div className="space-y-3">
+              {itemsByCategory[category].map((item) => (
+                <ChecklistItem
+                  key={item.id}
+                  item={item}
+                  isSelected={item.id === expandedItemId}
+                  onSelect={() => handleItemToggle(item.id)}
+                  guideContent={getItemGuide(item.id)}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
+
+        {/* Empty state */}
+        {items.length === 0 && (
+          <div className="rounded-xl px-5 py-12 bg-white border border-slate-200 text-center">
+            <p className="text-slate-500 italic">
               No items in this section yet.
             </p>
-          )}
-        </div>
-      </main>
-
-      {/* Guide panel (sidebar on right) */}
-      {guide && (
-        <aside className="lg:w-[420px] flex-shrink-0">
-          <div className="lg:sticky lg:top-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                {selectedItem ? (
-                  <span className="flex items-center gap-2">
-                    <span className="font-mono text-sm px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded">
-                      {selectedItem.id}
-                    </span>
-                    <span>Guide</span>
-                  </span>
-                ) : (
-                  'Overview'
-                )}
-              </h2>
-              {selectedItemId && (
-                <button
-                  onClick={() => setSelectedItemId(null)}
-                  className="text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-                >
-                  Show overview
-                </button>
-              )}
-            </div>
-            <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 bg-zinc-50 dark:bg-zinc-900 max-h-[calc(100vh-12rem)] overflow-y-auto">
-              <GuidePanel markdown={guideContent} collapsed={false} />
-            </div>
           </div>
-        </aside>
-      )}
+        )}
+      </div>
     </div>
   );
 }

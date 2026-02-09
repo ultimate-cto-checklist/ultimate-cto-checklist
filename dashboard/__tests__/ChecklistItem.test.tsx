@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ChecklistItem from '@/components/ChecklistItem';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/checklist';
@@ -44,97 +44,68 @@ describe('ChecklistItem', () => {
   });
 
   describe('Severity Chips', () => {
-    it('should render critical severity chip with red/orange styling', () => {
+    it('should render critical severity chip with amber styling', () => {
       render(<ChecklistItem item={mockCriticalItem} />);
 
       const chip = screen.getByText('Critical');
       expect(chip).toBeInTheDocument();
-      // Check for red/orange color classes (bg-red or bg-orange)
-      expect(chip.className).toMatch(/bg-(red|orange)/);
+      // Check for amber color classes (used for critical items in bold design)
+      expect(chip.className).toMatch(/bg-amber/);
     });
 
-    it('should render recommended severity chip with muted styling', () => {
+    it('should render recommended severity chip with teal styling', () => {
       render(<ChecklistItem item={mockRecommendedItem} />);
 
       const chip = screen.getByText('Recommended');
       expect(chip).toBeInTheDocument();
-      // Check for muted color classes (bg-zinc for recommended items)
-      expect(chip.className).toMatch(/bg-zinc/);
+      // Check for teal color classes (used for recommended items in DevOps design)
+      expect(chip.className).toMatch(/bg-teal/);
     });
   });
 
   describe('Expand/Collapse Behavior', () => {
     it('should have a clickable element with button role', () => {
-      render(<ChecklistItem item={mockCriticalItem} />);
+      render(<ChecklistItem item={mockCriticalItem} isSelected={false} />);
 
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
     });
 
     it('should have aria-expanded="false" when collapsed', () => {
-      render(<ChecklistItem item={mockCriticalItem} />);
+      render(<ChecklistItem item={mockCriticalItem} isSelected={false} />);
 
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('should expand and show description when clicked', () => {
-      render(<ChecklistItem item={mockCriticalItem} />);
+    it('should show description when isSelected is true', () => {
+      render(<ChecklistItem item={mockCriticalItem} isSelected={true} />);
 
-      const button = screen.getByRole('button');
-
-      // Initially collapsed
-      expect(screen.queryByText(/A README.md file should exist/)).not.toBeInTheDocument();
-
-      // Click to expand
-      fireEvent.click(button);
-
-      // Now visible
+      // Visible when selected
       expect(screen.getByText(/A README.md file should exist/)).toBeInTheDocument();
     });
 
-    it('should have aria-expanded="true" when expanded', () => {
-      render(<ChecklistItem item={mockCriticalItem} />);
+    it('should have aria-expanded="true" when isSelected is true', () => {
+      render(<ChecklistItem item={mockCriticalItem} isSelected={true} />);
 
       const button = screen.getByRole('button');
-      fireEvent.click(button);
-
       expect(button).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('should collapse and hide description when clicked again', () => {
-      render(<ChecklistItem item={mockCriticalItem} />);
+    it('should hide description when isSelected is false', () => {
+      render(<ChecklistItem item={mockCriticalItem} isSelected={false} />);
 
-      const button = screen.getByRole('button');
-
-      // Expand
-      fireEvent.click(button);
-      expect(screen.getByText(/A README.md file should exist/)).toBeInTheDocument();
-
-      // Collapse
-      fireEvent.click(button);
       expect(screen.queryByText(/A README.md file should exist/)).not.toBeInTheDocument();
     });
 
-    it('should toggle aria-expanded attribute on each click', () => {
-      render(<ChecklistItem item={mockCriticalItem} />);
+    it('should call onSelect when clicked', () => {
+      const onSelect = vi.fn();
+      render(<ChecklistItem item={mockCriticalItem} isSelected={false} onSelect={onSelect} />);
 
       const button = screen.getByRole('button');
-
-      // Initial state
-      expect(button).toHaveAttribute('aria-expanded', 'false');
-
-      // First click - expand
       fireEvent.click(button);
-      expect(button).toHaveAttribute('aria-expanded', 'true');
 
-      // Second click - collapse
-      fireEvent.click(button);
-      expect(button).toHaveAttribute('aria-expanded', 'false');
-
-      // Third click - expand again
-      fireEvent.click(button);
-      expect(button).toHaveAttribute('aria-expanded', 'true');
+      expect(onSelect).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -10,41 +10,52 @@ interface SectionCardProps {
  * Links to the detailed section page at /section/[slug].
  */
 export default function SectionCard({ section }: SectionCardProps) {
-  const { slug, id, name, description, itemCount, criticalCount } = section;
-
-  // Format item count text with proper pluralization
-  const itemText = itemCount === 1 ? '1 item' : `${itemCount} items`;
-
-  // Format critical count text with proper pluralization, only show if > 0
-  const criticalText = criticalCount > 0
-    ? ` · ${criticalCount === 1 ? '1 critical' : `${criticalCount} critical`}`
-    : '';
+  const { slug, id, name, description, goal, itemCount, criticalCount } = section;
 
   return (
     <Link
       href={`/section/${slug}`}
-      className="block rounded-lg border border-zinc-200 bg-white p-6 transition-all hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
+      className="group flex flex-col h-full rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-lg hover:shadow-teal-500/10 hover:border-teal-300 transition-all duration-200 overflow-hidden"
     >
-      {/* Section number and name */}
-      <h2 className="mb-2 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-        {id} - {name}
-      </h2>
+      {/* Colored top accent bar */}
+      <div className="h-1 bg-gradient-to-r from-teal-500 to-cyan-500 group-hover:from-teal-400 group-hover:to-cyan-400 transition-colors" />
 
-      {/* Description */}
-      <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
-        {description}
-      </p>
+      <div className="flex flex-col h-full p-5">
+        {/* Section number badge + name */}
+        <div className="flex items-start gap-3 mb-2">
+          <span className="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg bg-teal-50 text-teal-700 font-bold text-sm group-hover:bg-teal-100 transition-colors">
+            {id}
+          </span>
+          <div className="pt-0.5">
+            <h2 className="text-lg font-semibold text-slate-800 group-hover:text-teal-600 transition-colors leading-tight">
+              {name}
+            </h2>
+            {goal && (
+              <p className="text-sm text-slate-500 mt-0.5">
+                {goal}
+              </p>
+            )}
+          </div>
+        </div>
 
-      {/* Item count and critical badge */}
-      <div className="flex items-center gap-2 text-sm">
-        <span className="text-zinc-700 dark:text-zinc-300">
-          {itemText}
-          {criticalText && (
-            <span className="text-orange-600 dark:text-orange-500">
-              {criticalText}
+        {/* Description */}
+        <p className="mb-4 text-sm text-slate-500 flex-grow leading-relaxed">
+          {description}
+        </p>
+
+        {/* Stats footer */}
+        <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+          <span className="inline-flex items-center gap-1.5 text-sm text-slate-600">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            {itemCount} {itemCount === 1 ? 'item' : 'items'}
+          </span>
+          {criticalCount > 0 && (
+            <span className="inline-flex items-center gap-1.5 text-sm text-amber-700 font-medium">
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+              {criticalCount} critical
             </span>
           )}
-        </span>
+        </div>
       </div>
     </Link>
   );

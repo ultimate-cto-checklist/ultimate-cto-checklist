@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { getSection } from '@/lib/checklist';
 import SectionContent from '@/components/SectionContent';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/checklist';
@@ -8,6 +9,20 @@ interface SectionPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({ params }: SectionPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const section = await getSection(slug);
+    return {
+      title: `${section.name} - CTO Checklist`,
+    };
+  } catch {
+    return {
+      title: 'Section Not Found - CTO Checklist',
+    };
+  }
 }
 
 /**
@@ -60,38 +75,46 @@ export default async function SectionPage({ params }: SectionPageProps) {
   ).length;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
       {/* Back navigation */}
       <div className="mb-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 hover:text-teal-800 transition-colors group"
         >
-          <span>←</span>
+          <span className="group-hover:-translate-x-0.5 transition-transform">←</span>
           <span>Back to sections</span>
         </Link>
       </div>
 
       {/* Section header */}
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">
-          {section.id} - {section.name}
-        </h1>
-        <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-4">
-          {section.description}
-        </p>
-
-        {/* Stats */}
-        <div className="flex items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
-          <span>
-            {section.items.length}{' '}
-            {section.items.length === 1 ? 'item' : 'items'}
+      <header className="mb-8 pb-6 border-b border-slate-200">
+        <div className="flex items-start gap-4">
+          <span className="flex-shrink-0 inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 text-white font-bold text-lg shadow-lg shadow-teal-500/25">
+            {section.id}
           </span>
-          {criticalCount > 0 && (
-            <span className="text-orange-600 dark:text-orange-500">
-              {criticalCount} {criticalCount === 1 ? 'critical' : 'critical'}
-            </span>
-          )}
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">
+              {section.name}
+            </h1>
+            <p className="text-base text-slate-600 mb-4 leading-relaxed">
+              {section.description}
+            </p>
+
+            {/* Stats */}
+            <div className="flex items-center gap-4">
+              <span className="inline-flex items-center gap-1.5 text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                {section.items.length} {section.items.length === 1 ? 'item' : 'items'}
+              </span>
+              {criticalCount > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-sm text-amber-800 bg-amber-100 px-3 py-1 rounded-full font-medium">
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                  {criticalCount} critical
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 

@@ -21,6 +21,8 @@ interface GuidePanelProps {
   markdown: string
   /** Optional initial collapsed state for mobile */
   collapsed?: boolean
+  /** Whether to show table of contents (default: true) */
+  showToc?: boolean
 }
 
 /**
@@ -61,7 +63,7 @@ function extractTocEntries(markdown: string): TocEntry[] {
  * - Collapsible on mobile via toggle button
  * - Clean typography with Tailwind CSS
  */
-export default function GuidePanel({ markdown, collapsed: initialCollapsed = false }: GuidePanelProps) {
+export default function GuidePanel({ markdown, collapsed: initialCollapsed = false, showToc = true }: GuidePanelProps) {
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed)
 
   // Memoize TOC extraction to avoid re-parsing on every render
@@ -90,25 +92,26 @@ export default function GuidePanel({ markdown, collapsed: initialCollapsed = fal
   return (
     <div data-testid="guide-panel" className="overflow-hidden">
       {/* Table of Contents - collapsible */}
-      {tocEntries.length > 0 && (
-        <nav className="mb-4" aria-label="Table of contents">
+      {showToc && tocEntries.length > 0 && (
+        <nav className="mb-5 pb-4 border-b border-slate-200" aria-label="Table of contents">
           {/* Toggle button */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="w-full flex items-center justify-between py-2 text-left hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            className="w-full flex items-center justify-between py-2 text-left hover:text-slate-900 transition-colors"
             aria-expanded={!isCollapsed}
             aria-controls="toc-content"
           >
-            <span className="font-medium text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+            <span className="font-bold text-xs uppercase tracking-wider text-teal-600 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
               Table of Contents
             </span>
-            <span className="text-zinc-400 text-xs">{isCollapsed ? '▼' : '▲'}</span>
+            <span className={`text-teal-400 text-sm transition-transform duration-200 ${isCollapsed ? '' : 'rotate-90'}`}>▶</span>
           </button>
 
           {/* TOC Content */}
           <ul
             id="toc-content"
-            className={`${isCollapsed ? 'hidden' : 'block'} space-y-1 text-sm border-l border-zinc-200 dark:border-zinc-700 pl-3 mt-2`}
+            className={`${isCollapsed ? 'hidden' : 'block'} space-y-1 text-sm border-l-2 border-teal-200 pl-3 mt-3`}
           >
             {tocEntries.map((entry, index) => (
               <li
@@ -117,7 +120,7 @@ export default function GuidePanel({ markdown, collapsed: initialCollapsed = fal
               >
                 <a
                   href={`#${entry.id}`}
-                  className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 block py-0.5 text-sm leading-snug"
+                  className="text-slate-600 hover:text-teal-600 block py-0.5 text-sm leading-snug transition-colors"
                 >
                   {entry.text}
                 </a>
@@ -128,15 +131,22 @@ export default function GuidePanel({ markdown, collapsed: initialCollapsed = fal
       )}
 
       {/* Markdown Content */}
-      <article className="prose prose-sm prose-zinc dark:prose-invert max-w-none
-        prose-headings:font-semibold prose-headings:text-zinc-900 dark:prose-headings:text-zinc-100
-        prose-p:text-zinc-600 dark:prose-p:text-zinc-400 prose-p:leading-relaxed
-        prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-        prose-pre:bg-zinc-100 dark:prose-pre:bg-zinc-800 prose-pre:border prose-pre:border-zinc-200 dark:prose-pre:border-zinc-700
-        prose-a:text-zinc-700 dark:prose-a:text-zinc-300 prose-a:underline prose-a:underline-offset-2
-        prose-li:text-zinc-600 dark:prose-li:text-zinc-400
-        prose-strong:text-zinc-900 dark:prose-strong:text-zinc-100
-        prose-blockquote:border-zinc-300 dark:prose-blockquote:border-zinc-600 prose-blockquote:text-zinc-600 dark:prose-blockquote:text-zinc-400
+      <article className="prose prose-slate max-w-none
+        prose-headings:font-semibold prose-headings:tracking-tight
+        prose-h1:text-xl prose-h1:text-slate-900 prose-h1:border-b prose-h1:border-slate-200 prose-h1:pb-2 prose-h1:mb-4
+        prose-h2:text-lg prose-h2:text-slate-800 prose-h2:mt-8 prose-h2:mb-3
+        prose-h3:text-base prose-h3:text-slate-700 prose-h3:mt-6 prose-h3:mb-2
+        prose-p:text-slate-600 prose-p:leading-relaxed prose-p:my-3 prose-p:text-sm
+        prose-code:bg-slate-800 prose-code:text-cyan-400 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm prose-code:font-medium prose-code:before:content-none prose-code:after:content-none
+        prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-700 prose-pre:rounded-lg prose-pre:my-4
+        prose-pre:prose-code:bg-transparent prose-pre:prose-code:text-slate-300 prose-pre:prose-code:p-0
+        prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium
+        prose-ul:my-3 prose-ul:list-disc prose-ul:pl-5 prose-ul:text-sm
+        prose-ol:my-3 prose-ol:list-decimal prose-ol:pl-5 prose-ol:text-sm
+        prose-li:text-slate-600 prose-li:my-1 prose-li:pl-1
+        prose-strong:text-slate-800 prose-strong:font-semibold
+        prose-blockquote:border-l-3 prose-blockquote:border-teal-400 prose-blockquote:bg-teal-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-slate-600
+        prose-hr:border-slate-200 prose-hr:my-6
         overflow-x-auto
       ">
         <ReactMarkdown components={components}>

@@ -7,18 +7,28 @@ export default async function Home() {
 
   // Calculate total item count across all sections
   const totalItems = sections.reduce((sum, section) => sum + section.itemCount, 0);
+  const totalCritical = sections.reduce((sum, section) => sum + section.criticalCount, 0);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Summary stats */}
-      <div className="mb-8">
-        <p className="text-lg text-zinc-600 dark:text-zinc-400">
-          {sections.length} sections · {totalItems} total items
-        </p>
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      {/* Summary stats - inline display, not a card */}
+      <div className="mb-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-500">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+          <span>{sections.length} sections</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+          <span>{totalItems} items</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+          <span>{totalCritical} critical</span>
+        </div>
       </div>
 
-      {/* Grid of section cards - 3 cols desktop, 1 col mobile */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Grid of section cards */}
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
         {sections.map((section) => (
           <SectionCard key={section.slug} section={section} />
         ))}

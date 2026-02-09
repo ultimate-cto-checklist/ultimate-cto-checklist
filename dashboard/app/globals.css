@@ -1,17 +1,28 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* slate-50 - subtle off-white */
+  --foreground: #1e293b; /* slate-800 */
 
-  /* Severity colors - light mode */
-  --color-critical: #dc2626; /* red-600 */
-  --color-critical-bg: #fef2f2; /* red-50 */
-  --color-critical-border: #fecaca; /* red-200 */
+  /* Brand colors - teal/cyan for modern DevOps feel */
+  --color-primary: #0d9488; /* teal-600 */
+  --color-primary-light: #2dd4bf; /* teal-400 */
+  --color-primary-dark: #115e59; /* teal-800 */
 
-  --color-recommended: #3b82f6; /* blue-500 */
-  --color-recommended-bg: #eff6ff; /* blue-50 */
-  --color-recommended-border: #bfdbfe; /* blue-200 */
+  /* Severity colors - vibrant and clear */
+  --color-critical: #f59e0b; /* amber-500 */
+  --color-critical-bg: #fffbeb; /* amber-50 */
+  --color-critical-border: #fcd34d; /* amber-300 */
+  --color-critical-text: #92400e; /* amber-800 */
+
+  --color-recommended: #14b8a6; /* teal-500 */
+  --color-recommended-bg: #f0fdfa; /* teal-50 */
+  --color-recommended-border: #5eead4; /* teal-300 */
+
+  /* Success */
+  --color-success: #10b981; /* emerald-500 */
+  --color-success-bg: #ecfdf5; /* emerald-50 */
 }
 
 @theme inline {
@@ -21,28 +32,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-
-    /* Severity colors - dark mode */
-    --color-critical: #ef4444; /* red-500 */
-    --color-critical-bg: #1f1412; /* red-950/50 */
-    --color-critical-border: #7f1d1d; /* red-900 */
-
-    --color-recommended: #60a5fa; /* blue-400 */
-    --color-recommended-bg: #0f1419; /* blue-950/50 */
-    --color-recommended-border: #1e3a8a; /* blue-900 */
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
