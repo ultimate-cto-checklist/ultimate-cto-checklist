@@ -1,0 +1,78 @@
+# Scope Mapping for CTO Checklist Sections
+#
+# Defines the default audit scope for each checklist section.
+# Used when adding `default_scope` to each section's items.yaml.
+#
+# Scopes:
+#   org     - Audit once at the organization level (policies, tooling, standards)
+#   project - Audit per-project (code, config, deployments)
+#   both    - Org-level policy exists AND per-project compliance is verified
+
+sections:
+  # Infrastructure & Setup - per-project
+  01-git-repo-setup: project
+  02-dependencies: project
+  03-authentication-endpoints: project
+  04-environments: project
+
+  # Database & Data - per-project
+  05-database-connections: project
+  06-resilience: project
+
+  # Monitoring & Health - per-project
+  07-health-endpoints: project
+  08-testing-code-metrics: project
+  09-development-workflow: project
+  10-deployments: project
+
+  # Access & Security - mixed
+  11-access-control: both
+  12-monitoring: project
+  13-infrastructure-security: both
+
+  # Documentation & Admin - mixed
+  14-documentation: project
+  15-admin-features: org
+  16-cto-workspace: org
+
+  # Performance & Analytics - mostly per-project
+  17-performance-monitoring: project
+  18-analytics: project
+  19-error-reporting: project
+  20-email-infrastructure: org
+
+  # Frontend & Caching - per-project
+  21-caching: project
+  22-frontend-performance: project
+  23-client-side-security: project
+
+  # Data & Security - mixed
+  24-data-retention: both
+  25-intrusion-detection: org
+
+  # HA & Database - mixed
+  26-high-availability-backups: both
+  27-database-tooling: project
+
+  # Code & Secrets - per-project
+  28-code-architecture: project
+  29-secrets-management: both
+
+  # API & Security - per-project
+  30-rate-limiting: project
+  31-api-design: project
+  32-content-security-policy: project
+
+  # Operations - mixed
+  33-feature-flags: project
+  34-rollback-recovery: project
+  35-incident-response: org
+  36-load-stress-testing: project
+  37-gdpr-privacy-compliance: org
+  38-cost-monitoring-budget-alerts: org
+
+  # Team & Development - mostly org level
+  39-developer-onboarding: org
+  40-technical-debt-tracking: org
+  41-accessibility: project
+  42-internationalization: project
