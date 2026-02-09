@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's analytics capabilities, covering data ownership, pipelines, reporting, and engineering metrics.
 
+## The Goal: Data You Own and Query
+
+Analytics locked in third-party dashboards limits what questions you can answer. True data ownership means server-side capture, warehouse storage, and self-serve querying across product and engineering metrics.
+
+- **Owned** — analytics data captured server-side and stored in infrastructure you control
+- **Queryable** — automated pipelines flow data to a warehouse where SQL answers any question
+- **Self-serve** — BI reporting layer enables non-engineers to build their own reports
+- **Engineering-aware** — PRs, commits, and cycle time tracked alongside product metrics
+
 ## Before You Start
 
 1. Identify the analytics stack (PostHog, Segment, Mixpanel, custom, etc.)

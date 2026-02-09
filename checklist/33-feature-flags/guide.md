@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's feature flag system - gradual rollouts, A/B testing capabilities, kill switches, and targeting.
 
+## The Goal: Deployments Decoupled from Releases
+
+Ship code anytime, release features when ready. Feature flags give you control over what users see without redeploying.
+
+- **Enabled** — A feature flag system exists and is actively used (env vars for small projects, dedicated service for larger ones)
+- **Gradual** — Percentage-based rollouts, sticky user assignment, and segment targeting are available
+- **Kill switches** — Critical features (payments, external APIs, new features) can be toggled without a deploy
+- **Instant** — Kill switch toggle time is under 5 minutes, ideally instant via dashboard
+- **Documented** — Runbooks exist for disabling features during incidents
+
 ## Before You Start
 
 1. **Identify project scale** (small projects can use env vars, larger projects need dedicated service)

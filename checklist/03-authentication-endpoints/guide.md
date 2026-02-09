@@ -2,6 +2,17 @@
 
 This guide walks you through auditing a project's authentication system and HTTP endpoint security.
 
+## The Goal: Secure by Default
+
+Authentication should be simple enough to explain in two sentences, yet robust enough to withstand scrutiny. Every endpoint should be protected unless explicitly marked public, and the system should fail fast before wasting resources on unauthorized requests.
+
+- **Simple** — auth flow explainable in 2-3 sentences, single entry point
+- **Documented** — auth system described for developers and AI agents
+- **Tested** — comprehensive tests covering happy paths and failure cases
+- **Default-deny** — endpoints protected unless explicitly public
+- **Fail-fast** — auth validated before any expensive operations
+- **Verified** — webhooks validate signatures before processing payloads
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

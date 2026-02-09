@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's client-side security practices, including cookie configuration, browser storage usage, and JWT handling.
 
+## The Goal: Secrets Hidden from JavaScript
+
+Sensitive data in the browser should be inaccessible to malicious scripts, limiting the blast radius of XSS attacks.
+
+- **HttpOnly cookies** — Session tokens and auth data cannot be read by JavaScript
+- **Clean browser storage** — localStorage and sessionStorage contain only preferences, never tokens or PII
+- **Secure JWT handling** — Short-lived tokens, proper signing algorithms, documented refresh flows
+- **Minimized attack surface** — No sensitive data exposed to client-side code that doesn't need it
+
 ## Before You Start
 
 1. **Get access to the codebase** (required for this section)

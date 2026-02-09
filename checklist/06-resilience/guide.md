@@ -2,6 +2,15 @@
 
 This guide walks you through auditing an application's resilience to third-party service failures.
 
+## The Goal: Graceful Degradation
+
+When external services fail, the application should bend but not break. Users experience reduced functionality, not total outages.
+
+- **Fault-tolerant** — app continues running when optional services are down
+- **Isolated** — one failing dependency does not cascade to unrelated features
+- **Protected** — all external calls wrapped in error handling (try/catch, timeouts, circuit breakers)
+- **Classified** — dependencies categorized as critical vs optional with appropriate handling for each
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

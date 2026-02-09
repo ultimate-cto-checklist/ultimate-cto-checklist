@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's infrastructure security setup, ensuring all environments are protected behind Cloudflare, origin servers are not directly exposed, security headers are properly configured, and SSL certificate issuance is monitored.
 
+## The Goal: Hidden and Hardened
+
+Your origin servers should be invisible to attackers. Defense in depth means multiple layers: Cloudflare absorbs attacks, origins reject direct connections, headers reveal nothing useful, and certificate monitoring catches rogue issuance.
+
+- **Proxied** — All public-facing environments behind Cloudflare with DNS records showing only Cloudflare IPs
+- **Origin-protected** — Firewalls restrict traffic to Cloudflare IP ranges; direct origin access fails
+- **Header-hardened** — HSTS enforced, technology-revealing headers stripped, no stack fingerprinting
+- **Script-verified** — External CDN scripts use SRI; GTM access controlled and audited
+- **Certificate-monitored** — CT logs watched for unauthorized certificate issuance
+
 ## Before You Start
 
 1. Have Cloudflare API token with read access (Zone:Read, DNS:Read)

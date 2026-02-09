@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's Content Security Policy (CSP) configuration - headers, reporting, inline script handling, and source whitelisting.
 
+## The Goal: Defense in Depth
+
+CSP is your browser-level safety net. Even if XSS slips through your code, a strong CSP can stop malicious scripts from executing.
+
+- **Configured** — CSP headers are deployed with essential directives (`default-src`, `script-src`, `frame-ancestors`)
+- **Monitored** — A reporting mechanism captures and surfaces CSP violations
+- **Locked down** — Inline scripts are blocked or secured via nonces/hashes
+- **Least-privilege** — Source whitelists avoid overly permissive wildcards or `unsafe-eval`
+- **Production-ready** — Policy is strict enough to provide real protection, not just checkbox compliance
+
 ## Before You Start
 
 1. **Identify where CSP could be configured** (application code, nginx, Cloudflare, Vercel/Netlify headers)

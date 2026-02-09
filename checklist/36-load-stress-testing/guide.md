@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's load and stress testing practices - performance baselines, capacity planning, and resilience under extreme conditions.
 
+## The Goal: Known Limits, Graceful Failures
+
+Your system should never surprise you under load. Know your capacity, understand your breaking points, and fail gracefully when pushed beyond limits.
+
+- **Measured** — Baselines and capacity limits derived from actual testing, not guesswork
+- **Predictable** — Breaking points identified before they occur in production
+- **Resilient** — System degrades gracefully under overload with circuit breakers and load shedding
+- **Validated** — Auto-scaling and recovery mechanisms tested, not just configured
+
 ## Before You Start
 
 1. **Identify the technology stack** (affects which load testing tools are appropriate)

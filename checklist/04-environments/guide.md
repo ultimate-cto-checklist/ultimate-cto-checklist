@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's environment setup, configuration, and protection.
 
+## The Goal: Production Parity
+
+Staging should behave exactly like production so bugs surface before release, not after. Dev environments should enable deep debugging. Non-production environments should be invisible to the public internet.
+
+- **Tiered** — production, staging, and dev environments with clear workflows
+- **Parity** — staging runs in production mode with matching env vars
+- **Debuggable** — dev environments have verbose logging and stack traces
+- **Protected** — staging and dev behind Cloudflare Zero Trust
+- **Verified** — webhooks bypassing Zero Trust validate signatures
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

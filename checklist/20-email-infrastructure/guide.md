@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's email infrastructure, covering DNS authentication (MX, SPF, DKIM, DMARC), deliverability testing, and email logging for both transactional and marketing emails.
 
+## The Goal: Trusted, Visible Email
+
+Email infrastructure should be authenticated, monitored, and auditable. Every email your domain sends should be trusted by receivers and visible to your team.
+
+- **Authenticated** — SPF, DKIM, and DMARC configured with enforcement enabled
+- **Routable** — MX records correctly configured with reachable mail servers
+- **Visible** — transactional and marketing emails flow through providers with full delivery and engagement metrics
+- **Tested** — periodic deliverability testing prevents inbox placement degradation
+- **Retained** — email log retention policies intentionally defined and documented
+
 ## Before You Start
 
 1. **Get domain inventory from user**:

@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's API design practices - versioning strategy, input validation, injection prevention, and gateway/proxy configuration.
 
+## The Goal: Secure by Design
+
+APIs are your attack surface. This audit ensures your endpoints are hardened against injection attacks and architected for safe, consistent behavior.
+
+- **Consistent** — APIs use versioning strategies appropriate to their audience (public vs internal)
+- **Validated** — All user input is validated server-side before processing
+- **Injection-proof** — Database queries are protected through parameterized queries or ORM usage
+- **XSS-safe** — User-generated content is properly sanitized before rendering
+- **Centralized** — Authentication, rate limiting, and CORS are handled via gateway or proxy configuration
+
 ## Before You Start
 
 1. **Identify API architecture** (REST, GraphQL, gRPC, internal vs public)

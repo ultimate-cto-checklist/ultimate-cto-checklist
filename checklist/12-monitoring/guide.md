@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's monitoring setup, ensuring infrastructure metrics are collected, database performance is tracked, HTTP requests are logged with alerting, and status pages exist.
 
+## The Goal: No Blind Spots
+
+You cannot fix what you cannot see. Complete observability means knowing when things break before users do, understanding why they broke, and having the data to prevent recurrence.
+
+- **Complete coverage** — Every infrastructure component (compute, databases, caches) has metrics collection with no gaps
+- **Queryable** — Slow queries logged and reviewed regularly; HTTP requests analyzable by status, endpoint, and time
+- **Alertable** — 404 volume spikes and immediate 500 detection route to the right people
+- **Retained** — At least 14 days of logs for debugging; status pages for incident communication
+
 ## Before You Start
 
 1. Identify the monitoring stack in use (Prometheus, Datadog, CloudWatch, GCP Monitoring, etc.)

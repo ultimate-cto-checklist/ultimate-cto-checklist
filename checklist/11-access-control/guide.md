@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's access control model, ensuring production access is minimal, tiered appropriately, and that access holders meet security requirements.
 
+## The Goal: Least Privilege, Verified
+
+Production access is a liability. Every person with access is a potential attack vector, compliance risk, and operational burden. The goal is minimal, justified, secure access with clear accountability.
+
+- **Tiered** — Separate access lists for production, staging, and development with documented approval chains
+- **Minimal** — Production access granted only with clear justification; fewer people means smaller blast radius
+- **Verified** — Every production access holder meets security requirements: device encryption, MFA, endpoint protection
+- **Reviewed** — Periodic access audits with clear ownership ensure access stays minimal over time
+
 ## Before You Start
 
 1. Confirm you have access to cloud IAM (GCP, AWS, or Azure)

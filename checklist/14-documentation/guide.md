@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's documentation, ensuring all features are documented, complex systems have dedicated explanations, and documentation stays current with the codebase.
 
+## The Goal: Self-Explaining Systems
+
+Code tells you what, documentation tells you why. Good documentation enables humans and AI agents to understand, debug, and extend systems without tribal knowledge or archaeology.
+
+- **Accessible** — Feature documentation exists in-repo (preferred) or externally, readable by both humans and AI agents
+- **Complete** — Complex systems (payments, fulfillment, admin, integrations) have dedicated prose beyond code comments
+- **Current** — Documentation stays fresh; staleness signals are checked and addressed
+- **In-repo first** — Auth-walled external docs have in-repo equivalents for AI accessibility
+
 ## Before You Start
 
 1. Know the project's documentation locations (in-repo, Notion, GitBook, wiki)

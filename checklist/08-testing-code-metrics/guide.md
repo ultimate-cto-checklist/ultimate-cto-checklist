@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's test coverage, testing practices, and code quality metrics.
 
+## The Goal: Confidence in Change
+
+Every code change is validated by automated tests. Quality cannot silently degrade.
+
+- **Enforced** — CI fails when coverage drops below threshold
+- **Complete** — bug fixes include regression tests, features ship with test coverage
+- **Critical-path** — e2e tests cover revenue-impacting journeys (auth, checkout, core flows)
+- **Measurable** — complexity metrics tracked with established baselines
+- **Automated** — test and lint commands documented for agents and developers alike
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

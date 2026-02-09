@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a repository's dependency management, language choices, and code quality tooling.
 
+## The Goal: Secure, Modern Stack
+
+Dependencies should be actively maintained, automatically updated, and free of known vulnerabilities. The codebase should use modern tooling that catches bugs at compile time rather than runtime.
+
+- **Secure** — no critical vulnerabilities, regular security audits
+- **Updated** — automated dependency updates via Dependabot or Renovate
+- **Type-safe** — TypeScript with strict mode enabled
+- **Consistent** — linting rules follow best practices, not disabled wholesale
+- **Orchestrated** — monorepos use Turborepo for efficient builds and caching
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

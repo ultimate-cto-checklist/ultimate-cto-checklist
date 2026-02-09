@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's secrets management practices - how secrets are stored, loaded, and protected.
 
+## The Goal: Zero Leaked Secrets
+
+Secrets should be impossible to leak through code, impossible to access without authorization, and impossible to share across environments.
+
+- **Managed secrets** — production credentials in a dedicated secret manager with rotation and audit trails
+- **Environment injection** — secrets loaded via environment variables at startup, never read from files at runtime
+- **No git exposure** — nothing committed to version control, with scanning to prevent future leaks
+- **Isolated environments** — dev, staging, and prod use completely separate credentials
+- **Least privilege** — access follows principle of minimal permissions with proper service accounts and controls
+
 ## Before You Start
 
 1. **Identify deployment target** (GCP, AWS, Azure, self-hosted, etc.)

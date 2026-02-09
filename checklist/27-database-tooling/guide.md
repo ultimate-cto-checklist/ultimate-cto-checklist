@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's database tooling - specifically, whether developers have visibility into the database schema and the ability to explore data.
 
+## The Goal: Visible, Explorable Data
+
+Developers should understand and explore data easily in non-production environments while production access remains controlled and auditable.
+
+- **Visual schema** — ERD documentation that accurately reflects current table relationships, accessible to all developers
+- **Easy exploration** — tools for browsing and querying data in dev/staging without friction
+- **Controlled production** — production database access appropriately restricted with audit trails
+- **Standardized tooling** — team uses consistent tools rather than ad-hoc individual setups
+
 ## Before You Start
 
 1. **Identify database type** (PostgreSQL, MySQL, MongoDB, etc.)

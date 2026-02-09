@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's rate limiting configuration - how requests are throttled, how limits are enforced, and how consumers are informed.
 
+## The Goal: Protected Endpoints
+
+APIs must defend themselves against abuse while remaining usable for legitimate consumers who understand the boundaries.
+
+- **Active throttling** — rate limiting at infrastructure or application level protects against abuse and DoS
+- **Client isolation** — limits keyed on IP, user ID, or API key so one consumer cannot exhaust limits for others
+- **Graceful rejection** — proper 429 responses with helpful information when limits are exceeded
+- **Discoverable limits** — consumers can learn limits through documentation or response headers before hitting them
+
 ## Before You Start
 
 1. **Identify infrastructure** (Cloudflare, nginx, AWS API Gateway, etc.)

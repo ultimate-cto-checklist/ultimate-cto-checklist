@@ -1,6 +1,31 @@
-# Section 05: Database & Connections
+# Database & Connections Audit Guide
 
 Verification guide for database configuration, migrations, users, and access controls.
+
+## The Goal: Hardened Data Layer
+
+The database should be configured for production load, protected by least-privilege access, and impossible to accidentally destroy. Migrations should be tested before they touch production.
+
+- **Pooled** — explicit connection limits and timeouts configured
+- **Tested** — migrations verified in CI against ephemeral databases
+- **Least-privilege** — app user cannot DROP, read-only user available
+- **Restricted** — admin credentials limited to 1-2 critical personnel
+- **Documented** — Redis critical data and admin tools properly protected
+
+## Before You Start
+
+1. Confirm you're in the target repository's root directory
+2. Have database credentials or read-only access available for manual checks
+3. Know your database type (PostgreSQL, MySQL, etc.) for correct commands
+4. Have access to CI configuration (GitHub Actions)
+5. Have the user available for manual verification questions (DB-004, DB-005, DB-008, DB-009)
+
+## Audit Process
+
+Work through each item below. For each item:
+- Gather evidence (automatic where possible)
+- Record PASS, FAIL, or PARTIAL with evidence
+- Note any recommendations for failures
 
 ---
 

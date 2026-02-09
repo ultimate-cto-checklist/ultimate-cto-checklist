@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's admin features, ensuring admin parity with user-facing features and proper security controls on admin access.
 
+## The Goal: Empowered and Accountable
+
+Admins need power to help users, but that power must be traceable. The goal is full operational capability without direct database access, with every action logged and access revocable in minutes.
+
+- **Parity** — Every major user-facing feature has admin equivalents for viewing, managing, and debugging
+- **Enumerable** — All admin users listable with access levels; periodic reviews ensure minimal footprint
+- **Tracked** — Admin logins logged with timestamps and IPs; unusual patterns detectable
+- **Auditable** — Admin actions (especially destructive ones) recorded with enough detail to reconstruct incidents
+- **Revocable** — Compromised accounts disabled immediately via UI, active sessions invalidated
+
 ## Before You Start
 
 1. Identify the admin panel/interface location (in-app, separate app, etc.)

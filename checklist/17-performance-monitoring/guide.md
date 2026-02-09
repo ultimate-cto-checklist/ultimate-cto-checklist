@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's performance monitoring capabilities, covering response time tracking and memory management.
 
+## The Goal: Proactive Performance Visibility
+
+Performance issues should be detected and diagnosed before users notice. Complete monitoring coverage means you see slowdowns, memory growth, and resource pressure as they develop.
+
+- **Per-endpoint** — response time monitoring identifies slow requests at the route level
+- **Historical** — memory usage tracked over time enables capacity planning and trend analysis
+- **Alerting** — automated detection of memory leaks before they cause outages
+- **Protected** — heap dump capabilities secured from unauthorized access
+
 ## Before You Start
 
 1. Identify the monitoring stack (Datadog, New Relic, Prometheus/Grafana, Sentry Performance, etc.)

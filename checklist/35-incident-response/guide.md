@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's incident response capabilities - on-call coverage, escalation procedures, runbooks, and post-mortem practices.
 
+## The Goal: Calm Under Pressure
+
+Incidents are stressful. Good preparation turns chaos into a checklist. When production breaks at 3am, everyone knows what to do.
+
+- **Owned** — On-call coverage and escalation paths are defined so incidents have clear ownership at any time
+- **Reachable** — Emergency contact information is documented and accessible even during outages
+- **Runbooked** — Common incident types have step-by-step playbooks any team member can follow
+- **Learning** — Post-mortem practices capture learnings and generate tracked action items
+- **Improving** — Incident response matures from ad-hoc handling to continuous improvement
+
 ## Before You Start
 
 1. **Identify team size and coverage needs** (24/7 vs business hours only)

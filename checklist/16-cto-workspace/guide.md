@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's CTO workspace tooling, specifically the ability to get AI-assisted project briefings on demand.
 
+## The Goal: On-Demand Project Clarity
+
+A CTO should never need to manually gather data to understand project status. AI-assisted briefings provide instant, synthesized answers to "what happened since X?" across all critical dimensions.
+
+- **Documented** — a Claude skill or CLAUDE.md section provides the briefing mechanism
+- **Comprehensive** — queries git commits, pull requests, and deployment runs
+- **Synthesized** — delivers actionable summaries, not raw command output
+- **On-demand** — available whenever the CTO needs it, without manual data gathering
+
 ## Before You Start
 
 1. Ensure `gh` CLI is authenticated for the repository

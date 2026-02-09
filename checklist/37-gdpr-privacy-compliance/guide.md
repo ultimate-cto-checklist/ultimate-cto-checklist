@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's GDPR and privacy compliance - user rights, consent management, and required documentation.
 
+## The Goal: Privacy by Design
+
+User data should be handled with intentionality. Rights are exercisable, consent is meaningful, and data flows are documented and controlled.
+
+- **Exercisable** — Users can delete, export, and manage their data through clear mechanisms
+- **Enforceable** — No tracking before consent; withdrawal as easy as granting
+- **Documented** — Privacy policy current, ROPA maintained, all processors known and contracted
+- **Complete** — Deletion and export cover all services, not just the main database
+
 ## Before You Start
 
 1. **Identify target markets** (EU users trigger GDPR, California triggers CCPA, etc.)

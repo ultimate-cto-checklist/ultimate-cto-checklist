@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's error reporting capabilities, covering Sentry (or similar) setup, configuration, deployment integration, and AI-driven error handling.
 
+## The Goal: Errors That Fix Themselves
+
+Production errors should flow from detection to diagnosis to fix with minimal friction. A mature error pipeline means every error is tracked, readable, correlated to deploys, and triaged for action.
+
+- **Captured** — error tracking tool installed, initialized early, and properly configured
+- **Privacy-aware** — PII handling intentionally configured with scrubbing or documented justification
+- **Readable** — stack traces and source maps show original code, not minified output
+- **Correlated** — deployment integration ties errors to specific releases
+- **Actionable** — AI-driven triage, prioritization, and auto-PR creation for fixes
+
 ## Before You Start
 
 1. Identify the error tracking tool (Sentry, Bugsnag, Rollbar, Raygun, etc.)

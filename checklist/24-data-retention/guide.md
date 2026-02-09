@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's data retention practices, including soft delete implementation, data cleanup processes, and legal compliance.
 
+## The Goal: Reversible by Default
+
+Data deletion should be recoverable, auditable, and compliant with legal requirements.
+
+- **Soft deletes everywhere** — Critical business data is never permanently lost from regular operations
+- **Automatic filtering** — Queries exclude deleted records by default, with escape hatches for audits
+- **Periodic review** — Soft-deleted data gets reviewed and cleaned up, not accumulated forever
+- **Gated hard deletes** — Permanent deletion exists but requires review, logging, and approval
+- **Legal compliance** — Retention periods and legal holds prevent accidental deletion of required data
+
 ## Before You Start
 
 1. **Get access to the codebase** (required for this section)

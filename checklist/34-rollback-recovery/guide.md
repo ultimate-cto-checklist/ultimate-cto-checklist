@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's rollback and disaster recovery capabilities - deployment rollback, database migration rollback, and full recovery from backups.
 
+## The Goal: Two-Minute Recovery
+
+When things go wrong, speed matters. Every minute of downtime costs trust. This audit ensures you can undo mistakes fast.
+
+- **Documented** — Deployment rollback procedures can be executed quickly (under 2 minutes) by any team member
+- **Migration-aware** — Database rollback strategies exist, especially for destructive schema changes
+- **Full-stack** — Disaster recovery procedures cover restoring the entire system from backups
+- **Tested** — Rollback and recovery procedures have been validated and actually work
+- **Objective-driven** — Recovery objectives (RTO/RPO) are defined and achievable with current infrastructure
+
 ## Before You Start
 
 1. **Identify deployment platform** (Vercel, Railway, Fly.io, K8s, custom CI/CD)

@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's static asset caching configuration, including CDN caching and content hash-based cache invalidation.
 
+## The Goal: Cache Everything, Invalidate Reliably
+
+A well-configured caching strategy delivers fast page loads while ensuring users always see the latest content when you ship changes.
+
+- **CDN-served** — Static assets (JS, CSS, images, fonts) come from edge locations with appropriate cache headers
+- **Hash-based invalidation** — Content hashes in filenames ensure reliable cache busting when code changes
+- **Long TTLs for immutable assets** — Hashed assets get aggressive caching (1 year) since the hash handles versioning
+- **No cache misconfigurations** — Every asset has intentional cache settings, not defaults or no-cache
+
 ## Before You Start
 
 1. **Get the production URL** from the user

@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's intrusion detection capabilities, focusing on data exfiltration detection and alerting for smaller-budget implementations.
 
+## The Goal: Early Warning System
+
+Know when someone is stealing your data before they finish, not after the breach report.
+
+- **Active IDS** — Some form of intrusion detection (WAF, SIEM, or cloud-native tools) is deployed and monitored
+- **Exfiltration detection** — Unusual outbound data volumes trigger alerts, whether via network or API
+- **Database anomaly monitoring** — Large or unusual queries are logged and flagged for review
+- **Actionable alerts** — Security notifications reach the right people immediately with context to act
+
 ## Before You Start
 
 1. **Identify infrastructure provider** (AWS, GCP, Azure, Cloudflare, etc.)

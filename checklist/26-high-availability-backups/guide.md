@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's high availability configuration and backup strategy, ensuring production systems can survive failures and data can be recovered.
 
+## The Goal: Survivable Infrastructure
+
+Production systems must survive failures at every level - from individual nodes to entire cloud providers. This means having redundancy that actually works when needed.
+
+- **Automatic failover** — databases and servers recover without human intervention when primary nodes fail
+- **Regional resilience** — infrastructure spans multiple regions or availability zones with proper traffic routing
+- **Verified backups** — automated backups run successfully with appropriate retention, not just configured but tested
+- **Off-site protection** — backups stored with a separate provider to survive provider-wide failures
+- **Point-in-time recovery** — restore to any moment, not just the last daily snapshot, with windows aligned to RPO/RTO
+
 ## Before You Start
 
 1. **Identify database type and hosting** (RDS, Cloud SQL, self-hosted PostgreSQL/MySQL, etc.)

@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a repository's Git setup, branch strategy, CI/CD configuration, and overall cleanliness.
 
+## The Goal: Clone-to-Running in Minutes
+
+A new developer should be able to clone, install, and run the project without asking anyone for help. The repository should be self-documenting, secure by default, and impossible to accidentally break.
+
+- **Runnable** — clone to working app with zero manual intervention
+- **Protected** — branch rules enforce code review and prevent direct pushes
+- **Tested** — CI validates every PR with linting and tests
+- **Secure** — no secrets exposed in code or git history
+- **Clean** — proper .gitignore patterns, no stale files or cruft
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

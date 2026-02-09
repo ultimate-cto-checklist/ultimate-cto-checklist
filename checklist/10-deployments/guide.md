@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's deployment pipeline, including workflow stability, notifications, build performance, and release tagging.
 
+## The Goal: Push-Button Releases
+
+Deployments are boring, predictable events. The team knows instantly when code ships and can roll back if needed.
+
+- **Stable** — deployment workflow documented and rarely fails (<10% failure rate)
+- **Visible** — team notified on both success and failure, not just problems
+- **Fast** — builds optimized with caching and parallelization
+- **Tagged** — every production release gets a version tag for traceability
+- **Reversible** — clear rollback path when things go wrong
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

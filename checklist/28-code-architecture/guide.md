@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's code architecture - specifically SOLID principles compliance, code quality tooling, and build performance.
 
+## The Goal: Maintainable, Fast Builds
+
+Code should stay clean through regular architectural oversight, measurable quality metrics, and builds fast enough that developers actually run them.
+
+- **SOLID compliance** — principles documented and regularly audited through AI-assisted or manual code review
+- **Measured quality** — tools configured to detect duplication, complexity, and code smells with visible results
+- **Fast builds** — under 3 minutes clean, under 30 seconds cached, so developers don't avoid running them
+- **Visible metrics** — quality gates inform development decisions, not just exist in CI logs
+- **Documented decisions** — architecture choices recorded in ADRs, guidelines, or agent instructions
+
 ## Before You Start
 
 1. **Identify primary language/framework** (TypeScript, Python, Go, etc.)

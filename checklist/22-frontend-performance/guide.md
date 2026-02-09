@@ -2,6 +2,15 @@
 
 This guide walks you through auditing a project's front-end performance, including Core Web Vitals and resource loading optimization.
 
+## The Goal: Fast, Measurable Rendering
+
+Every page load should be snappy, and you should know immediately when a change makes it slower.
+
+- **Automated monitoring** — Lighthouse CI catches performance regressions before they reach production
+- **Green Core Web Vitals** — FCP, LCP, and CLS meet thresholds that keep users happy and SEO strong
+- **Preloaded fonts** — Critical fonts load early, preventing Flash of Invisible/Unstyled Text
+- **Optimized CSS delivery** — Critical CSS inlined or preloaded, non-critical loaded asynchronously
+
 ## Before You Start
 
 1. **Get the production URL** from the user (or staging if production not available)

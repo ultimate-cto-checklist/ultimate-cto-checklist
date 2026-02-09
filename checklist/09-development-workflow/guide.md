@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's development workflow, including PR processes, commit conventions, and merge strategies.
 
+## The Goal: Clean, Traceable History
+
+Every change flows through a predictable pipeline. History tells the story of why things changed.
+
+- **Reviewed** — PRs require meaningful descriptions and code review before merge
+- **Tested** — changes deployed to dev/preview environment before reaching protected branches
+- **Conventional** — commit messages follow documented conventions for changelog generation
+- **Preserved** — merge strategy maintains commit history rather than squashing it away
+- **Documented** — branch flow (feature → dev → staging → production) is explicit and followed
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory

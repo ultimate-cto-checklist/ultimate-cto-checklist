@@ -2,6 +2,16 @@
 
 This guide walks you through auditing a project's health check endpoints for monitoring, load balancing, and infrastructure observability.
 
+## The Goal: Observable Infrastructure
+
+Load balancers, orchestrators, and operators can see exactly what is healthy and what is not, at a glance.
+
+- **Discoverable** — basic health at a standard path (`/health`), no authentication required
+- **Fast** — basic health responds instantly without checking external dependencies
+- **Comprehensive** — deep health verifies all external services (database, cache, queues, APIs)
+- **Protected** — deep health requires authentication to prevent infrastructure exposure
+- **Diagnostic** — returns 503 with specific details when dependencies fail
+
 ## Before You Start
 
 1. Confirm you're in the target repository's root directory
