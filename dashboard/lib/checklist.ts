@@ -3,12 +3,15 @@ import path from 'path';
 import YAML from 'yaml';
 
 // Types
+export type Scope = 'org' | 'project' | 'both';
+
 export interface ChecklistItem {
   id: string;
   title: string;
   description: string;
   severity: 'critical' | 'recommended';
   category: string;
+  scope?: Scope;
 }
 
 export interface SectionSummary {
@@ -16,6 +19,8 @@ export interface SectionSummary {
   id: string;
   name: string;
   description: string;
+  defaultScope: Scope;
+  goal?: string;
   itemCount: number;
   criticalCount: number;
 }
@@ -25,6 +30,7 @@ export interface Section {
   id: string;
   name: string;
   description: string;
+  defaultScope: Scope;
   items: ChecklistItem[];
   guide: string;
 }
@@ -39,6 +45,7 @@ interface ItemsYAML {
   };
   title?: string;
   description?: string;
+  default_scope?: Scope;
   items: Array<{
     id: string;
     title: string;
@@ -47,6 +54,7 @@ interface ItemsYAML {
     severity: 'critical' | 'recommended';
     category?: string;
     type?: string;
+    scope?: Scope;
   }>;
 }
 
@@ -102,6 +110,7 @@ export async function listSections(): Promise<SectionSummary[]> {
 
     for (const dirName of sectionDirs) {
       const itemsPath = path.join(checklistDir, dirName, 'items.yaml');
+      const guidePath = path.join(checklistDir, dirName, 'guide.md');
 
       try {
         const itemsContent = await fs.readFile(itemsPath, 'utf-8');
@@ -125,6 +134,21 @@ export async function listSections(): Promise<SectionSummary[]> {
           description = parsed.section.description;
         }
 
+        // Extract default_scope (top-level field in both formats)
+        const defaultScope: Scope = parsed.default_scope || 'project';
+
+        // Extract goal from guide.md (pattern: "## The Goal: Goal Text")
+        let goal: string | undefined;
+        try {
+          const guideContent = await fs.readFile(guidePath, 'utf-8');
+          const goalMatch = guideContent.match(/^## The Goal: (.+)$/m);
+          if (goalMatch) {
+            goal = goalMatch[1].trim();
+          }
+        } catch {
+          // guide.md not found or unreadable - goal remains undefined
+        }
+
         const items = parsed.items || [];
         const itemCount = items.length;
         const criticalCount = items.filter(item => item.severity === 'critical').length;
@@ -134,6 +158,8 @@ export async function listSections(): Promise<SectionSummary[]> {
           id,
           name,
           description,
+          defaultScope,
+          goal,
           itemCount,
           criticalCount,
         });
@@ -256,6 +282,9 @@ export async function getSection(slug: string): Promise<Section> {
     description = parsed.section.description;
   }
 
+  // Extract default_scope (top-level field in both formats)
+  const defaultScope: Scope = parsed.default_scope || 'project';
+
   // Normalize items - handle both description and summary fields
   const items: ChecklistItem[] = (parsed.items || []).map(item => ({
     id: item.id,
@@ -263,6 +292,7 @@ export async function getSection(slug: string): Promise<Section> {
     description: item.description || item.summary || '',
     severity: item.severity,
     category: item.category || 'uncategorized',
+    scope: item.scope || defaultScope,
   }));
 
   const section: Section = {
@@ -270,6 +300,7 @@ export async function getSection(slug: string): Promise<Section> {
     id,
     name,
     description,
+    defaultScope,
     items,
     guide,
   };

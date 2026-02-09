@@ -9,14 +9,18 @@ describe('SectionCard', () => {
     id: '01',
     name: 'Git Repo Setup',
     description: 'Essential git repository configuration and best practices',
+    defaultScope: 'project',
     itemCount: 12,
     criticalCount: 3,
   };
 
-  it('renders section with correct number and name', () => {
+  it('renders section with correct number badge and name', () => {
     render(<SectionCard section={mockSection} />);
 
-    expect(screen.getByText('01 - Git Repo Setup')).toBeInTheDocument();
+    // Number is now in its own badge element
+    expect(screen.getByText('01')).toBeInTheDocument();
+    // Name is in a separate heading
+    expect(screen.getByText('Git Repo Setup')).toBeInTheDocument();
   });
 
   it('renders section description', () => {
