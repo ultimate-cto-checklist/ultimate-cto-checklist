@@ -1,6 +1,7 @@
 section: 28-code-architecture
 title: Code Architecture
 description: SOLID principles compliance, code quality tooling, and build performance
+default_scope: project
 
 items:
   - id: ARCH-001

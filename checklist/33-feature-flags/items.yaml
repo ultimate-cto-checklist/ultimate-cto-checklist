@@ -1,6 +1,7 @@
 section: 33-feature-flags
 title: Feature Flags & Rollouts
 description: Audit guide for feature flag systems, gradual rollouts, A/B testing, and kill switches.
+default_scope: project
 
 items:
   - id: FF-001

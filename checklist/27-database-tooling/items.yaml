@@ -1,6 +1,7 @@
 section: 27-database-tooling
 title: Database Tooling
 description: Developer tools for database visibility - schema visualization and data exploration
+default_scope: project
 
 items:
   - id: DBT-001

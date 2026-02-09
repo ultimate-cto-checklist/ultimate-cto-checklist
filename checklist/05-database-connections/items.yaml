@@ -2,6 +2,7 @@ section:
   id: "05"
   name: Database & Connections
   description: Database configuration, migrations, users, and access controls
+default_scope: project
 
 items:
   - id: DB-001

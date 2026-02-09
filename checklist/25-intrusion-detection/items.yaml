@@ -1,6 +1,7 @@
 section: 25-intrusion-detection
 title: Intrusion Detection
 description: Intrusion detection systems, data exfiltration monitoring, and security alerting for smaller budgets
+default_scope: org
 
 items:
   - id: IDS-001

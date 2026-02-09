@@ -1,0 +1,215 @@
+section: 40-technical-debt-tracking
+title: Technical Debt Tracking
+description: Audit technical debt visibility, management practices, and metrics
+default_scope: org
+
+items:
+  - id: DEBT-001
+    title: Explicit tech debt list maintained
+    severity: critical
+    category: visibility
+    description: >
+      Technical debt is explicitly tracked in a dedicated location (board, label, document),
+      actively maintained, and discoverable by team members.
+    verification:
+      - Check for debt tracking documentation or labels
+      - Query debt items in project tracker
+      - Verify list is actively updated (last quarter)
+    pass_criteria:
+      - Dedicated tech debt tracking exists
+      - Actively maintained (updated within last quarter)
+      - Discoverable by team members
+      - Contains actual items
+    fail_criteria:
+      - No explicit tracking
+      - List exists but stale (6+ months)
+      - Scattered with no central view
+
+  - id: DEBT-002
+    title: Each debt item has required fields
+    severity: recommended
+    category: visibility
+    description: >
+      Debt items have structured fields including description, impact, estimated effort,
+      and priority to enable informed prioritization.
+    verification:
+      - Sample debt items for field completeness
+      - Check for debt item template
+    pass_criteria:
+      - Items have structured fields (not just titles)
+      - Impact captured (why fix this)
+      - Effort estimated (even rough)
+      - Priority assigned or inferable
+    fail_criteria:
+      - Items are just titles
+      - No impact documented
+      - No effort estimate
+      - No priority
+    cross_references:
+      - DEBT-001
+      - DEBT-003
+
+  - id: DEBT-003
+    title: Regular debt review with stale item cleanup
+    severity: recommended
+    category: management
+    description: >
+      Debt list is reviewed on a regular cadence (quarterly minimum) to prioritize items,
+      close stale entries, and prevent debt from compounding indefinitely.
+    verification:
+      - Check for review cadence documentation
+      - Verify last review date
+      - Count stale items (older than 12 months)
+    pass_criteria:
+      - Defined cadence exists (quarterly minimum)
+      - Review actually happens
+      - Last review within expected window
+      - Stale items addressed
+      - No debt items older than 12 months without explicit decision
+    fail_criteria:
+      - No scheduled review
+      - Cadence documented but not followed
+      - Last review 6+ months ago
+      - Debt items from 2+ years ago still open and ignored
+    cross_references:
+      - DEBT-001
+      - DEBT-004
+
+  - id: DEBT-004
+    title: Allocate time for debt reduction
+    severity: recommended
+    category: management
+    description: >
+      Protected time is allocated for debt reduction (e.g., 10-20% of sprints),
+      and debt work actually gets done.
+    verification:
+      - Check for allocation policy in process docs
+      - Query recently closed debt items as evidence
+    pass_criteria:
+      - Explicit allocation policy exists
+      - Team knows the target
+      - Allocation somewhat protected from feature pressure
+      - Evidence of debt work being done
+    fail_criteria:
+      - No allocation policy
+      - Policy exists but always deprioritized
+      - Only happens in quiet periods
+      - Zero debt items closed in last quarter
+    cross_references:
+      - DEBT-003
+      - DEBT-005
+
+  - id: DEBT-005
+    title: Track debt paid down over time
+    severity: optional
+    category: management
+    description: >
+      Debt resolution is tracked over time to validate allocation is working
+      and provide visibility into whether debt is growing or shrinking.
+    verification:
+      - Query closed debt items with dates
+      - Compare open vs closed counts
+      - Check for trend visibility
+    pass_criteria:
+      - Can query closed debt items with dates
+      - Some visibility into trend
+      - Team has sense of progress direction
+    fail_criteria:
+      - No way to see resolved items
+      - Items disappear without record
+      - No sense of trend
+    cross_references:
+      - DEBT-001
+      - DEBT-004
+
+  - id: DEBT-006
+    title: Code complexity trends
+    severity: optional
+    category: metrics
+    description: >
+      Code complexity is measured and tracked over time to catch debt accumulation early.
+    verification:
+      - Check for complexity tooling (ESLint, SonarQube, CodeClimate)
+      - Look for complexity rules in linter config
+      - Check CI for complexity checks
+    pass_criteria:
+      - Complexity measured (ESLint rule or equivalent)
+      - Trend visible (reports, CI history)
+      - Team aware of complexity hotspots
+    fail_criteria:
+      - No complexity measurement
+      - Measured but not tracked over time
+      - Thresholds always ignored
+    cross_references:
+      - section: 8
+        items: [CRAP score]
+      - section: 28
+        items: [Code quality tools]
+
+  - id: DEBT-007
+    title: Dependency age/health
+    severity: recommended
+    category: metrics
+    description: >
+      Dependency updates are automated, security vulnerabilities are tracked,
+      and major dependencies are kept reasonably current.
+    verification:
+      - Check for Dependabot/Renovate config
+      - Run outdated/audit commands
+      - Check for unmerged dependency PRs
+    pass_criteria:
+      - Dependency update tool configured
+      - No critical/high CVEs unaddressed
+      - Major deps not more than 1-2 major versions behind
+      - Dependency PRs reviewed regularly
+    fail_criteria:
+      - No automated updates
+      - Dependencies years out of date
+      - Known CVEs ignored
+      - Dependency PRs pile up unreviewed
+    cross_references:
+      - section: 2
+        items: [Dependency management]
+
+  - id: DEBT-008
+    title: TODO/FIXME count in codebase
+    severity: optional
+    category: metrics
+    description: >
+      TODO and FIXME comments are tracked as informal debt markers,
+      with visibility into count and age.
+    verification:
+      - Count TODO/FIXME/HACK/XXX in codebase
+      - Sample oldest TODOs
+      - Check for ESLint no-warning-comments rule
+    pass_criteria:
+      - TODO count known or easily queryable
+      - TODOs have context (issue link, name, date)
+      - Count stable or declining
+      - Old TODOs periodically reviewed
+    fail_criteria:
+      - No visibility into TODO count
+      - Hundreds of orphaned TODOs
+      - Count growing unchecked
+      - TODOs from 3+ years ago present
+    cross_references:
+      - DEBT-001
+      - section: 28
+        items: [Code quality tools]
+
+metadata:
+  total_items: 8
+  critical: 1
+  recommended: 4
+  optional: 3
+  categories:
+    - visibility
+    - management
+    - metrics
+  cross_references:
+    - section: 2
+      title: Dependencies & Code Quality
+    - section: 8
+      title: Testing & Code Metrics
+    - section: 28
+      title: Code Architecture

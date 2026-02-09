@@ -2,6 +2,7 @@ section:
   id: "03"
   name: Authentication & Endpoints
   description: Auth system simplicity, documentation, testing, and HTTP endpoint security
+default_scope: project
 
 items:
   # Auth System

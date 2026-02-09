@@ -1,6 +1,7 @@
 section: 23-client-side-security
 title: Client-Side Security & Storage
 description: Cookie configuration, browser storage usage, and JWT handling practices
+default_scope: project
 
 items:
   - id: CSS-001

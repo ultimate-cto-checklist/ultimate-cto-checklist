@@ -2,6 +2,7 @@ section:
   id: "07"
   name: Health Endpoints
   description: Health check endpoints for monitoring, load balancing, and infrastructure observability
+default_scope: project
 
 items:
   # Basic Health

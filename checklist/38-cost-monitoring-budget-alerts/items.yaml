@@ -1,0 +1,150 @@
+section: 38-cost-monitoring-budget-alerts
+title: Cost Monitoring & Budget Alerts
+description: Audit cloud budgets, tool costs, visibility, and governance practices
+default_scope: org
+
+items:
+  - id: COST-001
+    title: Cloud provider budget alerts configured
+    severity: critical
+    category: Cloud Budget Alerts
+    description: >
+      Every cloud provider should have budget alerts with defined amounts
+      and multiple thresholds (50%, 80%, 100%). Alerts must go to monitored
+      recipients.
+    check_type: hybrid
+    auto_checks:
+      - aws budgets describe-budgets
+      - gcloud billing budgets list
+      - az consumption budget list
+      - grep for budget definitions in IaC
+    ask_user:
+      - Which cloud providers are in use?
+      - Is there a defined budget for this project?
+      - At what thresholds do you get alerted?
+      - Who receives alerts? Is that inbox monitored?
+    pass_criteria:
+      - Every cloud provider has budget alerts
+      - Budget amounts defined
+      - Multiple thresholds including early warning
+      - Alerts go to monitored recipients
+    fail_criteria:
+      - Any cloud provider without alerts
+      - No defined budget amount
+      - Only 100% threshold
+      - Alerts to unmonitored inbox
+
+  - id: COST-002
+    title: Anomaly detection and unexpected cost alerts
+    severity: recommended
+    category: Anomaly Detection
+    description: >
+      Fixed thresholds miss mid-month spikes. Anomaly detection catches
+      unusual spending patterns. Usage-based services need monitoring.
+    check_type: hybrid
+    auto_checks:
+      - aws ce get-anomaly-monitors
+      - grep for third-party cost tools
+      - identify usage-based services in codebase
+    ask_user:
+      - Do you have anomaly detection beyond fixed thresholds?
+      - Would you catch a sudden 3x spike mid-month?
+      - Any third-party cost monitoring tools?
+      - Which tools have usage-based pricing?
+    pass_criteria:
+      - Anomaly detection enabled
+      - Usage-based services identified
+      - High-risk services monitored
+    fail_criteria:
+      - Only fixed thresholds
+      - Unaware of usage-based pricing risks
+      - No monitoring for variable-cost services
+    cross_references:
+      - COST-001
+      - COST-003
+
+  - id: COST-003
+    title: Tool budgets defined
+    severity: recommended
+    category: Tool Budgets
+    description: >
+      Beyond cloud, SaaS tools add up. Each paid tool should have
+      an expected cost and owner.
+    check_type: hybrid
+    auto_checks:
+      - find tool/vendor documentation
+      - grep for cost documentation
+      - identify SaaS tools from codebase
+    ask_user:
+      - Do you have a list of all paid tech tools?
+      - Does each have a defined budget?
+      - Where is this tracked?
+      - Who owns tool budget management?
+    pass_criteria:
+      - Tool inventory exists
+      - Expected costs documented
+      - Budget ownership assigned
+    fail_criteria:
+      - No tool inventory
+      - Costs not documented
+      - No ownership of tool costs
+
+  - id: COST-004
+    title: Cost visibility and reporting
+    severity: recommended
+    category: Cost Visibility
+    description: >
+      Unified view of all tech costs with historical trends
+      and regular reporting.
+    check_type: hybrid
+    auto_checks:
+      - grep for cost dashboards
+      - check for data warehouse cost data
+      - look for reporting tool references
+    ask_user:
+      - Is there a single place to see all tech costs?
+      - Can you see trends over time?
+      - Do you get regular cost reports?
+      - Where does cost data live?
+    pass_criteria:
+      - Unified cost view exists
+      - Historical trends visible
+      - Regular reports generated
+    fail_criteria:
+      - Costs scattered across consoles
+      - No historical data
+      - No regular reporting
+    cross_references:
+      - COST-001
+      - COST-005
+
+  - id: COST-005
+    title: Cost governance
+    severity: recommended
+    category: Cost Governance
+    description: >
+      Cost attribution enables accountability. Regular reviews
+      turn visibility into action.
+    check_type: hybrid
+    auto_checks:
+      - check for tagging policies
+      - look for tagging in IaC
+      - check for review documentation
+    ask_user:
+      - Can you attribute costs to projects or teams?
+      - Is tagging enforced?
+      - Do you review costs regularly?
+      - What actions come out of reviews?
+    pass_criteria:
+      - Costs attributable to projects/teams
+      - Tagging enforced (if used)
+      - Regular review cadence
+      - Reviews lead to actions
+    fail_criteria:
+      - All costs in one bucket
+      - Tagging not enforced
+      - No regular reviews
+      - Reviews without actions
+    cross_references:
+      - COST-003
+      - COST-004

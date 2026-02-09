@@ -1,0 +1,119 @@
+section: 41-accessibility
+title: Accessibility
+description: Accessibility practices for user-facing applications
+applicability: User-facing applications only (web apps, mobile apps, customer-facing sites)
+default_scope: project
+
+items:
+  - id: A11Y-001
+    title: WCAG 2.1 Level AA target documented
+    severity: recommended  # Critical if legal/contractual requirement
+    category: wcag-compliance
+    automated: partial
+    description: >
+      An explicit accessibility target gives the team something to measure against.
+      Without it, "accessible enough" is undefined.
+
+  - id: A11Y-002
+    title: Automated accessibility testing in CI
+    severity: recommended
+    category: wcag-compliance
+    automated: full
+    description: >
+      Automated testing catches ~30-40% of accessibility issues before they ship.
+      Tools like axe-core, pa11y, or Lighthouse CI integrated into the build pipeline.
+
+  - id: A11Y-003
+    title: Screen reader testing for critical paths
+    severity: recommended  # Optional for internal tools
+    category: wcag-compliance
+    automated: none
+    description: >
+      Automated tools miss interaction and flow issues. Screen reader testing
+      validates the real user experience for critical paths like signup and checkout.
+
+  - id: A11Y-004
+    title: Keyboard navigation works
+    severity: recommended
+    category: wcag-compliance
+    automated: partial
+    description: >
+      Core flows work with keyboard only. Focus is visible, focus order is logical,
+      skip links exist, and modals trap focus correctly.
+
+  - id: A11Y-005
+    title: Accessibility audit before major releases
+    severity: recommended
+    category: testing
+    automated: partial
+    description: >
+      Major releases get a thorough accessibility review beyond what CI catches.
+      Blocking issues prevent release.
+
+  - id: A11Y-006
+    title: Color contrast checks
+    severity: recommended
+    category: testing
+    automated: full
+    description: >
+      Color choices validated for WCAG contrast requirements (4.5:1 for normal text).
+      Automated tools or design system with pre-validated colors.
+
+  - id: A11Y-007
+    title: Alt text for images
+    severity: recommended
+    category: testing
+    automated: full
+    description: >
+      ESLint rule enforces alt attribute on images. Meaningful alt text on content
+      images, empty alt="" for decorative images.
+
+  - id: A11Y-008
+    title: Form labels and ARIA attributes
+    severity: recommended
+    category: testing
+    automated: partial
+    description: >
+      All form inputs have associated labels. Error messages connected to inputs
+      via aria-describedby. ARIA used correctly as HTML supplement.
+
+  - id: A11Y-009
+    title: Accessibility standards documented
+    severity: recommended
+    category: documentation
+    automated: partial
+    description: >
+      Developers have documented guidance on building accessibly. Component-level
+      a11y guidelines, pattern library, or contributing guide.
+
+  - id: A11Y-010
+    title: Known accessibility issues tracked
+    severity: recommended
+    category: documentation
+    automated: partial
+    description: >
+      Dedicated label or tag for a11y issues. Known issues logged and visible,
+      not just remembered. Issues from audits get captured.
+
+  - id: A11Y-011
+    title: Remediation plan for gaps
+    severity: recommended  # Critical if compliance deadline exists
+    category: documentation
+    automated: partial
+    description: >
+      Known gaps have a prioritized plan with ownership and timelines.
+      Progress tracked over time, not just an unprioritized backlog.
+
+cross_references:
+  - section: 8
+    title: Testing & Code Metrics
+    relevance: Testing infrastructure, coverage practices
+  - section: 14
+    title: Documentation
+    relevance: Documentation practices
+  - section: 22
+    title: Front-End Performance
+    relevance: Lighthouse overlaps with accessibility audits
+  - section: 40
+    title: Technical Debt Tracking
+    relevance: Same patterns apply to accessibility debt

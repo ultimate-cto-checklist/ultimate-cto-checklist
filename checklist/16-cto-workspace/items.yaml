@@ -3,6 +3,8 @@ section:
   name: CTO Workspace
   description: CTO workspace tooling for AI-assisted project briefings and status updates
 
+default_scope: org
+
 items:
   - id: CTO-001
     title: AI-assisted project briefings

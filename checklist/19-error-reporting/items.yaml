@@ -1,7 +1,9 @@
 section:
   id: "19"
-  name: Error Reporting (Sentry)
+  name: Error Reporting
   description: Error tracking, configuration, deployment integration, and AI-driven error handling
+
+default_scope: project
 
 items:
   - id: ERR-001

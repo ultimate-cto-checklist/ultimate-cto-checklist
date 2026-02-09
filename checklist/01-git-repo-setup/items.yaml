@@ -2,6 +2,7 @@ section:
   id: "01"
   name: Git Repo Setup
   description: Repository configuration, branch strategy, CI/CD, and cleanliness standards
+default_scope: project
 
 items:
   # Clone & Run

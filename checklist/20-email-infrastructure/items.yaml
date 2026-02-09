@@ -3,6 +3,8 @@ section:
   name: Email Infrastructure
   description: DNS authentication (MX, SPF, DKIM, DMARC), deliverability testing, and email logging
 
+default_scope: org
+
 items:
   - id: EMAIL-001
     title: MX records configured

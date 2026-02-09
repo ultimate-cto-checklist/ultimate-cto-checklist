@@ -1,6 +1,7 @@
 section: 35-incident-response
 title: Incident Response
 description: On-call coverage, escalation procedures, runbooks, and post-mortem practices
+default_scope: org
 
 items:
   - id: IR-001

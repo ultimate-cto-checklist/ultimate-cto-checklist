@@ -3,6 +3,8 @@ section:
   name: Performance Monitoring
   description: Response time tracking, memory monitoring, and leak detection
 
+default_scope: project
+
 items:
   - id: PERF-001
     title: Response time monitoring

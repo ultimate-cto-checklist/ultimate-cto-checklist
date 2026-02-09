@@ -1,6 +1,7 @@
 section: 31-api-design
 title: API Design
 description: Audit guide for API versioning, input validation, injection prevention, and gateway configuration.
+default_scope: project
 
 items:
   - id: API-001

@@ -1,6 +1,7 @@
 section: 32-content-security-policy
 title: Content Security Policy
 description: Audit guide for CSP headers, reporting, inline script handling, and source whitelisting.
+default_scope: project
 
 items:
   - id: CSP-001

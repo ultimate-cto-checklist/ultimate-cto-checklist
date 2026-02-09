@@ -2,6 +2,7 @@ section:
   id: "06"
   name: Resilience
   description: Application resilience to third-party service failures and graceful degradation
+default_scope: project
 
 items:
   - id: RES-001

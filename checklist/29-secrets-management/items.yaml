@@ -1,6 +1,7 @@
 section: 29-secrets-management
 title: Secrets Management
 description: How secrets are stored, loaded, and protected across environments
+default_scope: both
 
 items:
   - id: SEC-001

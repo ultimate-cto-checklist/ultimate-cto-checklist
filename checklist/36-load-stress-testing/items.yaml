@@ -1,6 +1,7 @@
 section: 36-load-stress-testing
 title: Load & Stress Testing
 description: Performance baselines, capacity planning, load testing practices, and resilience under extreme conditions
+default_scope: project
 
 items:
   - id: LST-001

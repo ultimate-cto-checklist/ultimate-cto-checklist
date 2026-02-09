@@ -3,6 +3,8 @@ section:
   name: Admin Features
   description: Admin feature parity and admin panel security controls
 
+default_scope: org
+
 items:
   - id: ADM-001
     title: Admin feature parity

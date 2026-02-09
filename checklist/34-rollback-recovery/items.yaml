@@ -1,6 +1,7 @@
 section: 34-rollback-recovery
 title: Rollback & Recovery
 description: Deployment rollback, database migration rollback, and disaster recovery capabilities
+default_scope: project
 
 items:
   - id: RR-001

@@ -2,6 +2,7 @@ section:
   id: "02"
   name: Dependencies & Code Quality
   description: Dependency management, security scanning, language choices, and monorepo structure
+default_scope: project
 
 items:
   # Dependency Management

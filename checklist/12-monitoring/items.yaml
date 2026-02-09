@@ -5,6 +5,8 @@ section:
     Audit checklist for monitoring infrastructure metrics, database performance,
     HTTP logging, alerting, log retention, and status pages.
 
+default_scope: project
+
 items:
   - id: MON-001
     title: Infrastructure metrics collection

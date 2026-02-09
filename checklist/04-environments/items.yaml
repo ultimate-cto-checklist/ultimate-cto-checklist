@@ -2,6 +2,7 @@ section:
   id: "04"
   name: Environments
   description: Environment tiers, configuration, protection, and deployment verification
+default_scope: project
 
 items:
   # Environment Tiers

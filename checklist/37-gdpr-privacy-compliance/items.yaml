@@ -1,6 +1,7 @@
 section: 37-gdpr-privacy-compliance
 title: GDPR & Privacy Compliance
 description: User rights, consent management, and privacy documentation for regulatory compliance
+default_scope: org
 
 items:
   - id: GDPR-001

@@ -6,6 +6,8 @@ section:
     directly exposed, security headers are properly configured, and SSL certificate
     issuance is monitored.
 
+default_scope: both
+
 items:
   - id: SEC-001
     title: All environments behind Cloudflare

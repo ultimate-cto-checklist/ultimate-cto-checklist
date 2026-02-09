@@ -1,0 +1,115 @@
+section: 42-internationalization
+title: Internationalization (i18n)
+description: Audit guide for internationalization practices - translation frameworks, locale handling, and multi-language support
+default_scope: project
+
+items:
+  - id: I18N-001
+    title: i18n framework in place
+    severity: critical  # if multi-language needed, N/A otherwise
+    category: Multi-Language Support
+    automated: true
+    description: >
+      An i18n framework provides the foundation: string lookup, interpolation,
+      pluralization, and locale switching. Required if multi-language support is needed.
+
+  - id: I18N-002
+    title: String extraction automated
+    severity: recommended
+    category: Multi-Language Support
+    automated: true
+    description: >
+      Automated extraction ensures all translatable strings are captured.
+      Manual copy-paste to translation files is error-prone.
+
+  - id: I18N-003
+    title: Translation workflow documented
+    severity: recommended
+    category: Multi-Language Support
+    automated: partial
+    description: >
+      Without a documented workflow, translations become a bottleneck.
+      Developers need to know how strings flow to translators and back.
+
+  - id: I18N-004
+    title: Fallback language defined
+    severity: recommended
+    category: Multi-Language Support
+    automated: true
+    description: >
+      When a translation is missing, the app needs to know what to show.
+      Without a fallback, users see translation keys or blank content.
+
+  - id: I18N-005
+    title: No hardcoded strings in code
+    severity: recommended
+    category: Best Practices
+    automated: partial
+    description: >
+      Hardcoded strings bypass the translation system entirely.
+      Lint rules should enforce using i18n functions for user-facing strings.
+
+  - id: I18N-006
+    title: Date/time/currency formatting localized
+    severity: recommended
+    category: Best Practices
+    automated: partial
+    description: >
+      Dates, numbers, and currencies format differently across locales.
+      Use Intl API or locale-aware libraries for formatting.
+
+  - id: I18N-007
+    title: RTL support if needed
+    severity: critical  # if RTL languages supported, N/A otherwise
+    category: Best Practices
+    automated: partial
+    description: >
+      RTL languages (Arabic, Hebrew, Farsi, Urdu) require mirrored layouts.
+      CSS logical properties or RTL tooling needed for proper support.
+
+  - id: I18N-008
+    title: Plural forms handled correctly
+    severity: recommended
+    category: Best Practices
+    automated: partial
+    description: >
+      Different languages have different plural rules (English has 2, Russian has 3,
+      Arabic has 6). String concatenation breaks pluralization.
+
+  - id: I18N-009
+    title: Test with different locales
+    severity: recommended
+    category: Testing
+    automated: partial
+    description: >
+      Tests should validate behavior across locales, not just the default language.
+      At minimum, smoke tests for non-default locales.
+
+  - id: I18N-010
+    title: Pseudo-localization for catching issues
+    severity: optional
+    category: Testing
+    automated: true
+    description: >
+      Pseudo-localization transforms strings to reveal hardcoded text,
+      test expansion, and find truncation issues before real translations.
+
+  - id: I18N-011
+    title: Layout tested with long strings
+    severity: recommended
+    category: Testing
+    automated: partial
+    description: >
+      German is ~30% longer than English, Finnish can be 40%+ longer.
+      UI must handle text expansion without breaking layout.
+
+cross_references:
+  - section: 8
+    title: Testing & Code Metrics
+    relevance: Testing infrastructure for locale testing
+  - section: 14
+    title: Documentation
+    relevance: Documentation practices for translation workflow
+  - section: 41
+    title: Accessibility
+    relevance: Lang attributes, screen reader considerations

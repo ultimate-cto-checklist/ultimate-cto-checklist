@@ -1,0 +1,265 @@
+section: 39-developer-onboarding
+title: Developer Onboarding
+description: Audit developer onboarding experience - documentation, access, and day-one productivity
+default_scope: org
+
+items:
+  - id: DEV-001
+    title: Onboarding checklist documented
+    severity: critical
+    category: Onboarding Documentation
+    description: >
+      New developers need a clear path to follow. A checklist format
+      provides progress tracking and ensures nothing is missed.
+    check_type: hybrid
+    auto_checks:
+      - find onboarding/getting-started docs
+      - grep for onboarding content in docs/README
+    ask_user:
+      - Where does a new dev start?
+      - Is it a checklist or just prose?
+      - When was it last updated?
+      - Has a recent hire validated it?
+    pass_criteria:
+      - Documented onboarding guide exists
+      - Actionable checklist format
+      - Updated within 6 months or after last hire
+      - Covers access, setup, first tasks, who to ask
+    fail_criteria:
+      - No onboarding doc
+      - Outdated or broken doc
+      - Prose-only with no clear steps
+      - Missing critical sections
+
+  - id: DEV-002
+    title: Access requirements documented and pre-defined
+    severity: critical
+    category: Onboarding Documentation
+    description: >
+      All required access should be documented and requestable before
+      day one. New devs shouldn't discover missing access mid-task.
+    check_type: hybrid
+    auto_checks:
+      - grep for access/accounts/permissions in docs
+      - find access checklist or matrix
+      - identify tools needing access from codebase
+    ask_user:
+      - Is there a complete list of accounts/tools needed?
+      - Who requests access?
+      - How long until full access?
+      - When did someone last discover missing access?
+    pass_criteria:
+      - Documented list of all required access
+      - Clear owner or request process per item
+      - Full access achievable within first day
+    fail_criteria:
+      - No access list
+      - List incomplete or outdated
+      - Access takes 2+ days
+      - Regular surprise missing access
+    cross_references:
+      - DEV-001
+      - DEV-007
+
+  - id: DEV-003
+    title: Architecture overview documented
+    severity: recommended
+    category: Technical Documentation
+    description: >
+      New developers need to understand how the system fits together.
+      An architecture doc provides the mental model before diving into code.
+    check_type: hybrid
+    auto_checks:
+      - find architecture/overview/design docs
+      - grep for architecture content
+      - check for diagram files
+    ask_user:
+      - Is there a document explaining how the system fits together?
+      - Does it include diagrams?
+      - Would a new dev understand major components?
+    pass_criteria:
+      - Architecture doc exists
+      - Covers major components and interactions
+      - Includes diagrams
+      - Understandable without prior context
+    fail_criteria:
+      - No architecture doc
+      - Outdated (describes old system)
+      - Text-only, no visuals
+      - Requires existing knowledge
+    cross_references:
+      - DEV-004
+      - DOC-001
+      - DOC-002
+
+  - id: DEV-004
+    title: Key systems documented
+    severity: recommended
+    category: Technical Documentation
+    description: >
+      Complex or critical systems (payments, auth, integrations) need
+      dedicated documentation beyond architecture overview.
+    check_type: hybrid
+    auto_checks:
+      - find system-specific documentation
+      - check docs folder structure
+      - look for ADRs
+      - search for how-it-works docs
+    ask_user:
+      - What are the most complex or critical systems?
+      - Is each one documented?
+      - Where would a dev learn how payments/auth works?
+    pass_criteria:
+      - Each critical system has dedicated docs
+      - Docs explain flow, not just code location
+      - External integrations documented
+      - Understandable without reading all code
+    fail_criteria:
+      - Critical systems undocumented
+      - Stubs or outdated docs
+      - Only API reference, no conceptual docs
+      - Tribal knowledge required
+    cross_references:
+      - DEV-003
+      - DOC-002
+
+  - id: DEV-005
+    title: Development workflow documented
+    severity: recommended
+    category: Technical Documentation
+    description: >
+      New developers need to know team conventions: branching,
+      PRs, reviews, deployments.
+    check_type: hybrid
+    auto_checks:
+      - find CONTRIBUTING or workflow docs
+      - grep for workflow content
+      - check for PR templates
+    ask_user:
+      - Is the development workflow documented?
+      - Would a new dev know how to submit first PR?
+      - Are conventions documented?
+    pass_criteria:
+      - Workflow doc exists
+      - Covers branching, PRs, reviews
+      - Commit conventions documented
+      - Deploy process explained
+    fail_criteria:
+      - No workflow doc
+      - Incomplete coverage
+      - Contradicts actual practice
+      - New devs need to ask basics
+    cross_references:
+      - FLOW-001
+      - GIT-004
+      - GIT-005
+      - GIT-006
+
+  - id: DEV-006
+    title: Team contacts and ownership documented
+    severity: optional
+    category: Team & Support
+    description: >
+      New developers should know who to ask for help with different
+      areas. More important as team size grows.
+    check_type: hybrid
+    auto_checks:
+      - find team/contact/owner docs
+      - grep for ownership content
+      - check for CODEOWNERS
+    ask_user:
+      - Does a new dev know who to ask for different areas?
+      - Is there a CODEOWNERS file?
+      - Are team/area owners documented?
+    pass_criteria:
+      - Contact/ownership info exists
+      - Covers key areas
+      - Discoverable by new devs
+    fail_criteria:
+      - No ownership documentation
+      - Only "ask in Slack" with no guidance
+      - CODEOWNERS not discoverable
+
+  - id: DEV-007
+    title: Access provisioning automated
+    severity: optional
+    category: Access & Tooling
+    description: >
+      Automation reduces onboarding friction. This is a maturity
+      indicator, not a baseline requirement.
+    check_type: hybrid
+    auto_checks:
+      - find provisioning scripts
+      - check for SSO/identity provider references
+      - look for Terraform IAM
+    ask_user:
+      - How is access granted? (manual, tickets, automated)
+      - Is there SSO/identity provider?
+      - Any SCIM provisioning?
+      - How long does full access take?
+    pass_criteria:
+      - Some automation exists (SSO, scripts, SCIM)
+      - Manual steps documented and minimized
+      - Full access achievable same-day
+    fail_criteria:
+      - Fully manual with no automation
+      - Takes 2+ days due to bottlenecks
+      - No awareness of automation options
+    cross_references:
+      - DEV-002
+
+  - id: DEV-008
+    title: IDE/editor setup documented
+    severity: optional
+    category: Access & Tooling
+    description: >
+      Shared IDE configuration ensures consistent developer experience
+      (formatting, linting, extensions).
+    check_type: hybrid
+    auto_checks:
+      - check for .vscode/, .idea/, .editorconfig
+      - look for extensions.json
+      - grep for IDE setup docs
+    ask_user:
+      - Is there a recommended IDE/editor?
+      - Are settings/extensions shared?
+      - Would new dev get same experience as team?
+    pass_criteria:
+      - Recommended IDE documented OR shared config exists
+      - Extensions/plugins listed
+      - Consistent experience ensured
+    fail_criteria:
+      - No IDE guidance
+      - Shared config exists but not in repo
+      - Inconsistent formatting across team
+    cross_references:
+      - GIT-019
+
+  - id: DEV-009
+    title: Troubleshooting FAQ documented
+    severity: optional
+    category: Access & Tooling
+    description: >
+      Common issues and gotchas should be documented so new developers
+      don't hit the same problems repeatedly.
+    check_type: hybrid
+    auto_checks:
+      - find troubleshooting/FAQ docs
+      - grep for troubleshooting content
+      - check README for troubleshooting section
+    ask_user:
+      - Are common setup issues documented?
+      - What trips up new devs most often?
+      - Is there a place to add new gotchas?
+    pass_criteria:
+      - Troubleshooting section or FAQ exists
+      - Covers common issues
+      - Actively maintained
+    fail_criteria:
+      - No troubleshooting docs
+      - Stale (misses current issues)
+      - Same issues hit repeatedly
+    cross_references:
+      - DEV-001
+      - GIT-001
+      - GIT-003

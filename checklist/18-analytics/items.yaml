@@ -3,6 +3,8 @@ section:
   name: Analytics
   description: Server-side tracking, data pipelines, reporting, and engineering metrics
 
+default_scope: project
+
 items:
   - id: ANA-001
     title: Server-side analytics and data ownership

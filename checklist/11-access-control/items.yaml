@@ -3,6 +3,8 @@ section:
   name: Access Control
   description: Verify access control model with tiered permissions, minimal production access, and security requirements for access holders
 
+default_scope: both
+
 items:
   - id: ACCESS-001
     title: Tiered access model documented and approved

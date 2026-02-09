@@ -2,6 +2,7 @@ section:
   id: "09"
   name: Development Workflow
   description: PR processes, commit conventions, and merge strategies
+default_scope: project
 
 items:
   - id: FLOW-001

@@ -1,6 +1,7 @@
 section: 21-caching
 title: Caching
 description: Static asset caching via CDN and content hash-based cache invalidation
+default_scope: project
 
 items:
   - id: CACHE-001

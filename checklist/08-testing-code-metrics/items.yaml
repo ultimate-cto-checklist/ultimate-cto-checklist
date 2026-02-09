@@ -2,6 +2,7 @@ section:
   id: "08"
   name: Testing & Code Metrics
   description: Test coverage, testing practices, and code quality metrics for maintaining reliable, maintainable code
+default_scope: project
 
 items:
   # Test Coverage

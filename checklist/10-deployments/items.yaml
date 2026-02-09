@@ -2,6 +2,7 @@ section:
   id: "10"
   name: Deployments
   description: Deployment pipeline stability, notifications, build performance, and release tagging
+default_scope: project
 
 items:
   - id: DEPLOY-001

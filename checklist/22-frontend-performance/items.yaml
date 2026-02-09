@@ -1,6 +1,7 @@
 section: 22-frontend-performance
 title: Front-End Performance
 description: Core Web Vitals optimization and resource loading for SEO and user experience
+default_scope: project
 
 items:
   - id: FEP-001

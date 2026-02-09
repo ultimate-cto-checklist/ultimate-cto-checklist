@@ -3,6 +3,8 @@ section:
   name: Documentation
   description: Ensure all features are documented, complex systems have dedicated explanations, and documentation stays current with the codebase.
 
+default_scope: project
+
 items:
   - id: DOC-001
     title: Feature documentation exists (human + AI readable)

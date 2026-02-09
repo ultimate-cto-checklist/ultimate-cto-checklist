@@ -1,6 +1,7 @@
 section: 30-rate-limiting
 title: Rate Limiting
 description: Audit guide for rate limiting configuration, behavior, and documentation.
+default_scope: project
 
 items:
   - id: RATE-001
