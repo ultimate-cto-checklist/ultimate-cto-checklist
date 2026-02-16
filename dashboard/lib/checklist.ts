@@ -406,11 +406,11 @@ export async function listProjects(): Promise<Project[]> {
   }
 }
 
-function normalizeStatus(raw: string | undefined): string {
+function normalizeStatus(raw: string | undefined): AuditResult['status'] {
   if (!raw) return 'blocked';
   const s = raw.toLowerCase().trim();
   if (s === 'n/a') return 'not-applicable';
-  return s;
+  return s as AuditResult['status'];
 }
 
 export async function getAuditResults(
