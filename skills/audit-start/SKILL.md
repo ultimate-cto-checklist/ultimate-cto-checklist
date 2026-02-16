@@ -73,13 +73,20 @@ Create `.audit-state.yaml` in the audit folder:
 project: [name]
 started_at: [ISO datetime]
 flow: [sequential/priority/section/freeform]
-current_section: [number or null]
-current_item: [ID or null]
+phase: [auto-check/interactive/complete]    # Current workflow phase
+current_item: [ID or null]                  # Only meaningful during interactive phase
 items_total: [count]
 items_completed: [count]
 items_remaining:
   - [list of item IDs]
+active_sections: []                         # Sections being auto-checked by subagents
+last_auto_check_at: [ISO datetime or null]  # When parallel phase last ran
 ```
+
+- **`phase`** — tracks whether we're in `auto-check` (parallel subagents), `interactive` (sequential user review), or `complete`
+- **`current_item`** — only used during `interactive` phase; set to `null` during `auto-check`
+- **`active_sections`** — section numbers currently being processed by subagents; cleared when phase ends
+- **`last_auto_check_at`** — timestamp for detecting stale in-flight work on crash recovery
 
 ## Parallel Auto-Check Phase
 
@@ -89,7 +96,17 @@ After setup is complete and the repo is cloned:
 
 Items from the same section share the same `guide.md`, so group them together.
 
-### 2. Launch parallel subagents
+### 2. Update state for auto-check phase
+
+Before launching subagents, update `.audit-state.yaml`:
+```yaml
+phase: auto-check
+active_sections: [list of section numbers being dispatched]
+current_item: null
+last_auto_check_at: [current ISO datetime]
+```
+
+### 3. Launch parallel subagents
 
 Launch one subagent per section (or group of small sections), up to **8 concurrent agents**.
 
@@ -122,7 +139,7 @@ to `needs-review` and explain what you need from the user in the notes.
 Return a summary: {item_id, status, one-line evidence} for each item.
 ```
 
-### 3. Collect results and present batch summary
+### 4. Collect results and update state
 
 ```
 ## Auto-Check Results
@@ -141,14 +158,22 @@ Return a summary: {item_id, status, one-line evidence} for each item.
 Review auto-check results? (y = review details / n = accept and continue)
 ```
 
-### 4. User reviews
+After collecting all subagent results, update `.audit-state.yaml`:
+```yaml
+phase: interactive       # or 'complete' if no needs-review items remain
+active_sections: []
+items_completed: [updated count from result files on disk]
+items_remaining: [only needs-review items]
+```
+
+### 5. User reviews
 
 The user can:
 - **Accept all** — auto-checked results are finalized
 - **Review failures** — drill into specific failures to override or add notes
 - **Drill into any item** — inspect evidence and change status if needed
 
-### 5. Continue to interactive items
+### 6. Continue to interactive items
 
 Items marked `needs-review` are processed sequentially using the Interactive Item Workflow below.
 

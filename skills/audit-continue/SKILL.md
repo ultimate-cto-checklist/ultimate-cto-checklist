@@ -27,9 +27,35 @@ You are resuming an in-progress audit.
 ## State Recovery
 
 Read from `.audit-state.yaml`:
-- Current position
+- `phase` (auto-check / interactive / complete)
 - Flow preference
 - Remaining items
+
+### If phase is `auto-check` (interrupted parallel run)
+
+> ⚠ Previous auto-check was interrupted.
+> Checking which items completed before interruption...
+
+1. Diff `items_remaining` against existing result files on disk (`audits/<project>/<date>/<ITEM-ID>.md`)
+2. Items WITH result files → completed (remove from `items_remaining`)
+3. Items WITHOUT result files → need re-checking
+4. Update `items_completed` count from result file count
+5. Re-launch parallel auto-check on truly remaining items (proceeds to auto-check phase below)
+
+### If phase is `interactive`
+
+> Resuming interactive review...
+> Last item: [current_item]
+> Remaining: [count] items needing review
+
+Continue from `current_item` in interactive workflow (skip to Interactive Item Workflow below).
+
+### If phase is `complete`
+
+> This audit is already complete.
+> Start a new audit with `/audit-start`
+
+---
 
 Continue using the same flow as when started.
 

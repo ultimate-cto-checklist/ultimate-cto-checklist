@@ -72,10 +72,24 @@ If no `.audit-state.yaml` is found:
 To generate the status:
 
 1. Find active audit via `.audit-state.yaml` in `audits/*/[latest-date]/`
-2. Read all result `.md` files in the audit folder
-3. Parse YAML frontmatter from each to get status and severity
-4. Group by section using the `section` field in frontmatter
-5. Compare against previous audit (if exists) for regressions
+2. Read `phase` from `.audit-state.yaml` and show phase-specific info:
+
+   If `phase` is `auto-check`:
+   > **Phase:** Auto-checking ([N] sections in parallel)
+   > **Active sections:** [list from `active_sections`]
+   > **Last started:** [last_auto_check_at]
+
+   If `phase` is `interactive`:
+   > **Phase:** Interactive review
+   > **Current item:** [current_item]
+
+   If `phase` is `complete`:
+   > **Phase:** Complete
+
+3. Read all result `.md` files in the audit folder
+4. Parse YAML frontmatter from each to get status and severity
+5. Group by section using the `section` field in frontmatter
+6. Compare against previous audit (if exists) for regressions
 
 ## Update STATUS.md
 
