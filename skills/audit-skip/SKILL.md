@@ -30,7 +30,8 @@ You are skipping an audit item.
 > Please explain briefly:
 
 3. Write result file with status: skip
-4. Update audit state (if active audit exists)
+4. Validate result file — run `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fix any errors
+5. Update audit state (if active audit exists)
 5. Move to next item
 
 ## Result File
@@ -61,7 +62,8 @@ When `--section` flag is used:
 > Reason for skipping this section:
 
 4. Write skip result for each item with the same reason
-5. Update audit state
+5. Validate each result file — run `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fix any errors
+6. Update audit state
 
 ## After Skipping
 

@@ -133,6 +133,8 @@ For EACH item:
    checklist/schema/audit-result.schema.yaml (item_id not id, lowercase
    status, ## Summary required, ## Evidence required, ## Reason for
    Failure/Partial required per status)
+6. Validate the result file: run `npx tsx checklist/schema/validate.ts <path> --fix`
+   and fix any errors before moving to the next item
 
 If you CANNOT determine the result autonomously (needs user judgment,
 needs access you don't have, subjective quality call), set status
@@ -237,6 +239,10 @@ Key rules:
 - `## Reason for Failure` is required for fail
 - `## Reason for Partial` is required for partial
 - `## Recommendations` and `## Notes` are optional
+
+### 7b. Validate result file
+
+Run `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fix any errors before continuing.
 
 ### 8. Update state and continue
 

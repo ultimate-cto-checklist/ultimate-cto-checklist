@@ -53,7 +53,8 @@ Same as `/audit-start`:
 5. **Determine status** - Pass/Fail/Partial/Skip/Not Applicable/Blocked
 6. **Capture notes** - Optional user notes
 7. **Write result file** - Per `checklist/schema/audit-result.schema.yaml` (item_id not id, lowercase status, always include ## Summary, required headings per status)
-8. **Update state** - If active audit exists, update `.audit-state.yaml`:
+8. **Validate result file** - Run `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fix any errors before continuing
+9. **Update state** - If active audit exists, update `.audit-state.yaml`:
    - If `phase` is `auto-check`: do NOT update `current_item` (parallel work in progress).
      Just remove the item from `items_remaining` and increment `items_completed`.
    - If `phase` is `interactive`: update `current_item` to the next remaining item as before.
