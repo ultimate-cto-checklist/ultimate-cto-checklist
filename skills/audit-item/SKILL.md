@@ -25,14 +25,31 @@ You are jumping to a specific audit item.
    - Org-level: `audits/_org/[YYYY-MM-DD]/[ITEM-ID].md`
    - Project-level: `audits/[project]/[YYYY-MM-DD]/[ITEM-ID].md`
 
+## Autonomous Evidence Gathering
+
+**CRITICAL: Do NOT ask the user for evidence you can gather yourself.**
+
+Before running the item workflow:
+
+1. **Read the project config** (`projects/<name>.yaml`) and extract the `repo` field
+2. If the item requires codebase access, **clone the repo** to a temp directory:
+   ```bash
+   CLONE_DIR="/tmp/audit-$(date +%s)"
+   git clone git@github.com:<owner>/<repo>.git "$CLONE_DIR"
+   # Fall back to HTTPS if SSH fails
+   ```
+3. Use the cloned directory for all file-based checks
+4. Use `gh api repos/<owner>/<repo>/...` for GitHub API checks
+5. Only ask the user when you genuinely cannot determine the answer yourself
+
 ## Item Workflow
 
 Same as `/audit-start`:
 
 1. **Present the item** - Show ID, title, severity, section, description
 2. **Show the guide** - Extract from `checklist/checklist/[section]/guide.md`
-3. **Run auto-checks** - If available, ask before running
-4. **Ask follow-up questions** - If item has `ask_user` questions
+3. **Run auto-checks** - Clone the repo and run checks yourself, don't ask the user for evidence
+4. **Ask follow-up questions** - Only if you genuinely cannot determine the answer from the codebase
 5. **Determine status** - Pass/Fail/Partial/Skip/Not Applicable/Blocked
 6. **Capture notes** - Optional user notes
 7. **Write result file** - Markdown with YAML frontmatter

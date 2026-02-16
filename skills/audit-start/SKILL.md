@@ -19,6 +19,26 @@ You are starting a new audit for a project.
 1. Verify `org.yaml` exists
 2. Verify project exists in `projects/`
 3. Check for in-progress audit (warn if exists)
+4. **Read the project config** (`projects/<name>.yaml`) and extract the `repo` field
+
+## Autonomous Evidence Gathering
+
+**CRITICAL: Do NOT ask the user for evidence you can gather yourself.**
+
+When a project has a `repo` field in its config (e.g., `acme-corp/acme-api`):
+
+1. **Clone the repo** to a temp directory at the start of the audit:
+   ```bash
+   CLONE_DIR="/tmp/audit-$(date +%s)"
+   git clone git@github.com:<owner>/<repo>.git "$CLONE_DIR"
+   # Fall back to HTTPS if SSH fails:
+   # git clone https://github.com/<owner>/<repo>.git "$CLONE_DIR"
+   ```
+2. Use the cloned directory for all file-based checks (README, .gitignore, env files, etc.)
+3. Use `gh api repos/<owner>/<repo>/...` for GitHub API checks (branch protection, settings, etc.)
+4. Spawn subagents for heavy tasks (clone & run, secret scanning, etc.)
+5. Only ask the user when you genuinely cannot determine the answer yourself (e.g., "Is this key a sandbox key or production?")
+6. Clean up the temp clone when the audit session ends
 
 ## Flow Selection
 
@@ -61,9 +81,82 @@ items_remaining:
   - [list of item IDs]
 ```
 
-## Item Workflow
+## Parallel Auto-Check Phase
 
-For each item:
+After setup is complete and the repo is cloned:
+
+### 1. Group remaining items by section
+
+Items from the same section share the same `guide.md`, so group them together.
+
+### 2. Launch parallel subagents
+
+Launch one subagent per section (or group of small sections), up to **8 concurrent agents**.
+
+Each subagent receives this prompt:
+
+```
+You are auditing section [N]: [Name] for project [project-name].
+
+Repo cloned at: [clone_dir]
+Repo: [owner]/[repo]
+
+Items to check:
+[list of item IDs and titles]
+
+Guide: Read checklist/checklist/[section]/guide.md for verification steps.
+Items: Read checklist/checklist/[section]/items.yaml for item details.
+
+For EACH item:
+1. Read the guide.md section for this item
+2. Run the verification commands in [clone_dir]
+3. Use `gh api repos/[owner]/[repo]/...` for GitHub API checks
+4. Determine status: pass / fail / partial / needs-review
+5. Write result to audits/[project]/[date]/[ITEM-ID].md using the standard
+   result file format (YAML frontmatter + Evidence + Notes sections)
+
+If you CANNOT determine the result autonomously (needs user judgment,
+needs access you don't have, subjective quality call), set status
+to `needs-review` and explain what you need from the user in the notes.
+
+Return a summary: {item_id, status, one-line evidence} for each item.
+```
+
+### 3. Collect results and present batch summary
+
+```
+## Auto-Check Results
+
+**Completed:** X items across Y sections
+**Pass:** A | **Fail:** B | **Partial:** C | **Needs Review:** D
+
+### Failures (require attention):
+- SEC-005: HSTS header missing (FAIL)
+- GIT-017: Found potential secrets (FAIL)
+
+### Needs Your Input (Z items):
+- PERF-003: Is this response time acceptable?
+- PROC-002: What's your deployment approval process?
+
+Review auto-check results? (y = review details / n = accept and continue)
+```
+
+### 4. User reviews
+
+The user can:
+- **Accept all** — auto-checked results are finalized
+- **Review failures** — drill into specific failures to override or add notes
+- **Drill into any item** — inspect evidence and change status if needed
+
+### 5. Continue to interactive items
+
+Items marked `needs-review` are processed sequentially using the Interactive Item Workflow below.
+
+---
+
+## Interactive Item Workflow
+
+For items that couldn't be auto-resolved (marked `needs-review` or skipped by subagents):
 
 ### 1. Present the item
 
@@ -83,15 +176,7 @@ Extract the item's section from `checklist/checklist/[section]/guide.md`
 
 ### 3. Run auto-checks (if available)
 
-If item has `auto_checks`, ask:
-
-> I can run these automated checks:
-> - [command 1]
-> - [command 2]
->
-> Run them now? (y/n)
-
-Show results.
+If item has `auto_checks`, run them and show results.
 
 ### 4. Ask follow-up questions (if needed)
 

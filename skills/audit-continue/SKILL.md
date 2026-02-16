@@ -33,16 +33,34 @@ Read from `.audit-state.yaml`:
 
 Continue using the same flow as when started.
 
-Then follow the exact same Item Workflow as defined in `/audit-start`:
+### Autonomous Evidence Gathering
 
-### Item Workflow
+**Before starting the first item**, read the project config (`projects/<name>.yaml`) and clone the repo:
+```bash
+CLONE_DIR="/tmp/audit-$(date +%s)"
+git clone git@github.com:<owner>/<repo>.git "$CLONE_DIR"
+# Fall back to HTTPS if SSH fails
+```
+Reuse this clone for all items. Do NOT ask the user for evidence you can gather yourself.
 
-For each remaining item:
+### Parallel Auto-Check on Remaining Items
+
+Before walking through items interactively, run the parallel auto-check phase on remaining items:
+
+1. **Diff `items_remaining` against existing result files** — skip items that already have result files on disk (`audits/<project>/<date>/<ITEM-ID>.md`)
+2. **Group the truly remaining items by section**
+3. **Launch parallel subagents** (up to 8 concurrent) — one per section, using the same subagent prompt template as `/audit-start`
+4. **Present batch summary** of auto-check results
+5. **User reviews** — accept all, review failures, or drill into specifics
+
+### Interactive Item Workflow
+
+For items marked `needs-review` by subagents (or items the user wants to revisit):
 
 1. **Present the item** - Show ID, title, severity, section, description
 2. **Show the guide** - Extract from `checklist/checklist/[section]/guide.md`
-3. **Run auto-checks** - If available, ask before running
-4. **Ask follow-up questions** - If item has `ask_user` questions
+3. **Run auto-checks** - Run checks against the clone, don't ask the user for evidence
+4. **Ask follow-up questions** - Only if you genuinely cannot determine the answer from the codebase
 5. **Determine status** - Pass/Fail/Partial/Skip/Not Applicable/Blocked
 6. **Capture notes** - Optional user notes
 7. **Write result file** - Create `audits/[project]/[date]/[ITEM-ID].md` with YAML frontmatter

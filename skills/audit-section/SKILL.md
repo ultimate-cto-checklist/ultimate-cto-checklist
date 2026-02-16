@@ -114,7 +114,40 @@ When section selected:
 >
 > Start from the beginning? (y/n/or enter item number)
 
-Then proceed through items sequentially within the section using the standard Item Workflow from `/audit-start`.
+**Important:** Before starting the first item, read the project config (`projects/<name>.yaml`) and clone the repo to a temp directory. Reuse the same clone for all items in the section — don't re-clone for each item.
+
+### Parallel Auto-Check Within Section
+
+After listing items and cloning the repo, launch a **single subagent** to auto-check all items in the section:
+
+1. The subagent reads the section's `guide.md` and `items.yaml`
+2. It runs all verification commands against the cloned repo
+3. For each item, it determines: **pass** / **fail** / **partial** / **needs-review**
+4. It writes result files for items it can determine autonomously
+5. Items requiring user judgment are marked `needs-review`
+
+Present a section summary:
+
+```
+## Section [N] Auto-Check Results
+
+**Completed:** X/Y items
+**Pass:** A | **Fail:** B | **Partial:** C | **Needs Review:** D
+
+### Failures:
+- [ID]: [reason] (FAIL)
+
+### Needs Your Input:
+- [ID]: [what's needed from user]
+
+Review results? (y = review details / n = accept and continue to interactive items)
+```
+
+The user can accept, review, or override any auto-checked result.
+
+### Interactive Items
+
+Then proceed through remaining `needs-review` items sequentially using the Interactive Item Workflow from `/audit-start`.
 
 ## Cross-References
 
