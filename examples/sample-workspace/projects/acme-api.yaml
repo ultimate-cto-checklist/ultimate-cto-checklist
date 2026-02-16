@@ -1,0 +1,24 @@
+name: acme-api
+path: /Users/cto/code/acme-api
+created_at: 2026-01-15
+
+repo: acme-corp/acme-api
+
+type: backend
+stack:
+  - node
+  - typescript
+  - postgres
+
+environments:
+  - dev
+  - staging
+  - prod
+
+urls:
+  production: https://api.acme.com
+  health: https://api.acme.com/health
+
+scope:
+  include_sections: all
+  exclude_sections: []

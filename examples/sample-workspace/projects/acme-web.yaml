@@ -1,0 +1,25 @@
+name: acme-web
+path: /Users/cto/code/acme-web
+created_at: 2026-01-20
+
+repo: acme-corp/acme-web
+
+type: frontend
+stack:
+  - react
+  - typescript
+  - next.js
+
+environments:
+  - dev
+  - staging
+  - prod
+
+urls:
+  production: https://app.acme.com
+
+scope:
+  include_sections: all
+  exclude_sections:
+    - 05
+    - 27

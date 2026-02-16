@@ -14,9 +14,18 @@ A new developer should be able to clone, install, and run the project without as
 
 ## Before You Start
 
-1. Confirm you're in the target repository's root directory
-2. Verify you have access to GitHub API (via `gh` CLI) for branch protection checks
-3. Have the user available for questions you cannot answer automatically
+1. **Read the project config** from `projects/<project-name>.yaml` to get the `repo` field (e.g., `acme-corp/acme-api`)
+2. **Clone the repo yourself** — do NOT ask the user for evidence you can gather automatically:
+   ```bash
+   git clone git@github.com:<owner>/<repo>.git /tmp/audit-<project>-$(date +%s)
+   ```
+   If SSH fails, fall back to HTTPS:
+   ```bash
+   git clone https://github.com/<owner>/<repo>.git /tmp/audit-<project>-$(date +%s)
+   ```
+3. Use the cloned directory as your working directory for all checks in this section
+4. Verify you have access to GitHub API (via `gh` CLI) for branch protection checks
+5. Clean up the clone when the section is complete
 
 ## Audit Process
 
@@ -34,13 +43,18 @@ Work through each category below. For each item:
 
 **Verification steps**:
 
-1. **Clone to fresh directory**:
+1. **Get the repo URL from project config** — read `projects/<project>.yaml` and use the `repo` field:
    ```bash
-   git clone <repo-url> /tmp/audit-clone-test-$(date +%s)
-   cd /tmp/audit-clone-test-*
+   # Clone using the repo field from project config (e.g., acme-corp/acme-api)
+   CLONE_DIR="/tmp/audit-clone-test-$(date +%s)"
+   git clone git@github.com:<owner>/<repo>.git "$CLONE_DIR"
+   # If SSH fails, fall back to HTTPS:
+   # git clone https://github.com/<owner>/<repo>.git "$CLONE_DIR"
+   cd "$CLONE_DIR"
    ```
+   **Do NOT ask the user for the repo URL** — it's already in the project config.
 
-2. **Spawn subagent** to:
+2. **Spawn subagent** to work in the cloned directory:
    - Read README for setup instructions
    - Install dependencies (npm install, pip install, etc.)
    - **Build the app** (npm run build, etc.) - dev mode can hide issues

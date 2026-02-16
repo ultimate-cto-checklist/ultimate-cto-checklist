@@ -1,0 +1,30 @@
+name: Acme Corp
+created_at: 2026-01-15
+configured_by: claude-audit-init
+
+cloud_providers:
+  - aws
+
+source_control:
+  provider: github
+  type: cloud
+  org: acme-corp
+
+infrastructure:
+  iac: terraform
+  compute:
+    - kubernetes
+    - lambda
+
+observability:
+  monitoring: datadog
+  errors: sentry
+  logging: cloudwatch
+
+secrets: aws-secrets-manager
+
+ci_cd: github-actions
+
+auth: auth0
+
+deferred: []
