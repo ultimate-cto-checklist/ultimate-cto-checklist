@@ -87,14 +87,18 @@ The `dashboard/` directory contains a Next.js app for browsing the checklist.
 
 ### Development
 
-Use pm2 for the dev server (not `pnpm dev` directly):
+The dashboard requires `AUDIT_WORKSPACE` to point to the workspace root (the directory containing `org.yaml`, `projects/`, and `audits/`). Without it, the dashboard shows only the checklist — no project or audit data.
 
 ```bash
-cd dashboard
-pm2 start ecosystem.config.js   # Start dev server
-pm2 logs dashboard              # View logs
-pm2 restart dashboard           # Restart after changes
+# From a cto-workspace that uses this as a submodule:
+AUDIT_WORKSPACE=$PWD pnpm --prefix checklist/dashboard dev -p 6555
+
+# Or with pm2:
+AUDIT_WORKSPACE=/path/to/cto-workspace pm2 start checklist/dashboard/ecosystem.config.js
+pm2 logs cto-checklist-dashboard-dev
 ```
+
+Runs on **http://localhost:6555**.
 
 ## Conventions
 
@@ -102,3 +106,15 @@ pm2 restart dashboard           # Restart after changes
 - Each item should be independently verifiable
 - Reference specific tools/services where applicable (Sentry, Cloudflare, etc.)
 - Include both "what to check" and "why it matters"
+
+### Audit Result File Format
+
+All audit result files must follow `checklist/schema/audit-result.schema.yaml`. Key rules:
+
+- **Frontmatter**: Use `item_id` (not `id`), lowercase `status`, filename matches `item_id`
+- **`## Summary`** is required for all statuses — 1-3 sentences shown in the dashboard
+- **`## Evidence`** is required for pass/fail/partial
+- **`## Reason for Failure`** / **`## Reason for Partial`** required per status
+- **`## Recommendations`** and **`## Notes`** are optional
+
+Validate with: `npx tsx checklist/schema/validate.ts <path>` (use `--fix` for auto-corrections)

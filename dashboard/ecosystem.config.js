@@ -6,7 +6,8 @@ module.exports = {
     watch: false,  // Next.js has its own watch
     env: {
       NODE_ENV: 'development',
-      PORT: 6555
+      PORT: 6555,
+      AUDIT_WORKSPACE: process.env.AUDIT_WORKSPACE || ''
     }
   }]
 };

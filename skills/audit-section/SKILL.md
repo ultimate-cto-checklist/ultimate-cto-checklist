@@ -123,7 +123,7 @@ After listing items and cloning the repo, launch a **single subagent** to auto-c
 1. The subagent reads the section's `guide.md` and `items.yaml`
 2. It runs all verification commands against the cloned repo
 3. For each item, it determines: **pass** / **fail** / **partial** / **needs-review**
-4. It writes result files for items it can determine autonomously
+4. It writes result files per `checklist/schema/audit-result.schema.yaml` (item_id not id, lowercase status, ## Summary required, required headings per status)
 5. Items requiring user judgment are marked `needs-review`
 
 Present a section summary:

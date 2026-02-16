@@ -89,7 +89,7 @@ For items marked `needs-review` by subagents (or items the user wants to revisit
 4. **Ask follow-up questions** - Only if you genuinely cannot determine the answer from the codebase
 5. **Determine status** - Pass/Fail/Partial/Skip/Not Applicable/Blocked
 6. **Capture notes** - Optional user notes
-7. **Write result file** - Create `audits/[project]/[date]/[ITEM-ID].md` with YAML frontmatter
+7. **Write result file** - Create `audits/[project]/[date]/[ITEM-ID].md` per `checklist/schema/audit-result.schema.yaml` (item_id not id, lowercase status, always include ## Summary, required headings per status)
 8. **Update state** - Update `.audit-state.yaml` and move to next item
 
 ## Regression Awareness

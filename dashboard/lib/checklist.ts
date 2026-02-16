@@ -406,6 +406,13 @@ export async function listProjects(): Promise<Project[]> {
   }
 }
 
+function normalizeStatus(raw: string | undefined): string {
+  if (!raw) return 'blocked';
+  const s = raw.toLowerCase().trim();
+  if (s === 'n/a') return 'not-applicable';
+  return s;
+}
+
 export async function getAuditResults(
   project: string,
   date: string
@@ -421,15 +428,24 @@ export async function getAuditResults(
       const content = await fs.readFile(path.join(auditDir, file), 'utf-8');
       const { data, body } = parseFrontmatter(content);
 
+      // Backward compat: accept both item_id and id
+      if (!data.item_id && data.id && process.env.NODE_ENV !== 'production') {
+        console.warn(`[audit] ${file}: uses 'id' instead of 'item_id' — run validate.ts --fix`);
+      }
+
       return {
-        itemId: data.item_id || '',
+        itemId: data.item_id || data.id || '',
         title: data.title || '',
-        status: data.status || 'blocked',
+        status: normalizeStatus(data.status),
         severity: data.severity || 'recommended',
         section: data.section || '',
         auditedAt: data.audited_at || '',
         evidence: extractMarkdownSection(body, 'Evidence'),
-        notes: extractMarkdownSection(body, 'Notes'),
+        notes: extractMarkdownSection(body, 'Summary')
+          || extractMarkdownSection(body, 'Notes')
+          || extractMarkdownSection(body, 'Reason for Failure')
+          || extractMarkdownSection(body, 'Reason for Partial')
+          || undefined,
       };
     }));
   } catch {
@@ -489,3 +505,4 @@ function extractMarkdownSection(content: string, heading: string): string | unde
   const match = content.match(regex);
   return match ? match[1].trim() || undefined : undefined;
 }
+

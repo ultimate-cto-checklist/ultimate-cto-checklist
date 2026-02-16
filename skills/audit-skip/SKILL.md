@@ -35,28 +35,14 @@ You are skipping an audit item.
 
 ## Result File
 
-Create `audits/[project]/[date]/[ITEM-ID].md`:
+Create `audits/[project]/[date]/[ITEM-ID].md` per `checklist/schema/audit-result.schema.yaml`.
 
-```markdown
----
-item_id: [ID]
-title: [Title]
-status: skip
-severity: [critical/recommended]
-section: [section-slug]
-audited_at: [ISO datetime]
-auditor: claude-session
-skip_reason: [reason category]
----
-
-## Skip Reason
-
-[Detailed reason from user]
-
-## Notes
-
-Will revisit when [condition].
-```
+Key rules for skip results:
+- Use `item_id` (not `id`), lowercase `status: skip`
+- Filename must match `item_id` (e.g., `GIT-005.md`)
+- `## Summary` is **required** — 1-3 sentences explaining why the item was skipped
+- Include `skip_reason` in frontmatter (reason category)
+- `## Notes` is optional — use for "will revisit when [condition]"
 
 ## Bulk Skip
 

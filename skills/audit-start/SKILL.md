@@ -129,8 +129,10 @@ For EACH item:
 2. Run the verification commands in [clone_dir]
 3. Use `gh api repos/[owner]/[repo]/...` for GitHub API checks
 4. Determine status: pass / fail / partial / needs-review
-5. Write result to audits/[project]/[date]/[ITEM-ID].md using the standard
-   result file format (YAML frontmatter + Evidence + Notes sections)
+5. Write result to audits/[project]/[date]/[ITEM-ID].md following
+   checklist/schema/audit-result.schema.yaml (item_id not id, lowercase
+   status, ## Summary required, ## Evidence required, ## Reason for
+   Failure/Partial required per status)
 
 If you CANNOT determine the result autonomously (needs user judgment,
 needs access you don't have, subjective quality call), set status
@@ -224,27 +226,17 @@ If item has `ask_user` questions, ask them.
 
 ### 7. Write result file
 
-Create `audits/[project]/[date]/[ITEM-ID].md`:
+Create `audits/[project]/[date]/[ITEM-ID].md` following `checklist/schema/audit-result.schema.yaml`.
 
-```markdown
----
-item_id: [ID]
-title: [Title]
-status: [pass/fail/partial/skip/not-applicable/blocked]
-severity: [critical/recommended]
-section: [section-slug]
-audited_at: [ISO datetime]
-auditor: claude-session
----
-
-## Evidence
-
-[Command outputs, observations]
-
-## Notes
-
-[User's notes]
-```
+Key rules:
+- Use `item_id` (not `id`) in frontmatter
+- Status must be **lowercase**: `pass`, `fail`, `partial`, `skip`, `not-applicable`, `blocked`
+- Filename must match `item_id` (e.g., `GIT-001.md`)
+- `## Summary` is **required for all statuses** — 1-3 sentences explaining the result
+- `## Evidence` is required for pass/fail/partial
+- `## Reason for Failure` is required for fail
+- `## Reason for Partial` is required for partial
+- `## Recommendations` and `## Notes` are optional
 
 ### 8. Update state and continue
 
