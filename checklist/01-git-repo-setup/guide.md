@@ -1,4 +1,4 @@
-# Git Repo Setup Audit Guide
+# Git Repo Setup & Security Audit Guide
 
 This guide walks you through auditing a repository's Git setup, branch strategy, CI/CD configuration, and overall cleanliness.
 

@@ -1,6 +1,6 @@
 section:
   id: "01"
-  name: Git Repo Setup
+  name: Git Repo Setup & Security
   description: Repository configuration, branch strategy, CI/CD, and cleanliness standards
 default_scope: project
 

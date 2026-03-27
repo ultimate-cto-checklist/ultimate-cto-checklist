@@ -76,6 +76,10 @@ The 42 sections cover:
 | 38-39 | Compliance & Legal |
 | 40-42 | Team & Development |
 
+### Next Up: Split guide.md into per-item files
+
+Split each section's `guide.md` into `overview.md` + `{ITEM-ID}.md` files for easier filesystem search and simpler skill/agent loading. Full plan in `plans/split-guides.md`. Touches: checklist files, dashboard (lib/checklist.ts, SectionContent.tsx, section page), 5 skills, and tests.
+
 ### Future Planned
 
 - `scripts/` - Automated verification and setup tools

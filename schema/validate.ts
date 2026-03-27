@@ -25,7 +25,7 @@ const VALID_STATUSES = [
 ] as const;
 type Status = (typeof VALID_STATUSES)[number];
 
-const ITEM_ID_PATTERN = /^[A-Z]+-\d{3}$/;
+const ITEM_ID_PATTERN = /^[A-Z][A-Z0-9]+-\d{3}$/;
 const SECTION_PATTERN = /^\d{2}-[a-z-]+$/;
 
 const REQUIRED_HEADINGS_BY_STATUS: Record<string, string[]> = {
