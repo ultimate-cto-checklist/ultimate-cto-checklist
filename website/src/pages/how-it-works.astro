@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CopyPromptButton from '../islands/CopyPromptButton';
+---
+
+<BaseLayout title="How It Works" description="Three steps to audit your project against the CTO Checklist using Claude.">
+
+  <section class="py-20 px-6 max-w-3xl mx-auto text-center">
+    <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-4">How It Works</h1>
+    <p class="text-lg text-gray-500 leading-relaxed">
+      The CTO Checklist is an open-source audit framework. You run it with Claude Code against your codebase. Here's what that looks like.
+    </p>
+  </section>
+
+  <section class="bg-[#052e16] py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-[#052e16] rounded-lg font-black text-sm mb-4">1</div>
+      <h2 class="text-2xl font-bold text-[#ecfdf5] mb-2">Copy the audit prompt</h2>
+      <p class="text-[#86efac] mb-6 leading-relaxed">
+        One prompt bootstraps everything. It tells Claude to set up a workspace, load the checklist, and start auditing your project section by section.
+      </p>
+      <div class="bg-black/30 border border-white/10 rounded-lg p-6 font-mono text-sm text-[#4ade80] leading-relaxed mb-6">
+        Audit my project against the CTO Checklist. Start a cto-workspace, set up the checklist for audits, and follow the CLAUDE.md instructions.
+      </div>
+      <CopyPromptButton client:idle />
+    </div>
+  </section>
+
+  <section class="py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-white rounded-lg font-black text-sm mb-4">2</div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Claude runs the audit</h2>
+      <p class="text-gray-500 mb-6 leading-relaxed">
+        Claude Code clones your repo, scans 42 sections, runs automated checks (git config, CI status, file structure), and asks targeted questions about what it can't verify automatically.
+      </p>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h3 class="font-bold text-sm text-gray-900 mb-4">What a workspace looks like:</h3>
+        <pre class="font-mono text-xs text-gray-600 leading-relaxed">cto-workspace/
+├── org.yaml              # Your organization config
+├── projects/
+│   └── my-app.yaml       # Project config + repo URL
+├── checklist/            # CTO Checklist (submodule)
+│   ├── 01-git-repo-setup/
+│   ├── 02-dependencies/
+│   └── ... (42 sections)
+└── audits/
+    └── my-app/
+        └── 2026-04-01/   # Dated audit results
+            ├── GIT-001.md
+            ├── SEC-003.md
+            └── summary.md</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-gray-50 py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-white rounded-lg font-black text-sm mb-4">3</div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Get your audit report</h2>
+      <p class="text-gray-500 mb-6 leading-relaxed">
+        Every item gets a structured result: pass, fail, or partial. Evidence is captured, failures include recommendations, and the summary gives you the full picture.
+      </p>
+      <div class="bg-white border border-gray-200 rounded-lg p-6">
+        <h3 class="font-bold text-sm text-gray-900 mb-4">Sample audit result:</h3>
+        <pre class="font-mono text-xs text-gray-600 leading-relaxed">---
+item_id: GIT-001
+status: pass
+---
+
+## Summary
+Repository clones cleanly and runs with a single
+`pnpm install &amp;&amp; pnpm dev` command. All sandbox
+env vars provided in .env.example.
+
+## Evidence
+- Clone: ✓ completed in 4.2s
+- Install: ✓ pnpm install (no errors)
+- Dev server: ✓ starts on port 3000
+- .env.example: ✓ present with 12 variables</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Built for how you work</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="border border-gray-200 rounded-lg p-6">
+          <h3 class="font-bold text-gray-900 mb-2">For CTOs</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Run a comprehensive audit across all 42 sections. Delegate to your team with clear pass/fail criteria. Track improvements over time with dated reports.</p>
+        </div>
+        <div class="border border-gray-200 rounded-lg p-6">
+          <h3 class="font-bold text-gray-900 mb-2">For Founders</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Get CTO-level infrastructure review without hiring one yet. Identify critical gaps in security, monitoring, and deployment before they become incidents.</p>
+        </div>
+        <div class="border border-gray-200 rounded-lg p-6">
+          <h3 class="font-bold text-gray-900 mb-2">For CEOs & VPs</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Verify your technical team isn't missing critical items. Get a structured report you can read without deep technical knowledge. Evidence-based confidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-[#f0fdf4] border-y border-[#bbf7d0] py-16 px-6 text-center">
+    <h2 class="text-2xl font-extrabold text-[#052e16] mb-4">Ready to audit your project?</h2>
+    <div class="flex gap-3 justify-center">
+      <CopyPromptButton client:idle />
+      <a href="/checklist/" class="bg-white text-[#052e16] px-8 py-3 rounded-lg text-sm font-semibold border border-[#bbf7d0] hover:bg-[#dcfce7] transition-colors">
+        Browse the Checklist
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>
