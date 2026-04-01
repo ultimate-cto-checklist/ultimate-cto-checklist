@@ -10,5 +10,5 @@ export default defineConfig({
   },
   output: 'static',
   trailingSlash: 'always',
-  site: 'https://cto-checklist.com',
+  site: 'https://www.cto-checklist.com',
 });
