@@ -4,6 +4,7 @@ import ChecklistSidebar from '../../components/ChecklistSidebar.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import ItemCard from '../../components/ItemCard.astro';
 import GuidePanel from '../../components/GuidePanel.astro';
+import ChecklistSearch from '../../islands/ChecklistSearch';
 import { loadAllSections } from '../../lib/content';
 import { marked } from 'marked';
 
@@ -16,6 +17,18 @@ export function getStaticPaths() {
 }
 
 const { section } = Astro.props;
+
+const allSections = loadAllSections();
+const searchItems = allSections.flatMap(s =>
+  s.items.map(item => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    severity: item.severity,
+    sectionSlug: s.slug,
+    sectionName: s.name,
+  }))
+);
 
 const categories = new Map<string, typeof section.items>();
 for (const item of section.items) {
@@ -32,6 +45,7 @@ const guideHtml = section.guideContent ? await marked.parse(section.guideContent
     <ChecklistSidebar currentSlug={section.slug} />
     <main class="flex-1 py-8 px-8 max-w-4xl">
       <SectionHeader section={section} />
+      <ChecklistSearch client:idle items={searchItems} />
       {Array.from(categories).map(([category, items]) => (
         <div class="mb-6">
           <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 border-l-2 border-[#16a34a] pl-3">
