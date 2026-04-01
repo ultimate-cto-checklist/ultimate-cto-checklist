@@ -1,2 +1,5 @@
 # Local Claude settings (user-specific)
 .claude/settings.local.json
+
+# Brainstorming mockups
+.superpowers/
