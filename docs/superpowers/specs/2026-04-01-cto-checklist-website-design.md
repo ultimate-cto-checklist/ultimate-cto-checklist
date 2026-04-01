@@ -5,7 +5,7 @@
 Public website for **cto-checklist.com** — the marketing and reference site for the CTO Checklist open-source audit framework. The site serves as both a compelling introduction and the full interactive reference for 42 sections covering everything a CTO needs to verify in production-grade projects.
 
 **Brand:** CTO Checklist
-**Tagline:** Computed at build time from actual item count — format: *`{N}` things between you and production-ready.*
+**Tagline:** Computed at build time from actual item count — format: *`{N}` blind spots between you and production-ready.*
 **Domain:** cto-checklist.com
 
 **Current stats (as of 2026-04-01):** 42 sections, 252 items. These numbers are computed at build time from the YAML source files and should never be hardcoded.
@@ -66,7 +66,7 @@ All routes use trailing slashes for GitHub Pages compatibility.
 Scroll flow:
 
 1. **Sticky banner** — green dot + "CTO Checklist" + nav (How It Works, Checklist, GitHub) + meta ("{N} sections · {M} items" — computed at build)
-2. **Hero** — badge ("Open Source Audit Framework"), headline ("{M} things between you and production-ready."), subhead, dual CTAs:
+2. **Hero** — badge ("Open Source Audit Framework"), headline ("{M} blind spots between you and production-ready."), subhead, dual CTAs:
    - Primary: `$ copy audit prompt` (terminal-styled, dark bg, green text)
    - Secondary: "Browse Checklist" (light green bg)
 3. **Floating items area** — ambient showcase (see Floating Items above)
