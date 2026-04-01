@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
 import { getDomain } from './domains';
-import type { Section, Item, SiteStats } from './types';
+import type { Section, Item, SiteStats, FloatingQuestion } from './types';
 
 const CHECKLIST_DIR = path.resolve(process.cwd(), 'checklist');
 
@@ -13,6 +13,7 @@ function parseItem(raw: Record<string, unknown>): Item {
     description: String(raw.description ?? raw.summary ?? ''),
     severity: raw.severity === 'critical' ? 'critical' : 'recommended',
     category: String(raw.category ?? 'general'),
+    question: raw.question as string | string[] | undefined,
   };
 }
 
@@ -60,4 +61,37 @@ export function computeStats(sections: Section[]): SiteStats {
   const itemCount = sections.reduce((sum, s) => sum + s.items.length, 0);
   const criticalCount = sections.reduce((sum, s) => sum + s.items.filter(i => i.severity === 'critical').length, 0);
   return { sectionCount: sections.length, itemCount, criticalCount };
+}
+
+const CLUSTER_COLORS: Record<string, { bg: string; border: string; text: string }> = {
+  infrastructure: { bg: '#eff6ff', border: '#bfdbfe', text: '#1e40af' },
+  data: { bg: '#f5f3ff', border: '#ddd6fe', text: '#5b21b6' },
+  observability: { bg: '#fffbeb', border: '#fde68a', text: '#92400e' },
+  security: { bg: '#fff1f2', border: '#fecdd3', text: '#9f1239' },
+  operations: { bg: '#f0fdf4', border: '#bbf7d0', text: '#166534' },
+};
+
+function getCluster(sectionId: string): string {
+  const num = parseInt(sectionId, 10);
+  if (num >= 1 && num <= 4) return 'infrastructure';
+  if (num === 5 || num === 6 || num === 24 || num === 25) return 'data';
+  if ((num >= 7 && num <= 9) || (num >= 12 && num <= 14) || num === 19 || num === 20) return 'observability';
+  if ((num >= 30 && num <= 35) || num === 38 || num === 39) return 'security';
+  return 'operations';
+}
+
+export function loadAllQuestions(): FloatingQuestion[] {
+  const sections = loadAllSections();
+  const questions: FloatingQuestion[] = [];
+  for (const section of sections) {
+    const colors = CLUSTER_COLORS[getCluster(section.id)];
+    for (const item of section.items) {
+      if (!item.question) continue;
+      const qs = Array.isArray(item.question) ? item.question : [item.question];
+      for (const q of qs) {
+        questions.push({ question: q, ...colors });
+      }
+    }
+  }
+  return questions;
 }

@@ -4,6 +4,14 @@ export interface Item {
   description: string;
   severity: 'critical' | 'recommended';
   category: string;
+  question?: string | string[];
+}
+
+export interface FloatingQuestion {
+  question: string;
+  bg: string;
+  border: string;
+  text: string;
 }
 
 export interface Section {
