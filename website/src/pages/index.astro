@@ -5,11 +5,14 @@ import HowItWorksExcerpt from '../components/HowItWorksExcerpt.astro';
 import DomainGrid from '../components/DomainGrid.astro';
 import EmailCapture from '../components/EmailCapture.astro';
 import FloatingItems from '../islands/FloatingItems';
+import { loadAllQuestions } from '../lib/content';
+
+const questions = loadAllQuestions();
 ---
 
 <BaseLayout title="Home" description="The open-source audit framework for technical leaders. AI-powered, ruthlessly comprehensive.">
   <Hero />
-  <FloatingItems client:idle />
+  <FloatingItems client:idle questions={questions} />
   <HowItWorksExcerpt />
   <DomainGrid />
   <EmailCapture />
