@@ -4,11 +4,12 @@ import Hero from '../components/Hero.astro';
 import HowItWorksExcerpt from '../components/HowItWorksExcerpt.astro';
 import DomainGrid from '../components/DomainGrid.astro';
 import EmailCapture from '../components/EmailCapture.astro';
+import FloatingItems from '../islands/FloatingItems';
 ---
 
 <BaseLayout title="Home" description="The open-source audit framework for technical leaders. AI-powered, ruthlessly comprehensive.">
   <Hero />
-  <!-- Floating items area will be added in Task 6 -->
+  <FloatingItems client:idle />
   <HowItWorksExcerpt />
   <DomainGrid />
   <EmailCapture />
