@@ -1,19 +1,15 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import HowItWorksExcerpt from '../components/HowItWorksExcerpt.astro';
+import DomainGrid from '../components/DomainGrid.astro';
+import EmailCapture from '../components/EmailCapture.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>CTO Checklist - The Ultimate Technical Leadership Reference</title>
-	</head>
-	<body class="bg-white text-gray-900">
-		<main class="max-w-4xl mx-auto px-4 py-16">
-			<h1 class="text-4xl font-bold mb-4">CTO Checklist</h1>
-			<p class="text-lg text-gray-600">The ultimate checklist for technical leadership. Coming soon.</p>
-		</main>
-	</body>
-</html>
+<BaseLayout title="Home" description="The open-source audit framework for technical leaders. AI-powered, ruthlessly comprehensive.">
+  <Hero />
+  <!-- Floating items area will be added in Task 6 -->
+  <HowItWorksExcerpt />
+  <DomainGrid />
+  <EmailCapture />
+</BaseLayout>
