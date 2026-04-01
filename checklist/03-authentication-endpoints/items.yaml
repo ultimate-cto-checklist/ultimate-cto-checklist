@@ -8,24 +8,28 @@ items:
   # Auth System
   - id: AUTH-001
     title: Auth system is simple, not convoluted
+    question: "Explain your auth flow in 2 sentences — can you?"
     description: Auth flow can be explained in 2-3 sentences, single entry point, obvious from code
     severity: recommended
     category: auth-system
 
   - id: AUTH-002
     title: Auth system is documented
+    question: "Does the auth documentation match what the code actually does?"
     description: Auth flow documented in README, docs/, or inline; matches actual implementation
     severity: recommended
     category: auth-system
 
   - id: AUTH-003
     title: AI agents can verify auth implementation
+    question: "Is auth logic readable in the repo, or buried in a black box?"
     description: Auth source in repo (not compiled), no undocumented external dependencies
     severity: recommended
     category: auth-system
 
   - id: AUTH-004
     title: Comprehensive tests on auth system
+    question: "What happens if someone sends an expired token — tested?"
     description: Tests cover login, logout, expiry, invalid tokens, unauthorized access
     severity: critical
     category: auth-system
@@ -33,36 +37,42 @@ items:
   # HTTP Endpoints / Webhooks
   - id: AUTH-005
     title: All endpoints documented
+    question: "Is /api-docs exposed to the public on your production app?"
     description: OpenAPI/Swagger or markdown docs exist, not exposed in production unless intentional
     severity: recommended
     category: http-endpoints
 
   - id: AUTH-006
     title: Endpoints easily auditable
+    question: "Can you list every route in this app in under 30 seconds?"
     description: Routes listable via CLI or centralized files, no dynamic registration
     severity: recommended
     category: http-endpoints
 
   - id: AUTH-007
     title: Endpoints follow auth best practices
+    question: "Is every new route secure by default, or opt-in?"
     description: Default-deny pattern, authorization checks for privileged routes
     severity: critical
     category: http-endpoints
 
   - id: AUTH-008
     title: Fail fast - no heavy work before auth validation
+    question: "Could a bad actor hammer your DB before auth even runs?"
     description: No DB queries, file uploads, or external calls before auth check
     severity: critical
     category: http-endpoints
 
   - id: AUTH-009
     title: Auth check is cheap
+    question: "Every request hitting the DB just to verify who you are?"
     description: JWT signature or cached session lookup, no DB hit per request
     severity: recommended
     category: http-endpoints
 
   - id: AUTH-010
     title: Webhooks verify signatures
+    question: "Could anyone POST fake events to your webhook endpoints?"
     description: All webhooks verify signatures before processing, or are behind Zero Trust
     severity: critical
     category: http-endpoints

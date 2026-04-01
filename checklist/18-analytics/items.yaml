@@ -8,6 +8,7 @@ default_scope: project
 items:
   - id: ANA-001
     title: Server-side analytics and data ownership
+    question: "If a third-party shuts down, do you lose your analytics history?"
     severity: recommended
     category: Server-Side Tracking
     description: >
@@ -24,6 +25,7 @@ items:
 
   - id: ANA-002
     title: Analytics data flows to data warehouse
+    question: "Can you write SQL against your raw analytics events?"
     severity: recommended
     category: Data Pipeline
     description: >
@@ -44,6 +46,7 @@ items:
 
   - id: ANA-003
     title: GitHub data flows to warehouse
+    question: "What's your team's actual PR cycle time this quarter?"
     severity: optional
     category: Data Pipeline
     description: >
@@ -60,6 +63,7 @@ items:
 
   - id: ANA-004
     title: BI reporting layer
+    question: "Can your non-engineers answer their own data questions?"
     severity: recommended
     category: Data Pipeline
     description: >
@@ -79,6 +83,7 @@ items:
 
   - id: ANA-005
     title: Engineering/git analytics visibility
+    question: "Are your DORA metrics getting better or worse?"
     severity: optional
     category: Git Analytics
     description: >

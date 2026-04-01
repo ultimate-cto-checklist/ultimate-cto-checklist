@@ -6,6 +6,7 @@ default_scope: org
 items:
   - id: COST-001
     title: Cloud provider budget alerts configured
+    question: "Would a 10x billing spike wake anyone up tonight?"
     severity: critical
     category: Cloud Budget Alerts
     description: >
@@ -36,6 +37,7 @@ items:
 
   - id: COST-002
     title: Anomaly detection and unexpected cost alerts
+    question: "What if costs tripled overnight — when would you know?"
     severity: recommended
     category: Anomaly Detection
     description: >
@@ -65,6 +67,7 @@ items:
 
   - id: COST-003
     title: Tool budgets defined
+    question: "What's your monthly SaaS spend — within $500?"
     severity: recommended
     category: Tool Budgets
     description: >
@@ -91,6 +94,7 @@ items:
 
   - id: COST-004
     title: Cost visibility and reporting
+    question: "Where do you go to see last month's full tech spend?"
     severity: recommended
     category: Cost Visibility
     description: >
@@ -120,6 +124,7 @@ items:
 
   - id: COST-005
     title: Cost governance
+    question: "Which team is responsible for that $8k AWS charge?"
     severity: recommended
     category: Cost Governance
     description: >

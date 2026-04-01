@@ -8,18 +8,21 @@ items:
   # Dependency Management
   - id: DEP-001
     title: Dependencies secure and maintained
+    question: "Any critical CVEs sitting unpatched in your lockfile right now?"
     description: No critical/high vulnerabilities, lockfile updated regularly
     severity: critical
     category: dependency-management
 
   - id: DEP-002
     title: Dependency update system configured
+    question: "Who's watching for new vulnerabilities — a person or a bot?"
     description: Dependabot, Renovate, or documented manual process for tracking updates
     severity: recommended
     category: dependency-management
 
   - id: DEP-003
     title: No deprecated or unmaintained libraries
+    question: "Any critical packages with last commit over 2 years ago?"
     description: Critical dependencies are actively maintained, no deprecated packages
     severity: recommended
     category: dependency-management
@@ -27,18 +30,21 @@ items:
   # Language & Tooling
   - id: DEP-004
     title: TypeScript over JavaScript
+    question: "Still shipping .js files because strict mode felt too hard?"
     description: TypeScript configured with strict mode, source files predominantly .ts/.tsx
     severity: recommended
     category: language-tooling
 
   - id: DEP-005
     title: Linting rules follow best practices
+    question: "How many eslint-disable comments are hiding real problems?"
     description: ESLint extends recommended configs, critical rules not disabled
     severity: recommended
     category: language-tooling
 
   - id: DEP-006
     title: pnpm over npm for Node projects
+    question: "Mixed npm and pnpm installs causing phantom dependency bugs?"
     description: Using pnpm with lockfile and packageManager field set
     severity: recommended
     category: language-tooling
@@ -46,6 +52,7 @@ items:
   # Monorepo Structure
   - id: DEP-007
     title: Turborepo for monorepos
+    question: "Any apps hiding in the monorepo nobody remembers deploying?"
     description: Monorepos use Turborepo with proper workspace config, no hidden apps
     severity: recommended
     category: monorepo-structure

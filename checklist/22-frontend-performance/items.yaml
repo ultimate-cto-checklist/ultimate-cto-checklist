@@ -6,24 +6,28 @@ default_scope: project
 items:
   - id: FEP-001
     title: Automated Lighthouse reports
+    question: "What's your Lighthouse score right now?"
     severity: recommended
     category: Page Rendering
     summary: Lighthouse CI integrated in pipeline to catch performance regressions automatically
 
   - id: FEP-002
     title: Core Web Vitals optimized
+    question: "Would Google rank you lower than a competitor right now?"
     severity: recommended
     category: Page Rendering
     summary: FCP, LCP, CLS within acceptable thresholds; performance score tracked over time
 
   - id: FEP-003
     title: Preload critical fonts
+    question: "Are fonts making users stare at blank text on load?"
     severity: recommended
     category: Resource Loading
     summary: Above-the-fold fonts preloaded with correct attributes or font-display fallback configured
 
   - id: FEP-004
     title: Preload critical CSS
+    question: "Is CSS blocking your first render right now?"
     severity: recommended
     category: Resource Loading
     summary: Critical CSS inlined or preloaded to minimize render-blocking resources

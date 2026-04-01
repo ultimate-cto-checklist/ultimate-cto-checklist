@@ -6,6 +6,7 @@ default_scope: org
 items:
   - id: DEBT-001
     title: Explicit tech debt list maintained
+    question: "Name your top three debt items right now."
     severity: critical
     category: visibility
     description: >
@@ -27,6 +28,7 @@ items:
 
   - id: DEBT-002
     title: Each debt item has required fields
+    question: "Pick a debt item — does it say why it matters?"
     severity: recommended
     category: visibility
     description: >
@@ -51,6 +53,7 @@ items:
 
   - id: DEBT-003
     title: Regular debt review with stale item cleanup
+    question: "When was your last debt review — and what changed?"
     severity: recommended
     category: management
     description: >
@@ -77,6 +80,7 @@ items:
 
   - id: DEBT-004
     title: Allocate time for debt reduction
+    question: "What percentage of last sprint went to debt? Really?"
     severity: recommended
     category: management
     description: >
@@ -101,6 +105,7 @@ items:
 
   - id: DEBT-005
     title: Track debt paid down over time
+    question: "Is your debt list shrinking or just growing?"
     severity: optional
     category: management
     description: >
@@ -124,6 +129,7 @@ items:
 
   - id: DEBT-006
     title: Code complexity trends
+    question: "Which file is your most complex — and is it getting worse?"
     severity: optional
     category: metrics
     description: >
@@ -148,6 +154,7 @@ items:
 
   - id: DEBT-007
     title: Dependency age/health
+    question: "Any dependencies more than two major versions behind?"
     severity: recommended
     category: metrics
     description: >
@@ -173,6 +180,7 @@ items:
 
   - id: DEBT-008
     title: TODO/FIXME count in codebase
+    question: "How many TODOs are older than your newest engineer?"
     severity: optional
     category: metrics
     description: >

@@ -8,18 +8,21 @@ items:
   # Environment Tiers
   - id: ENV-001
     title: Production environment exists
+    question: "How is production deployed — does the whole team know?"
     description: Production environment deployed, deployment method documented, visible in CI history
     severity: critical
     category: environment-tiers
 
   - id: ENV-002
     title: Staging environment exists
+    question: "Shipping straight to prod because staging is too painful?"
     description: Staging environment deployed, deployment method documented, visible in CI history
     severity: critical
     category: environment-tiers
 
   - id: ENV-003
     title: Dev environment(s) exist
+    question: "Where does QA test feature branches before they hit staging?"
     description: At least one dev environment for QA, method to deploy feature branches for testing
     severity: recommended
     category: environment-tiers
@@ -27,24 +30,28 @@ items:
   # Environment Configuration
   - id: ENV-004
     title: Staging runs in production mode
+    question: "Is staging running in dev mode and masking real prod issues?"
     description: NODE_ENV=production or equivalent, same build process as production
     severity: critical
     category: environment-config
 
   - id: ENV-005
     title: Dev environment has verbose logging
+    question: "Are stack traces visible locally, or are devs debugging blind?"
     description: Dev mode enabled, debug/verbose logging, stack traces visible for debugging
     severity: recommended
     category: environment-config
 
   - id: ENV-006
     title: Staging env vars match production
+    question: "What breaks in staging that works in prod due to different config?"
     description: Same env vars as prod except payment gateways (sandbox OK), email must use real provider
     severity: critical
     category: environment-config
 
   - id: ENV-007
     title: Production has minimal logging and user-friendly errors
+    question: "Are stack traces leaking to your users in production?"
     description: Log level info/warn/error, stack traces hidden from users, friendly error messages
     severity: recommended
     category: environment-config
@@ -52,12 +59,14 @@ items:
   # Environment Protection
   - id: ENV-008
     title: Dev and staging protected with Cloudflare Zero Trust
+    question: "Can someone stumble onto staging without any credentials?"
     description: Browser access requires authentication, verified via browser test and Cloudflare API
     severity: critical
     category: environment-protection
 
   - id: ENV-009
     title: Webhooks bypass Zero Trust but verify signatures
+    question: "Zero Trust bypass path — is it guarded, or a wide-open door?"
     description: Webhook endpoints verify signatures before processing if bypassing Zero Trust
     severity: critical
     category: environment-protection

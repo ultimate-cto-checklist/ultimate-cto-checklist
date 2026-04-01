@@ -8,6 +8,7 @@ default_scope: org
 items:
   - id: CTO-001
     title: AI-assisted project briefings
+    question: "How long does it take you to know what your team shipped this week?"
     severity: recommended
     category: Project Briefings
     description: >

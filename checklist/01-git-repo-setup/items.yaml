@@ -8,18 +8,21 @@ items:
   # Clone & Run
   - id: GIT-001
     title: Clone and run immediately
+    question: "Can a new hire be running locally in under 10 minutes?"
     description: Repository can be cloned, built, and run without external system setup
     severity: critical
     category: clone-and-run
 
   - id: GIT-002
     title: Sandbox env vars ready
+    question: "Missing one key — does everything break with no explanation?"
     description: Sandbox/development environment variables provided in .env.example or .env
     severity: critical
     category: clone-and-run
 
   - id: GIT-003
     title: Graceful failure with clear warnings
+    question: "What does the app say when a required env var is missing?"
     description: Missing keys produce clear warnings with helpful error messages
     severity: recommended
     category: clone-and-run
@@ -27,6 +30,7 @@ items:
   # Branch Protection
   - id: GIT-005
     title: Branch protections configured
+    question: "Could an engineer force-push to main right now?"
     description: Protected branches with PR requirements, no force push, and documented admin bypass
     severity: critical
     category: branch-protection
@@ -34,24 +38,28 @@ items:
   # Branch Strategy
   - id: GIT-006
     title: Clean branch structure
+    question: "How many long-lived branches exist, and why?"
     description: Only main/staging as long-lived branches, no dev/develop branch
     severity: recommended
     category: branch-strategy
 
   - id: GIT-007
     title: Feature branches for all work
+    question: "When was the last direct commit to main?"
     description: All development work happens in feature branches via PRs
     severity: critical
     category: branch-strategy
 
   - id: GIT-008
     title: Feature branches deleted after merge
+    question: "How many merged branches are still sitting around?"
     description: Merged feature branches are promptly deleted
     severity: recommended
     category: branch-strategy
 
   - id: GIT-009
     title: Stale branch audit
+    question: "Any branches untouched for 45+ days nobody's talking about?"
     description: Branches with no push for 30-45 days are reviewed and cleaned up
     severity: recommended
     category: branch-strategy
@@ -59,12 +67,14 @@ items:
   # CI/CD
   - id: GIT-010
     title: Linting configured
+    question: "Does a sloppy PR actually get blocked, or just warned?"
     description: Linting tools configured locally and in CI, runs on PRs
     severity: critical
     category: ci-cd
 
   - id: GIT-011
     title: Testing configured
+    question: "Can broken code merge if all tests are skipped?"
     description: Test framework configured locally and in CI, runs on PRs
     severity: critical
     category: ci-cd
@@ -72,12 +82,14 @@ items:
   # Documentation
   - id: GIT-012
     title: README.md present
+    question: "Is the README still accurate, or is it lying to new devs?"
     description: Repository has a README with accurate setup instructions
     severity: critical
     category: documentation
 
   - id: GIT-013
     title: AI agent context file
+    question: "Would an AI agent know what NOT to touch in this repo?"
     description: CLAUDE.md or AGENTS.md provides context for AI agents
     severity: recommended
     category: documentation
@@ -85,6 +97,7 @@ items:
   # Local Development
   - id: GIT-014
     title: Docker Compose for services
+    question: "How many external accounts does a dev need before first run?"
     description: Third-party services available via Docker Compose with matching env vars
     severity: recommended
     category: local-dev
@@ -92,36 +105,42 @@ items:
   # Repo Cleanliness
   - id: GIT-015
     title: No useless/outdated files
+    question: "Any files in here nobody's opened in 6 months?"
     description: No backup files, dated reports, or outdated planning documents
     severity: recommended
     category: repo-cleanliness
 
   - id: GIT-016
     title: Test results gitignored
+    question: "Are coverage reports cluttering your git history?"
     description: Test output, coverage reports not committed
     severity: critical
     category: repo-cleanliness
 
   - id: GIT-017
     title: No credentials in repo
+    question: "Searched git history for secrets lately — really searched?"
     description: No production secrets in repository or git history
     severity: critical
     category: repo-cleanliness
 
   - id: GIT-018
     title: Sandbox keys rotation documented
+    question: "When were the sandbox keys last rotated — do you know?"
     description: Sandbox keys have rotation schedule and last rotation date in comments
     severity: recommended
     category: repo-cleanliness
 
   - id: GIT-019
     title: No local engineer settings
+    question: "Is someone's .vscode/ or .idea/ folder in this repo?"
     description: IDE configs and personal settings not committed
     severity: recommended
     category: repo-cleanliness
 
   - id: GIT-020
     title: Proper .gitignore configured
+    question: "How confident are you nothing sensitive slips through?"
     description: .gitignore covers all standard patterns for the project type
     severity: critical
     category: repo-cleanliness

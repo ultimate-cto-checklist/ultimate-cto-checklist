@@ -8,6 +8,7 @@ default_scope: both
 items:
   - id: ACCESS-001
     title: Tiered access model documented and approved
+    question: "Who approved your current prod access list?"
     severity: critical
     category: Tiered Access
     automated: partial
@@ -33,6 +34,7 @@ items:
 
   - id: ACCESS-002
     title: Production access is minimal
+    question: "How many people can query your prod database right now?"
     severity: critical
     category: Production Access
     automated: partial
@@ -57,6 +59,7 @@ items:
 
   - id: ACCESS-003
     title: Production access holders meet security requirements
+    question: "Is everyone with prod access actually using MFA?"
     severity: critical
     category: Security Requirements
     automated: minimal

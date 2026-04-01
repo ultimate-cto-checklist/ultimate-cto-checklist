@@ -8,48 +8,56 @@ default_scope: org
 items:
   - id: EMAIL-001
     title: MX records configured
+    question: "Are you sure mail to your domain actually lands somewhere?"
     severity: critical
     category: DNS Authentication
     summary: MX records exist, resolve, and are reachable on port 25 for all domains in email inventory
 
   - id: EMAIL-002
     title: SPF configured
+    question: "Could someone send email as you@yourdomain.com right now?"
     severity: critical
     category: DNS Authentication
     summary: SPF records exist with authorized senders and hard fail (-all) or documented soft fail (~all)
 
   - id: EMAIL-003
     title: DKIM configured
+    question: "Are your emails actually cryptographically signed?"
     severity: critical
     category: DNS Authentication
     summary: DKIM records exist with valid public keys for all sending domains/subdomains
 
   - id: EMAIL-004
     title: DMARC configured
+    question: "What's your DMARC policy — p=none is basically nothing."
     severity: critical
     category: DNS Authentication
     summary: DMARC records with enforcement policy (quarantine/reject), reporting configured, reports reviewed
 
   - id: EMAIL-005
     title: Email deliverability testing
+    question: "When did you last check if your emails hit Gmail's spam folder?"
     severity: recommended
     category: Email Monitoring
     summary: Spam scoring tool and periodic placement tests with fresh accounts (Gmail, Outlook minimum)
 
   - id: EMAIL-006
     title: Transactional email control and logging
+    question: "Can you prove a specific user received a specific email last month?"
     severity: critical
     category: Email Monitoring
     summary: Dedicated provider with dashboard access, bounce tracking, open/click tracking (or documented exceptions)
 
   - id: EMAIL-007
     title: Marketing email logging
+    question: "What's your unsubscribe rate, and is it trending up?"
     severity: recommended
     category: Email Monitoring
     summary: Marketing platform with send logs, engagement metrics, and individual recipient tracking
 
   - id: EMAIL-008
     title: Email log retention
+    question: "How far back can you prove what emails you sent and to whom?"
     severity: recommended
     category: Email Monitoring
     summary: Intentionally defined retention period (typically 2-4 weeks) for transactional and marketing logs

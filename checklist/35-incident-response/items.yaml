@@ -6,6 +6,7 @@ default_scope: org
 items:
   - id: IR-001
     title: On-call rotation defined
+    question: "Who's getting paged at 2am if prod goes down tonight?"
     severity: recommended
     category: on-call-escalation
     summary: >
@@ -26,6 +27,7 @@ items:
 
   - id: IR-002
     title: Escalation paths documented
+    question: "What happens when the on-call person is stuck and panicking?"
     severity: recommended
     category: on-call-escalation
     summary: >
@@ -46,6 +48,7 @@ items:
 
   - id: IR-003
     title: Contact list for emergencies
+    question: "If Slack is down, how does your team reach each other?"
     severity: critical
     category: on-call-escalation
     summary: >
@@ -67,6 +70,7 @@ items:
 
   - id: IR-004
     title: PagerDuty/Opsgenie or similar
+    question: "How does an alert wake someone up at 3am without Slack?"
     severity: recommended
     category: on-call-escalation
     summary: >
@@ -91,6 +95,7 @@ items:
 
   - id: IR-005
     title: Common incidents have runbooks
+    question: "Which incidents only one person on your team knows how to fix?"
     severity: critical
     category: runbooks
     summary: >
@@ -119,6 +124,7 @@ items:
 
   - id: IR-006
     title: Blameless post-mortems after incidents
+    question: "After your last incident, did you fix the system or blame a person?"
     severity: recommended
     category: post-mortems
     summary: >
@@ -147,6 +153,7 @@ items:
 
   - id: IR-007
     title: Action items tracked to completion
+    question: "How many post-mortem action items are still open from last year?"
     severity: recommended
     category: post-mortems
     summary: >

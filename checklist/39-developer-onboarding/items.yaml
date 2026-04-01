@@ -6,6 +6,7 @@ default_scope: org
 items:
   - id: DEV-001
     title: Onboarding checklist documented
+    question: "How long until a new hire ships their first PR?"
     severity: critical
     category: Onboarding Documentation
     description: >
@@ -33,6 +34,7 @@ items:
 
   - id: DEV-002
     title: Access requirements documented and pre-defined
+    question: "What access is a new dev still waiting on after week one?"
     severity: critical
     category: Onboarding Documentation
     description: >
@@ -63,6 +65,7 @@ items:
 
   - id: DEV-003
     title: Architecture overview documented
+    question: "Could a new hire explain your system after day one?"
     severity: recommended
     category: Technical Documentation
     description: >
@@ -94,6 +97,7 @@ items:
 
   - id: DEV-004
     title: Key systems documented
+    question: "Payments went wrong — where does a new dev start?"
     severity: recommended
     category: Technical Documentation
     description: >
@@ -125,6 +129,7 @@ items:
 
   - id: DEV-005
     title: Development workflow documented
+    question: "Could a contractor submit a PR without asking anyone?"
     severity: recommended
     category: Technical Documentation
     description: >
@@ -157,6 +162,7 @@ items:
 
   - id: DEV-006
     title: Team contacts and ownership documented
+    question: "Auth is broken — who does the new hire Slack?"
     severity: optional
     category: Team & Support
     description: >
@@ -182,6 +188,7 @@ items:
 
   - id: DEV-007
     title: Access provisioning automated
+    question: "How many manual steps to fully onboard a new engineer?"
     severity: optional
     category: Access & Tooling
     description: >
@@ -210,6 +217,7 @@ items:
 
   - id: DEV-008
     title: IDE/editor setup documented
+    question: "New dev, fresh laptop — how long until their linter matches yours?"
     severity: optional
     category: Access & Tooling
     description: >
@@ -237,6 +245,7 @@ items:
 
   - id: DEV-009
     title: Troubleshooting FAQ documented
+    question: "What's the most common new-hire question you answer twice a month?"
     severity: optional
     category: Access & Tooling
     description: >

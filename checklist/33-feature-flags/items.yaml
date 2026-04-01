@@ -6,10 +6,12 @@ default_scope: project
 items:
   - id: FF-001
     title: Feature flag system configured
+    question: "How do you ship to 5% of users without a deploy?"
     severity: recommended
     summary: Feature flag system exists (env vars for small projects, GrowthBook for larger) with capabilities for percentage rollouts, A/B testing, sticky assignment, and user segment targeting
 
   - id: FF-002
     title: Kill switches for quick disable
+    question: "How fast can you disable that new feature if it's melting prod?"
     severity: recommended
     summary: Critical features have kill switches that can be toggled in < 5 minutes without deploy, with documented procedures and controlled access

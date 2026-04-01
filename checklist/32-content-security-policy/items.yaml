@@ -6,20 +6,24 @@ default_scope: project
 items:
   - id: CSP-001
     title: Full CSP headers configured
+    question: "Could an attacker inject a script into your pages right now?"
     severity: recommended
     summary: CSP header present with key directives (default-src, script-src, frame-ancestors) - not overly permissive
 
   - id: CSP-002
     title: Report-only mode for testing
+    question: "Did you test your CSP before it started blocking real users?"
     severity: recommended
     summary: CSP tested via report-only mode before enforcing, with violation reports collected and reviewed
 
   - id: CSP-003
     title: Block inline scripts where possible
+    question: "unsafe-inline — do you know what that actually allows?"
     severity: recommended
     summary: script-src avoids unsafe-inline or uses nonces/hashes, GTM strategy documented if used
 
   - id: CSP-004
     title: Whitelist trusted sources
+    question: "Which third-party domains does your CSP currently trust?"
     severity: recommended
     summary: CSP uses 'self' baseline with only necessary domains whitelisted, no wildcards or unsafe-eval without justification

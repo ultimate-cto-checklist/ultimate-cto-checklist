@@ -6,30 +6,35 @@ default_scope: both
 items:
   - id: RET-001
     title: Critical data uses soft deletes
+    question: "What happens when a user 'deletes' their account?"
     severity: critical
     category: Soft Delete Implementation
     summary: Critical business data uses soft deletes (deleted_at column) instead of hard DELETE operations
 
   - id: RET-002
     title: Soft delete queries exclude deleted records by default
+    question: "Can deleted records leak into API responses?"
     severity: critical
     category: Soft Delete Implementation
     summary: Queries automatically filter out soft-deleted records via ORM feature or global middleware; escape hatch exists for admin/audit
 
   - id: RET-003
     title: Periodic review of old soft-deleted data
+    question: "How much deleted data is silently accumulating right now?"
     severity: recommended
     category: Data Cleanup
     summary: Process exists (automated or manual) to periodically review soft-deleted records for permanent deletion
 
   - id: RET-004
     title: Hard delete after review period
+    question: "Who owns the decision to permanently purge data?"
     severity: recommended
     category: Data Cleanup
     summary: Capability exists to permanently purge reviewed soft-deleted data; retention period defined; purges are auditable
 
   - id: RET-005
     title: Legal retention requirements respected
+    question: "Could deleting data today violate a legal hold?"
     severity: critical
     category: Legal Compliance
     summary: Compliance requirements documented; legal hold mechanism prevents deletion of legally-required data; purge respects holds

@@ -8,6 +8,7 @@ items:
   # Basic Health
   - id: HEALTH-001
     title: Basic health endpoint exists
+    question: "How does your load balancer know the app is actually alive?"
     description: Simple health endpoint at standard path (/health, /healthz, /ping) returning 200 OK with no auth required and <50ms response time
     severity: critical
     category: basic-health
@@ -15,6 +16,7 @@ items:
   # Deep Health
   - id: HEALTH-002
     title: Deep health endpoint with dependency checks
+    question: "DB is down — are you getting a 200 OK or the truth?"
     description: Auth-protected endpoint that checks all external service connectivity (database, cache, APIs) and returns 503 with details when any is unavailable
     severity: critical
     category: deep-health

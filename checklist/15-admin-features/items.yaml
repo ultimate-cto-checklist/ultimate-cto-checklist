@@ -8,6 +8,7 @@ default_scope: org
 items:
   - id: ADM-001
     title: Admin feature parity
+    question: "Can your admin panel do everything your API can?"
     severity: recommended
     category: Admin Parity
     description: >
@@ -23,6 +24,7 @@ items:
 
   - id: ADM-002
     title: Admin access auditing
+    question: "Who still has admin access that probably shouldn't?"
     severity: recommended
     category: Admin Panel Security
     description: >
@@ -38,6 +40,7 @@ items:
 
   - id: ADM-003
     title: Track login IPs and login frequency
+    question: "Would you notice if someone logged in from a foreign country?"
     severity: recommended
     category: Admin Panel Security
     description: >
@@ -50,6 +53,7 @@ items:
 
   - id: ADM-004
     title: Audit trail for admin requests
+    question: "When was the last time you audited what your admins actually did?"
     severity: recommended
     category: Admin Panel Security
     description: >
@@ -64,6 +68,7 @@ items:
 
   - id: ADM-005
     title: Easy to disable admin users immediately
+    question: "Could you lock out a compromised admin in under 60 seconds?"
     severity: recommended
     category: Admin Panel Security
     description: >
@@ -76,6 +81,7 @@ items:
 
   - id: ADM-006
     title: Claude skill to audit admin access
+    question: "How often does anyone actually audit admin permissions?"
     severity: optional
     category: Admin Panel Security
     description: >

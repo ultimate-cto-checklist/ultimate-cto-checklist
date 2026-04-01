@@ -6,48 +6,56 @@ default_scope: project
 items:
   - id: RR-001
     title: Rollback procedure documented
+    question: "Where's the rollback doc, and when did you last read it?"
     severity: critical
     category: rollback-strategy
     summary: Written procedure for how to rollback a bad deployment
 
   - id: RR-002
     title: Rollback tested regularly
+    question: "When was the last time you actually ran a rollback drill?"
     severity: recommended
     category: rollback-strategy
     summary: Rollback procedure tested at least quarterly with multiple team members
 
   - id: RR-003
     title: Can rollback in < 2 minutes
+    question: "How long did your last bad deploy actually take to reverse?"
     severity: critical
     category: rollback-strategy
     summary: Rollback execution time under 2 minutes with no blocking approval gates
 
   - id: RR-004
     title: Database migration rollback plan
+    question: "What happens when you deploy with a DROP COLUMN and need to revert?"
     severity: critical
     category: rollback-strategy
     summary: Strategy for rolling back database migrations including destructive changes
 
   - id: RR-005
     title: Recovery from backups documented
+    question: "Who knows the steps to restore prod from scratch — right now, tonight?"
     severity: critical
     category: emergency-recovery
     summary: Step-by-step procedure to restore full stack from backups
 
   - id: RR-006
     title: Recovery procedure tested
+    question: "Have you confirmed your backups actually restore correctly?"
     severity: critical
     category: emergency-recovery
     summary: Full recovery drill completed at least annually including database restore
 
   - id: RR-007
     title: Know RTO (Recovery Time Objective)
+    question: "How long can your business actually survive prod being completely down?"
     severity: recommended
     category: emergency-recovery
     summary: Maximum acceptable downtime defined and achievable with current infrastructure
 
   - id: RR-008
     title: Know RPO (Recovery Point Objective)
+    question: "How much data could you lose right now before it becomes a crisis?"
     severity: recommended
     category: emergency-recovery
     summary: Maximum acceptable data loss defined with backup frequency to support it

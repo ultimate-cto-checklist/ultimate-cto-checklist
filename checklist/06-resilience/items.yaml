@@ -7,6 +7,7 @@ default_scope: project
 items:
   - id: RES-001
     title: Third-party service resilience
+    question: "Stripe goes down for an hour — does your whole app crash?"
     description: App handles external service failures gracefully - doesn't crash, other requests still work, affected features return errors instead of crashing the process
     severity: critical
     category: third-party-services

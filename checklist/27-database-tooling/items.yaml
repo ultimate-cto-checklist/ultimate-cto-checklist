@@ -6,12 +6,14 @@ default_scope: project
 items:
   - id: DBT-001
     title: Tool to visualize database diagrams (ERD)
+    question: "Can a new engineer understand your schema in 10 min?"
     severity: recommended
     category: Visualization
     summary: Team has accessible way to view database schema visually; new developers can quickly understand table relationships
 
   - id: DBT-002
     title: Ability to query/explore data from any table
+    question: "Who has production DB access and is it audited?"
     severity: recommended
     category: Exploration
     summary: Developers can browse data in dev/staging; production access controlled and audited; documented tooling available

@@ -7,6 +7,7 @@ default_scope: project
 items:
   - id: A11Y-001
     title: WCAG 2.1 Level AA target documented
+    question: "What's your accessibility target, and who set it?"
     severity: recommended  # Critical if legal/contractual requirement
     category: wcag-compliance
     automated: partial
@@ -16,6 +17,7 @@ items:
 
   - id: A11Y-002
     title: Automated accessibility testing in CI
+    question: "Would a missing label on a form input ship undetected?"
     severity: recommended
     category: wcag-compliance
     automated: full
@@ -25,6 +27,7 @@ items:
 
   - id: A11Y-003
     title: Screen reader testing for critical paths
+    question: "When did someone last test checkout with a screen reader?"
     severity: recommended  # Optional for internal tools
     category: wcag-compliance
     automated: none
@@ -34,6 +37,7 @@ items:
 
   - id: A11Y-004
     title: Keyboard navigation works
+    question: "Tab through your app — where does focus go invisible?"
     severity: recommended
     category: wcag-compliance
     automated: partial
@@ -43,6 +47,7 @@ items:
 
   - id: A11Y-005
     title: Accessibility audit before major releases
+    question: "Last major release — did accessibility get reviewed?"
     severity: recommended
     category: testing
     automated: partial
@@ -52,6 +57,7 @@ items:
 
   - id: A11Y-006
     title: Color contrast checks
+    question: "Does your gray placeholder text pass 4.5:1 contrast?"
     severity: recommended
     category: testing
     automated: full
@@ -61,6 +67,7 @@ items:
 
   - id: A11Y-007
     title: Alt text for images
+    question: "What does a screen reader say about your hero image?"
     severity: recommended
     category: testing
     automated: full
@@ -70,6 +77,7 @@ items:
 
   - id: A11Y-008
     title: Form labels and ARIA attributes
+    question: "Error on a form field — does a screen reader announce it?"
     severity: recommended
     category: testing
     automated: partial
@@ -79,6 +87,7 @@ items:
 
   - id: A11Y-009
     title: Accessibility standards documented
+    question: "Where do devs look up how to build an accessible modal?"
     severity: recommended
     category: documentation
     automated: partial
@@ -88,6 +97,7 @@ items:
 
   - id: A11Y-010
     title: Known accessibility issues tracked
+    question: "How many a11y issues have been open for 6+ months?"
     severity: recommended
     category: documentation
     automated: partial
@@ -97,6 +107,7 @@ items:
 
   - id: A11Y-011
     title: Remediation plan for gaps
+    question: "Known a11y gaps — who owns fixing them and by when?"
     severity: recommended  # Critical if compliance deadline exists
     category: documentation
     automated: partial

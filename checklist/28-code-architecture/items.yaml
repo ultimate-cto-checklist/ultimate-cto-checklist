@@ -6,6 +6,7 @@ default_scope: project
 items:
   - id: ARCH-001
     title: SOLID Principles Audited Regularly
+    question: "When did you last audit for god classes?"
     severity: Recommended
     category: SOLID Principles
     summary: Code follows SOLID principles and is regularly audited for compliance, preferably by AI agents
@@ -25,6 +26,7 @@ items:
 
   - id: ARCH-002
     title: Code Quality Measurement Tools
+    question: "How much duplication is hiding in your codebase?"
     severity: Recommended
     category: Code Quality
     summary: Tooling to measure code health - duplication, complexity, and overall quality with visible results
@@ -46,6 +48,7 @@ items:
 
   - id: ARCH-003
     title: Build Performance
+    question: "How long does your CI take — and is anyone bothered?"
     severity: Recommended
     category: Build Performance
     summary: Builds complete quickly - under 3 minutes clean, under 30 seconds cached

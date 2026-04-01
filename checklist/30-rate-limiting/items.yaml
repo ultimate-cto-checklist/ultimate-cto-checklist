@@ -6,15 +6,18 @@ default_scope: project
 items:
   - id: RATE-001
     title: Rate limiting configured
+    question: "Could one angry script hit your API until it falls over?"
     severity: critical
     summary: Rate limiting exists at infrastructure or application level with proper client isolation
 
   - id: RATE-002
     title: Graceful 429 handling
+    question: "What does your client actually do when it gets rate-limited?"
     severity: recommended
     summary: Rate-limited requests return proper 429 responses with helpful information
 
   - id: RATE-003
     title: Rate limits documented
+    question: "Do your API consumers know they're about to hit a wall?"
     severity: recommended
     summary: API consumers can discover rate limits via documentation or response headers

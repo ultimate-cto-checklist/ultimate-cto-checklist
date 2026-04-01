@@ -6,6 +6,7 @@ default_scope: project
 items:
   - id: LST-001
     title: Load testing tool configured
+    question: "When was your last load test?"
     severity: recommended
     category: load-testing-setup
     summary: >
@@ -34,6 +35,7 @@ items:
 
   - id: LST-002
     title: Baseline performance metrics established
+    question: "What's your p95 response time right now?"
     severity: recommended
     category: load-testing-setup
     summary: >
@@ -59,6 +61,7 @@ items:
 
   - id: LST-003
     title: Load testing before major releases
+    question: "Last release — did you load test before or after shipping?"
     severity: recommended
     category: pre-release-testing
     summary: >
@@ -86,6 +89,7 @@ items:
 
   - id: LST-004
     title: Automated smoke load tests in CI
+    question: "Would a 10x response time regression slip past your CI?"
     severity: optional
     category: pre-release-testing
     summary: >
@@ -111,6 +115,7 @@ items:
 
   - id: LST-005
     title: Capacity limits documented
+    question: "How much traffic can you handle before things break?"
     severity: recommended
     category: capacity-planning
     summary: >
@@ -132,6 +137,7 @@ items:
 
   - id: LST-006
     title: Breaking points identified (stress testing)
+    question: "What breaks first under overload — database or API?"
     severity: recommended
     category: stress-testing
     summary: >
@@ -158,6 +164,7 @@ items:
 
   - id: LST-007
     title: Graceful degradation under load
+    question: "When a dependency dies, does it take everything down?"
     severity: recommended
     category: stress-testing
     summary: >
@@ -188,6 +195,7 @@ items:
 
   - id: LST-008
     title: Auto-scaling triggers tested
+    question: "Auto-scaling configured but never triggered — sure it works?"
     severity: recommended
     category: stress-testing
     summary: >

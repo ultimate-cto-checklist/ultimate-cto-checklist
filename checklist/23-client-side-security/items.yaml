@@ -6,18 +6,21 @@ default_scope: project
 items:
   - id: CSS-001
     title: Cookies use HttpOnly for sensitive data
+    question: "Could XSS steal your session tokens right now?"
     severity: critical
     category: Cookies
     summary: Auth/session cookies configured with HttpOnly flag to prevent XSS attacks from stealing tokens
 
   - id: CSS-002
     title: Browser storage used appropriately
+    question: "Any tokens sitting in localStorage right now?"
     severity: recommended
     category: Storage
     summary: localStorage limited to preferences/UI state; no tokens, secrets, or PII in browser storage
 
   - id: CSS-003
     title: JWT handling practices documented and followed
+    question: "What's your JWT expiry and does the team know it?"
     severity: recommended
     category: JWT Handling
     summary: JWT practices documented including expiration, storage, refresh flow; implementation matches docs

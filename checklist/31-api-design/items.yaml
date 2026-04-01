@@ -6,30 +6,36 @@ default_scope: project
 items:
   - id: API-001
     title: API versioning strategy
+    question: "What breaks when you ship a breaking change today?"
     severity: optional
     summary: API uses consistent versioning approach (URL or header) or intentionally omits versioning for internal/early-stage APIs
 
   - id: API-002
     title: API deprecation strategy
+    question: "How many dead API versions are still running in prod?"
     severity: optional
     summary: If multiple API versions exist, there is a documented plan for sunsetting old versions with migration guidance
 
   - id: API-003
     title: Server-side input validation
+    question: "What stops someone from sending you 10MB of garbage as a name field?"
     severity: critical
     summary: All user input is validated on the server using a validation library before processing
 
   - id: API-004
     title: SQL injection prevention
+    question: "Any raw SQL anywhere in this codebase with user input in it?"
     severity: critical
     summary: Database queries use ORM methods or parameterized queries - no string concatenation with user input
 
   - id: API-005
     title: XSS prevention
+    question: "Could a user store a script that runs in another user's browser?"
     severity: critical
     summary: User-generated content is escaped or sanitized before rendering to prevent script injection
 
   - id: API-006
     title: API gateway / proxy configuration
+    question: "Who else's origin can call your API right now?"
     severity: recommended
     summary: API uses gateway for centralized concerns or has properly configured CORS with whitelisted origins

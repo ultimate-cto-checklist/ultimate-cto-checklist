@@ -7,6 +7,7 @@ default_scope: project
 items:
   - id: FLOW-001
     title: Feature branch workflow enforced
+    question: "Anyone pushing straight to main lately?"
     severity: critical
     category: PR Process
     summary: PRs come from feature branches with meaningful descriptions
@@ -21,6 +22,7 @@ items:
 
   - id: FLOW-002
     title: PRs reviewed by AI agent + human
+    question: "Who caught the last bug before it hit production?"
     severity: recommended
     category: PR Process
     summary: AI review tooling configured alongside human reviewers
@@ -34,6 +36,7 @@ items:
 
   - id: FLOW-003
     title: PRs tested on dev environment before merge
+    question: "How often do merges break staging?"
     severity: critical
     category: PR Process
     summary: Feature branches deploy to dev for testing before merge
@@ -49,6 +52,7 @@ items:
 
   - id: FLOW-004
     title: Commit messages follow project conventions
+    question: "Can you tell what changed last week from the git log?"
     severity: recommended
     category: Commit Conventions
     summary: Documented and enforced commit message format
@@ -63,6 +67,7 @@ items:
 
   - id: FLOW-005
     title: Merge strategy preserves history
+    question: "Could you trace exactly what changed in your last release?"
     severity: critical
     category: Merge Strategy
     summary: Regular merges used, no squash/rebase that loses history
@@ -78,6 +83,7 @@ items:
 
   - id: FLOW-006
     title: Branch flow documented
+    question: "Does your team agree on what promotes to staging?"
     severity: recommended
     category: Merge Strategy
     summary: Feature → dev → staging → production flow documented

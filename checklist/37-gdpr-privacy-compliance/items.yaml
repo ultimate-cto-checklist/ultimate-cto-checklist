@@ -6,6 +6,7 @@ default_scope: org
 items:
   - id: GDPR-001
     title: Data deletion request mechanism
+    question: "Could a user delete their data right now, today?"
     severity: critical
     category: Right to Be Forgotten
     description: >
@@ -16,6 +17,7 @@ items:
 
   - id: GDPR-002
     title: Deletion request audit trail
+    question: "Prove you deleted a user's data. Where's the log?"
     severity: recommended
     category: Right to Be Forgotten
     description: >
@@ -25,6 +27,7 @@ items:
 
   - id: GDPR-003
     title: Deletion timelines defined
+    question: "Deletion request arrives today — when is it done?"
     severity: critical
     category: Right to Be Forgotten
     description: >
@@ -34,6 +37,7 @@ items:
 
   - id: GDPR-004
     title: Cross-service data deletion
+    question: "User deleted — still in your CRM? Your analytics?"
     severity: critical
     category: Right to Be Forgotten
     description: >
@@ -46,6 +50,7 @@ items:
 
   - id: GDPR-005
     title: Data export / portability
+    question: "User asks for their data — how fast can you produce it?"
     severity: critical
     category: Data Export
     description: >
@@ -55,6 +60,7 @@ items:
 
   - id: GDPR-006
     title: Consent enforced before tracking
+    question: "What fires before a user clicks accept on your banner?"
     severity: critical
     category: Consent Management
     description: >
@@ -67,6 +73,7 @@ items:
 
   - id: GDPR-007
     title: Consent stored and auditable
+    question: "Can you prove a specific user consented in 2023?"
     severity: critical
     category: Consent Management
     description: >
@@ -76,6 +83,7 @@ items:
 
   - id: GDPR-008
     title: Consent withdrawal mechanism
+    question: "Withdrawing consent — easier or harder than giving it?"
     severity: critical
     category: Consent Management
     description: >
@@ -85,6 +93,7 @@ items:
 
   - id: GDPR-009
     title: Privacy policy current and complete
+    question: "When was your privacy policy last updated?"
     severity: critical
     category: Privacy Documentation
     description: >
@@ -94,6 +103,7 @@ items:
 
   - id: GDPR-010
     title: Data processing records maintained
+    question: "List every place you process user data. All of them."
     severity: critical
     category: Privacy Documentation
     description: >
@@ -107,6 +117,7 @@ items:
 
   - id: GDPR-011
     title: Third-party processors documented
+    question: "Which vendors touch your users' data — and are they GDPR-compliant?"
     severity: critical
     category: Privacy Documentation
     description: >

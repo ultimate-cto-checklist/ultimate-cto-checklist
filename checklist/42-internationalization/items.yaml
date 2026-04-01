@@ -6,6 +6,7 @@ default_scope: project
 items:
   - id: I18N-001
     title: i18n framework in place
+    question: "Adding a new language — how long would that take?"
     severity: critical  # if multi-language needed, N/A otherwise
     category: Multi-Language Support
     automated: true
@@ -15,6 +16,7 @@ items:
 
   - id: I18N-002
     title: String extraction automated
+    question: "How often do translation keys drift from the actual UI?"
     severity: recommended
     category: Multi-Language Support
     automated: true
@@ -24,6 +26,7 @@ items:
 
   - id: I18N-003
     title: Translation workflow documented
+    question: "Who translates new strings, and how long does it take?"
     severity: recommended
     category: Multi-Language Support
     automated: partial
@@ -33,6 +36,7 @@ items:
 
   - id: I18N-004
     title: Fallback language defined
+    question: "Missing translation — what does your user actually see?"
     severity: recommended
     category: Multi-Language Support
     automated: true
@@ -42,6 +46,7 @@ items:
 
   - id: I18N-005
     title: No hardcoded strings in code
+    question: "How many English strings are hiding in your components?"
     severity: recommended
     category: Best Practices
     automated: partial
@@ -51,6 +56,7 @@ items:
 
   - id: I18N-006
     title: Date/time/currency formatting localized
+    question: "What does $1,234.56 look like to a German user?"
     severity: recommended
     category: Best Practices
     automated: partial
@@ -60,6 +66,7 @@ items:
 
   - id: I18N-007
     title: RTL support if needed
+    question: "Flip to Arabic — does your layout mirror or break?"
     severity: critical  # if RTL languages supported, N/A otherwise
     category: Best Practices
     automated: partial
@@ -69,6 +76,7 @@ items:
 
   - id: I18N-008
     title: Plural forms handled correctly
+    question: "\"1 items\" — still lurking somewhere in your UI?"
     severity: recommended
     category: Best Practices
     automated: partial
@@ -78,6 +86,7 @@ items:
 
   - id: I18N-009
     title: Test with different locales
+    question: "Your tests pass in en-US — what about fr-FR?"
     severity: recommended
     category: Testing
     automated: partial
@@ -87,6 +96,7 @@ items:
 
   - id: I18N-010
     title: Pseudo-localization for catching issues
+    question: "Any hardcoded text hiding from your translation pipeline?"
     severity: optional
     category: Testing
     automated: true
@@ -96,6 +106,7 @@ items:
 
   - id: I18N-011
     title: Layout tested with long strings
+    question: "Your UI in German — does anything overflow or truncate?"
     severity: recommended
     category: Testing
     automated: partial

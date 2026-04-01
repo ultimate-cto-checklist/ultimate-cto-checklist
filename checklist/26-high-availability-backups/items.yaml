@@ -6,6 +6,7 @@ default_scope: both
 items:
   - id: HA-001
     title: Production database HA configured
+    question: "Your DB goes down at 2am — what happens next?"
     severity: recommended
     severity_note: Critical when serious money involved
     category: High Availability
@@ -13,6 +14,7 @@ items:
 
   - id: HA-002
     title: Multi-region server deployment with failover
+    question: "One region goes dark — how long until users notice?"
     severity: recommended
     severity_note: Critical when serious money involved
     category: High Availability
@@ -20,12 +22,14 @@ items:
 
   - id: HA-003
     title: Production database backup configured
+    question: "When did you last verify a backup actually restores?"
     severity: critical
     category: Backups
     summary: Automated backups enabled; retention period defined (minimum 7 days); backups verified running; restore tested
 
   - id: HA-004
     title: Off-site backup storage (outside primary provider)
+    question: "If AWS went down, where are your backups?"
     severity: recommended
     severity_note: Critical when serious money involved
     category: Backups
@@ -33,12 +37,14 @@ items:
 
   - id: HA-005
     title: Point-in-time recovery enabled
+    question: "Bad deploy corrupts data — how far back can you go?"
     severity: critical
     category: Backups
     summary: PITR enabled for production database; recovery window appropriate (7-35 days); team knows how to perform PITR restore
 
   - id: HA-006
     title: Backup window appropriate for RPO
+    question: "How much data are you willing to lose in a disaster?"
     severity: recommended
     category: Backups
     summary: Backup window intentional (low-traffic period); frequency aligns with business RPO; no performance impact during backups

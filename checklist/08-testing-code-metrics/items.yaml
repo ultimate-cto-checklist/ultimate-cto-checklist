@@ -8,6 +8,7 @@ items:
   # Test Coverage
   - id: TEST-001
     title: Automated tests with coverage tracking and CI threshold
+    question: "What's your actual coverage number right now?"
     description: Test framework configured with coverage reporting, thresholds set, and CI enforces coverage requirements
     severity: critical
     category: test-coverage
@@ -15,18 +16,21 @@ items:
   # Test Requirements
   - id: TEST-002
     title: Bug fix commits include regression tests
+    question: "How many bugs have you fixed twice?"
     description: 80%+ of bug fix commits have associated test changes (same commit or ±1 commit) to prevent regressions
     severity: critical
     category: test-requirements
 
   - id: TEST-003
     title: New feature commits include tests
+    question: "What shipped last sprint with zero tests?"
     description: 80%+ of feature commits have associated test changes (same commit or ±1 commit)
     severity: critical
     category: test-requirements
 
   - id: TEST-004
     title: End-to-end tests for business-critical paths
+    question: "If checkout broke right now, how fast would you know?"
     description: E2e test framework configured with tests covering revenue, auth, and core user journeys
     severity: critical
     category: test-requirements
@@ -34,6 +38,7 @@ items:
   # Code Metrics
   - id: TEST-005
     title: CRAP score calculated with project baseline
+    question: "Which file would you least want to touch right now?"
     description: Code complexity tooling configured with established baseline/threshold for the project
     severity: recommended
     category: code-metrics
@@ -41,6 +46,7 @@ items:
   # Agent Automation
   - id: TEST-006
     title: Agent skills for test automation
+    question: "Can an AI agent run your full test suite unassisted?"
     description: Agent-readable instructions exist for running tests, linting, and checking code quality metrics
     severity: optional
     category: agent-automation

@@ -6,6 +6,7 @@ default_scope: both
 items:
   - id: SEC-001
     title: Use Secret Manager or Equivalent
+    question: "Where are your production secrets stored right now?"
     severity: Critical
     category: Secret Storage
     summary: Production secrets managed by dedicated secret manager with rotation and audit capabilities
@@ -25,6 +26,7 @@ items:
 
   - id: SEC-002
     title: Secrets Loaded into Process Environment
+    question: "Would a crash dump expose any credentials?"
     severity: Critical
     category: Secret Storage
     summary: Secrets injected into process environment at startup, not read from files at runtime
@@ -45,6 +47,7 @@ items:
 
   - id: SEC-003
     title: Not Stored on File System
+    question: "Any .env files sitting on a production server right now?"
     severity: Critical
     category: Secret Storage
     summary: Secrets exist only in memory after environment injection - no files on production servers
@@ -66,6 +69,7 @@ items:
 
   - id: SEC-004
     title: No Secrets Committed to Git
+    question: "Has anyone actually scanned your full git history for leaks?"
     severity: Critical
     category: Secret Security
     summary: Secret scanning in place to prevent commits and detect past leaks
@@ -86,6 +90,7 @@ items:
 
   - id: SEC-005
     title: Different Secrets Per Environment
+    question: "Would a staging breach give access to production data?"
     severity: Recommended
     category: Secret Security
     summary: Each environment has completely separate credentials - compromising one doesn't expose others
@@ -106,6 +111,7 @@ items:
 
   - id: SEC-006
     title: Least Privilege Access to Secrets
+    question: "How many people on your team can read production database passwords?"
     severity: Recommended
     category: Secret Security
     summary: Secret access follows least privilege - dedicated service accounts, limited human access, audit trails

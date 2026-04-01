@@ -10,6 +10,7 @@ default_scope: project
 items:
   - id: MON-001
     title: Infrastructure metrics collection
+    question: "Which service has no monitoring right now?"
     severity: critical
     description: >
       All services have monitoring configured collecting CPU, memory, disk metrics.
@@ -27,6 +28,7 @@ items:
 
   - id: MON-002
     title: Database performance monitoring
+    question: "When did you last look at your slow query log?"
     severity: critical
     description: >
       Slow query logging enabled with reasonable threshold. Query analysis tooling
@@ -44,6 +46,7 @@ items:
 
   - id: MON-003
     title: HTTP request logging and analysis
+    question: "Could you tell me how many 4xx errors hit you yesterday?"
     severity: critical
     description: >
       HTTP requests are logged (any source: app, CDN, LB, APM). Logs include
@@ -61,6 +64,7 @@ items:
 
   - id: MON-004
     title: HTTP error alerting
+    question: "Would a spike in 500s wake anyone up tonight?"
     severity: critical
     description: >
       Alert on high volume of 404s (team-defined threshold). Alert on any 500s
@@ -78,6 +82,7 @@ items:
 
   - id: MON-005
     title: Log retention policy
+    question: "How far back can you investigate an incident?"
     severity: recommended
     description: >
       Log retention is configured with minimum 2 weeks. Retention policy is
@@ -93,6 +98,7 @@ items:
 
   - id: MON-006
     title: Status pages and downtime alerts
+    question: "Do your customers know before you do when you're down?"
     severity: critical
     description: >
       Production status page exists and is accessible. Staging status page exists

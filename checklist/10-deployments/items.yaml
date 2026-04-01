@@ -7,6 +7,7 @@ default_scope: project
 items:
   - id: DEPLOY-001
     title: Clear, stable deployment workflow
+    question: "When did a deploy last fail in a way nobody noticed?"
     severity: critical
     category: Pipeline Stability
     summary: Documented deployment workflow that runs reliably
@@ -24,6 +25,7 @@ items:
 
   - id: DEPLOY-002
     title: Deployment failures tracked and team notified
+    question: "How would you find out about a silent deploy failure?"
     severity: critical
     category: Pipeline Stability
     summary: Team notified on both deployment success and failure
@@ -37,6 +39,7 @@ items:
 
   - id: DEPLOY-003
     title: Build performance optimized
+    question: "How long do your engineers wait for a build to finish?"
     severity: recommended
     category: Build Performance
     summary: Caching and parallelization keep builds fast
@@ -51,6 +54,7 @@ items:
 
   - id: DEPLOY-004
     title: Production deployments tagged
+    question: "What's running in production right now — exact version?"
     severity: critical
     category: Release Management
     summary: Every production deployment gets a tag for traceability

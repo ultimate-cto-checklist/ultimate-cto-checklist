@@ -6,6 +6,7 @@ default_scope: org
 items:
   - id: IDS-001
     title: Intrusion detection system evaluated/deployed
+    question: "How long would an active breach go unnoticed?"
     severity: recommended
     severity_note: Critical for big projects handling sensitive data or at scale
     category: General Security Monitoring
@@ -13,6 +14,7 @@ items:
 
   - id: IDS-002
     title: Network-level data transfer monitoring
+    question: "Would 10GB leaving your network tonight trigger an alert?"
     severity: recommended
     severity_note: Critical for big projects handling sensitive data or at scale
     category: Data Exfiltration Detection
@@ -20,6 +22,7 @@ items:
 
   - id: IDS-003
     title: Database query anomaly detection
+    question: "Could someone dump your whole users table undetected?"
     severity: recommended
     severity_note: Critical for big projects handling sensitive data or at scale
     category: Data Exfiltration Detection
@@ -27,6 +30,7 @@ items:
 
   - id: IDS-004
     title: Exfiltration alert routing configured
+    question: "Who gets paged for a security alert at midnight?"
     severity: recommended
     severity_note: Critical for big projects handling sensitive data or at scale
     category: Alerting

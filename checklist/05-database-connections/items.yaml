@@ -7,6 +7,7 @@ default_scope: project
 items:
   - id: DB-001
     title: Connection pooling and optimization configured
+    question: "What happens to your DB when traffic spikes unexpectedly?"
     severity: critical
     type: auto
     summary: |
@@ -15,6 +16,7 @@ items:
 
   - id: DB-002
     title: CI verifies migrations on ephemeral test DB
+    question: "Migrations tested against a real DB, or just hope they work?"
     severity: critical
     type: auto
     summary: |
@@ -23,6 +25,7 @@ items:
 
   - id: DB-003
     title: AI-assisted migration review with human override
+    question: "Who caught the last DROP COLUMN before it hit production?"
     severity: recommended
     type: auto+manual
     summary: |
@@ -31,6 +34,7 @@ items:
 
   - id: DB-004
     title: Database users documented (including read-only user)
+    question: "How many DB users exist, and do you know what each one can do?"
     severity: critical
     type: guided-manual
     summary: |
@@ -39,6 +43,7 @@ items:
 
   - id: DB-005
     title: App user cannot DROP DATABASE
+    question: "Could a SQL injection bug wipe your entire database?"
     severity: critical
     type: guided-manual
     summary: |
@@ -47,6 +52,7 @@ items:
 
   - id: DB-006
     title: Soft delete pattern implemented
+    question: "When a user deletes their account, is it recoverable?"
     severity: recommended
     type: auto+manual
     summary: |
@@ -55,6 +61,7 @@ items:
 
   - id: DB-007
     title: Redis documented if storing critical data
+    question: "If Redis restarts, what critical data evaporates with it?"
     severity: recommended
     type: auto
     summary: |
@@ -63,6 +70,7 @@ items:
 
   - id: DB-008
     title: DB admin tools on-demand and Zero Trust protected
+    question: "Is phpMyAdmin running 24/7 somewhere, exposed to the internet?"
     severity: critical
     type: guided-manual
     summary: |
@@ -71,6 +79,7 @@ items:
 
   - id: DB-009
     title: Admin password restricted to critical people
+    question: "Who on your team could drop the production database right now?"
     severity: critical
     type: guided-manual
     summary: |

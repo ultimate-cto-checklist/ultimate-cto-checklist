@@ -8,6 +8,7 @@ default_scope: project
 items:
   - id: DOC-001
     title: Feature documentation exists (human + AI readable)
+    question: "Could a new hire understand your system without asking you?"
     severity: recommended
     description: >
       Documentation exists covering major features, accessible to both humans and AI agents.
@@ -24,6 +25,7 @@ items:
 
   - id: DOC-002
     title: Complex systems documented
+    question: "What happens to your payment flow if your main dev quits?"
     severity: critical
     description: >
       Complex systems (e.g., payment gateways, order fulfillment, admin features, third-party integrations)
@@ -44,6 +46,7 @@ items:
 
   - id: DOC-003
     title: Documentation is current
+    question: "When did your docs last change alongside the code?"
     severity: recommended
     description: >
       Documentation is kept up to date with the codebase. Source files referenced in docs

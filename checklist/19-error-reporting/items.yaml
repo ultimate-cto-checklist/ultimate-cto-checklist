@@ -8,48 +8,56 @@ default_scope: project
 items:
   - id: ERR-001
     title: Error tracking tool installed and configured
+    question: "How many errors happened in production in the last 24 hours?"
     severity: critical
     category: Setup
     summary: Sentry or similar error tracking SDK installed, initialized early, and DSN configured
 
   - id: ERR-002
     title: PII handling configured
+    question: "Are user passwords or tokens ending up in your error logs?"
     severity: recommended
     category: Setup
     summary: Personal data handling is intentional - either scrubbed or enabled with documented rationale
 
   - id: ERR-003
     title: Stack traces configured
+    question: "Do your stack traces point to real source lines or minified junk?"
     severity: recommended
     category: Setup
     summary: Stack traces enabled and useful; performance tracing configured with appropriate sample rate
 
   - id: ERR-004
     title: Source maps configured
+    question: "What line of code caused last week's frontend error?"
     severity: recommended
     category: Setup
     summary: Source maps generated, uploaded to Sentry via CI/CD, stack traces show original source
 
   - id: ERR-005
     title: Deployment integration with Sentry
+    question: "Did errors spike after your last deploy, and did you catch it?"
     severity: recommended
     category: Setup
     summary: Releases created in Sentry, deploy notifications sent, errors filterable by release
 
   - id: ERR-006
     title: AI periodically reviews Sentry errors
+    question: "When did a human last actually review your error inbox?"
     severity: recommended
     category: AI-Driven Error Handling
     summary: Scheduled AI/Claude review of errors with actionable output (Slack, issues, or PRs)
 
   - id: ERR-007
     title: Auto-create PRs for fixes
+    question: "How many fixable errors have sat in Sentry for months?"
     severity: recommended
     category: AI-Driven Error Handling
     summary: AI identifies fixable errors and creates labeled PRs requiring human review
 
   - id: ERR-008
     title: Automated error triage
+    question: "Who owns the error your most important user hit yesterday?"
     severity: recommended
     category: AI-Driven Error Handling
     summary: Errors prioritized by impact, routed to owners, known errors filtered, issue tracker integration

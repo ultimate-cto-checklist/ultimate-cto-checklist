@@ -8,6 +8,7 @@ default_scope: project
 items:
   - id: PERF-001
     title: Response time monitoring
+    question: "Which endpoint is your slowest right now?"
     severity: recommended
     category: response-time
     summary: Graph response times for all endpoints with slowest endpoint visibility
@@ -22,6 +23,7 @@ items:
 
   - id: PERF-002
     title: Memory usage tracking over time
+    question: "Is your memory usage trending up month over month?"
     severity: recommended
     category: memory-monitoring
     summary: Track memory usage with historical trends visible
@@ -35,6 +37,7 @@ items:
 
   - id: PERF-003
     title: Memory leak detection alerting
+    question: "Will you know about a memory leak before your users do?"
     severity: recommended
     category: memory-monitoring
     summary: Automated alerts for memory growth or threshold breaches
@@ -52,6 +55,7 @@ items:
 
   - id: PERF-004
     title: Heap dump capability
+    question: "Could anyone trigger a heap dump from the internet right now?"
     severity: optional
     category: memory-monitoring
     summary: Protected mechanism to capture heap dumps for debugging memory leaks

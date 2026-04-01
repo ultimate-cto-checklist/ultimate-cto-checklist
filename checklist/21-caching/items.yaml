@@ -6,12 +6,14 @@ default_scope: project
 items:
   - id: CACHE-001
     title: Static assets cached by CDN
+    question: "Are users downloading your JS bundle from your origin server?"
     severity: recommended
     category: Static Asset Caching
     summary: JS, CSS, images, and fonts served through CDN with appropriate Cache-Control headers
 
   - id: CACHE-002
     title: Content hashes for cache invalidation
+    question: "Do users need to hard-refresh to get your latest deploy?"
     severity: recommended
     category: Static Asset Caching
     summary: Asset filenames include content hashes enabling long TTLs with automatic invalidation on changes

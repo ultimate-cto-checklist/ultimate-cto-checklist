@@ -11,6 +11,7 @@ default_scope: both
 items:
   - id: SEC-001
     title: All environments behind Cloudflare
+    question: "Is staging actually behind Cloudflare, or just prod?"
     severity: critical
     category: Cloudflare Protection
     description: >
@@ -29,6 +30,7 @@ items:
 
   - id: SEC-002
     title: No direct IP exposure
+    question: "Could someone bypass Cloudflare and hit your origin directly?"
     severity: critical
     category: Cloudflare Protection
     description: >
@@ -49,6 +51,7 @@ items:
 
   - id: SEC-003
     title: Cloudflare respects cache-control headers
+    question: "Is Cloudflare caching responses it shouldn't be?"
     severity: recommended
     category: Cloudflare Protection
     description: >
@@ -69,6 +72,7 @@ items:
 
   - id: SEC-004
     title: Response header hygiene
+    question: "What does your Server header reveal about your stack?"
     severity: recommended
     category: Security Headers
     description: >
@@ -90,6 +94,7 @@ items:
 
   - id: SEC-005
     title: HTTPS-only headers (HSTS)
+    question: "Can your app still be reached over plain HTTP?"
     severity: critical
     category: Security Headers
     description: >
@@ -111,6 +116,7 @@ items:
 
   - id: SEC-006
     title: Subresource Integrity (SRI) and GTM controls
+    question: "Who has access to inject scripts via GTM right now?"
     severity: recommended
     category: Security Headers
     description: >
@@ -135,6 +141,7 @@ items:
 
   - id: SEC-007
     title: SSL transparency reports
+    question: "Would you know if someone issued a cert for your domain?"
     severity: recommended
     category: SSL/Certificates
     description: >
