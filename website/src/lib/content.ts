@@ -1,13 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
 import { getDomain } from './domains';
 import type { Section, Item, SiteStats } from './types';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const CHECKLIST_DIR = path.resolve(__dirname, '../../checklist');
+const CHECKLIST_DIR = path.resolve(process.cwd(), 'checklist');
 
 function parseItem(raw: Record<string, unknown>): Item {
   return {
