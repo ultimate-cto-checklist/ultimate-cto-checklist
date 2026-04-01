@@ -1,0 +1,17 @@
+---
+import type { Section } from '../lib/types';
+interface Props { section: Section; }
+const { section } = Astro.props;
+const criticalCount = section.items.filter(i => i.severity === 'critical').length;
+const recommendedCount = section.items.length - criticalCount;
+---
+<div class="mb-8">
+  <p class="text-xs text-gray-400 font-mono mb-1">Section {section.id} · {section.domain}</p>
+  <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-2">{section.name}</h1>
+  <p class="text-gray-500 mb-4">{section.description}</p>
+  <div class="flex gap-4 text-sm">
+    <span class="text-gray-600"><strong>{section.items.length}</strong> items</span>
+    {criticalCount > 0 && <span class="text-amber-600"><strong>{criticalCount}</strong> critical</span>}
+    {recommendedCount > 0 && <span class="text-green-600"><strong>{recommendedCount}</strong> recommended</span>}
+  </div>
+</div>

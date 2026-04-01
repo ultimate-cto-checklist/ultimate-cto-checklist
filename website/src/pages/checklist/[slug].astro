@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../components/ChecklistSidebar.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import ItemCard from '../../components/ItemCard.astro';
+import GuidePanel from '../../components/GuidePanel.astro';
+import { loadAllSections } from '../../lib/content';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  const sections = loadAllSections();
+  return sections.map(s => ({
+    params: { slug: s.slug },
+    props: { section: s },
+  }));
+}
+
+const { section } = Astro.props;
+
+const categories = new Map<string, typeof section.items>();
+for (const item of section.items) {
+  const group = categories.get(item.category) ?? [];
+  group.push(item);
+  categories.set(item.category, group);
+}
+
+const guideHtml = section.guideContent ? await marked.parse(section.guideContent) : '';
+---
+
+<BaseLayout title={section.name} description={section.description}>
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug={section.slug} />
+    <main class="flex-1 py-8 px-8 max-w-4xl">
+      <SectionHeader section={section} />
+      {Array.from(categories).map(([category, items]) => (
+        <div class="mb-6">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 border-l-2 border-[#16a34a] pl-3">
+            {category}
+          </h2>
+          {items.map(item => <ItemCard item={item} />)}
+        </div>
+      ))}
+      <GuidePanel content={guideHtml} />
+    </main>
+  </div>
+</BaseLayout>

@@ -1,0 +1,38 @@
+---
+import { loadAllSections } from '../lib/content';
+import { getAllDomains } from '../lib/domains';
+interface Props { currentSlug: string; }
+const { currentSlug } = Astro.props;
+const sections = loadAllSections();
+const domains = getAllDomains();
+const sectionsByDomain = new Map<string, typeof sections>();
+for (const section of sections) {
+  const group = sectionsByDomain.get(section.domain) ?? [];
+  group.push(section);
+  sectionsByDomain.set(section.domain, group);
+}
+---
+<nav class="w-64 shrink-0 overflow-y-auto max-h-[calc(100vh-3.5rem)] sticky top-14 py-6 pr-4">
+  {domains.map(domain => {
+    const group = sectionsByDomain.get(domain) ?? [];
+    if (group.length === 0) return null;
+    return (
+      <div class="mb-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5 px-2">{domain}</h3>
+        {group.map(s => (
+          <a
+            href={`/checklist/${s.slug}/`}
+            class:list={[
+              'block px-2 py-1 text-sm rounded transition-colors',
+              s.slug === currentSlug
+                ? 'bg-[#f0fdf4] text-[#052e16] font-semibold'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+            ]}
+          >
+            {s.name}
+          </a>
+        ))}
+      </div>
+    );
+  })}
+</nav>

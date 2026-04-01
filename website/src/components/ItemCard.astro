@@ -1,0 +1,18 @@
+---
+import SeverityBadge from './SeverityBadge.astro';
+import type { Item } from '../lib/types';
+interface Props { item: Item; }
+const { item } = Astro.props;
+---
+<div class="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
+  <span class="font-mono text-xs text-[#16a34a] font-semibold mt-0.5 shrink-0">{item.id}</span>
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2 mb-0.5">
+      <span class="font-semibold text-sm text-gray-900">{item.title}</span>
+      <SeverityBadge severity={item.severity} />
+    </div>
+    {item.description && (
+      <p class="text-xs text-gray-500 leading-relaxed">{item.description}</p>
+    )}
+  </div>
+</div>

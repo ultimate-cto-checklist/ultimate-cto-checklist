@@ -1,0 +1,6 @@
+---
+import { loadAllSections } from '../../lib/content';
+const sections = loadAllSections();
+const firstSlug = sections[0]?.slug ?? 'git-repo-setup';
+return Astro.redirect(`/checklist/${firstSlug}/`);
+---
