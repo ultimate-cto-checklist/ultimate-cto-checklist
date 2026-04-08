@@ -7,6 +7,8 @@ description: Begin a new audit for a project. Creates dated audit folder and gui
 
 You are starting a new audit for a project.
 
+**Note:** Usually called from `/audit <project>`, which handles workspace init and project validation. Can also be called directly.
+
 ## Usage
 
 ```
@@ -16,8 +18,8 @@ You are starting a new audit for a project.
 
 ## Pre-flight Checks
 
-1. Verify `org.yaml` exists
-2. Verify project exists in `projects/`
+1. Verify `org.yaml` exists — if not, read and follow `checklist/skills/audit-init/SKILL.md` first
+2. Verify project exists in `projects/` — if not, read and follow `checklist/skills/audit-add-project/SKILL.md`
 3. Check for in-progress audit (warn if exists)
 4. **Read the project config** (`projects/<name>.yaml`) and extract the `repo` field
 

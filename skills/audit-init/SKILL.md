@@ -7,11 +7,16 @@ description: Initialize organization context for the audit workspace. Interactiv
 
 You are configuring a CTO's audit workspace. This is an interactive setup wizard.
 
+**Note:** Usually called automatically from `/audit` when the workspace needs setup. Can also be run directly to reconfigure.
+
 ## Pre-flight Checks
 
 1. Verify we're in a valid workspace (not inside checklist repo)
-2. Check if `org.yaml` already exists - if so, ask if they want to reconfigure
-3. Ensure `checklist/` submodule exists or can be added
+2. Ensure `checklist/` submodule exists or can be added
+3. Check if `org.yaml` already exists and is fully configured (has cloud_providers, source_control, monitoring, etc. — not just name/slug/created_at):
+   - **Fully configured:** Show a summary and ask if they want to reconfigure. If not, tell them they're ready and suggest `/audit` to start.
+   - **Minimal (just name/slug):** Tell them you'll fill in the rest, skip Step 1 (use the existing name), start from Step 2.
+   - **Missing:** Start from Step 1.
 
 ## Setup Flow
 
