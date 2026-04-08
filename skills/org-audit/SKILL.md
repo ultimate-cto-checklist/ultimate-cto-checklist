@@ -25,33 +25,46 @@ Run an organization-level audit. This covers sections that apply to the whole or
 
 ## Choose Scope
 
-Present the available sections grouped by category:
+**Important:** The org audit has two tiers of items. Default to org-only.
 
-> Here are the 14 org-level sections I can audit:
+### Tier 1: Org-only items (default)
+
+These are items scoped exclusively to `org` — policies, processes, accounts, team structure. They don't require a specific project context.
+
+Read each section's `items.yaml` and filter:
+- Sections with `default_scope: org` → include ALL items
+- Sections with `default_scope: [org, project]` → include ONLY items that don't have a per-item `scope: project` override
+- Sections with `default_scope: project` → include ONLY items with per-item `scope: org` or `scope: [org, project]` override
+
+Present what's included:
+
+> **Org Audit — org-only items**
 >
-> **Compliance & Legal**
-> - 37: GDPR & Privacy Compliance (11 items)
-> - 24: Data Retention (5 items)
+> I'll audit the items that apply at the organization level — policies, processes, tooling, and standards.
 >
-> **Security**
-> - 11: Access Control (3 items)
-> - 13: Infrastructure Security (7 items)
-> - 25: Intrusion Detection (4 items)
-> - 29: Secrets Management (6 items)
+> [List sections with item counts, grouped by category — only counting org-scoped items per section]
 >
-> **Operations**
-> - 35: Incident Response (7 items)
-> - 26: High Availability & Backups (6 items)
-> - 20: Email Infrastructure (8 items)
-> - 38: Cost Monitoring & Budget Alerts (5 items)
+> Ready to start? (Y / or pick specific sections)
+
+### Tier 2: Org-level review of shared items (opt-in, after Tier 1)
+
+After Tier 1 completes, offer:
+
+> **Optional: Review org-level policies for shared items?**
 >
-> **Team & Process**
-> - 15: Admin Features (6 items)
-> - 39: Developer Onboarding (9 items)
-> - 40: Technical Debt Tracking (8 items)
-> - 16: CTO Workspace (1 item)
+> Some items are scoped to both org and project (`[org, project]`). At the org level, I'd check whether the *policy or standard* exists — not whether each project implements it (that happens in project audits).
 >
-> Run all 14? Or pick specific sections? (e.g., "just security" or "37, 35, 39")
+> Examples:
+> - Secrets Management: "Is there an org-wide secrets policy?" (not "does repo X use Vault?")
+> - Access Control: "Is there a tiered access model?" (not "does repo X enforce it?")
+>
+> Want to review these too? (Y/N / pick sections)
+
+If yes, audit the `[org, project]` items but **only the org-level aspect**: verify the policy/standard/process exists, not per-project compliance. Add a note in each result file:
+
+```yaml
+audit_scope: org-policy  # org-level policy check; per-project compliance verified in project audits
+```
 
 ## Run the Audit
 
@@ -78,7 +91,10 @@ Organization context from org.yaml:
 Read the verification steps:  checklist/checklist/<section>/guide.md
 Read the item definitions:    checklist/checklist/<section>/items.yaml
 
-For EACH item:
+ONLY audit these specific items: <list of item IDs from the chosen tier>
+Skip any items not in this list — they belong to a different scope.
+
+For EACH item in the list:
 1. Follow the guide's verification steps
 2. Run auto_checks commands from items.yaml if available
 3. Use `gh api` for GitHub checks where applicable
