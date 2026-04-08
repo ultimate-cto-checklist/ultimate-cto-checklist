@@ -97,6 +97,7 @@ items:
     title: Common incidents have runbooks
     question: "Which incidents only one person on your team knows how to fix?"
     severity: critical
+    scope: [org, project]
     category: runbooks
     summary: >
       Runbooks turn tribal knowledge into documented steps anyone can follow.

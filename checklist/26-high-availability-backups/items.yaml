@@ -1,7 +1,7 @@
 section: 26-high-availability-backups
 title: High Availability & Backups
 description: High availability configuration for databases and servers, backup strategies, point-in-time recovery, and off-site storage
-default_scope: both
+default_scope: [org, project]
 
 items:
   - id: HA-001

@@ -9,7 +9,7 @@ describe('SectionCard', () => {
     id: '01',
     name: 'Git Repo Setup',
     description: 'Essential git repository configuration and best practices',
-    defaultScope: 'project',
+    defaultScope: ['project'],
     itemCount: 12,
     criticalCount: 3,
   };

@@ -3,7 +3,7 @@ import path from 'path';
 import YAML from 'yaml';
 
 // Types
-export type Scope = 'org' | 'project' | 'both';
+export type Scope = 'org' | 'project';
 
 export interface ChecklistItem {
   id: string;
@@ -11,7 +11,7 @@ export interface ChecklistItem {
   description: string;
   severity: 'critical' | 'recommended';
   category: string;
-  scope?: Scope;
+  scope: Scope[];
 }
 
 export interface SectionSummary {
@@ -19,7 +19,7 @@ export interface SectionSummary {
   id: string;
   name: string;
   description: string;
-  defaultScope: Scope;
+  defaultScope: Scope[];
   goal?: string;
   itemCount: number;
   criticalCount: number;
@@ -30,7 +30,7 @@ export interface Section {
   id: string;
   name: string;
   description: string;
-  defaultScope: Scope;
+  defaultScope: Scope[];
   items: ChecklistItem[];
   guide: string;
 }
@@ -45,7 +45,7 @@ interface ItemsYAML {
   };
   title?: string;
   description?: string;
-  default_scope?: Scope;
+  default_scope?: Scope | Scope[];
   items: Array<{
     id: string;
     title: string;
@@ -54,8 +54,14 @@ interface ItemsYAML {
     severity: 'critical' | 'recommended';
     category?: string;
     type?: string;
-    scope?: Scope;
+    scope?: Scope | Scope[];
   }>;
+}
+
+/** Normalize a scope value (string or array) into a Scope[] */
+function normalizeScope(raw: Scope | Scope[] | undefined, fallback: Scope[]): Scope[] {
+  if (!raw) return fallback;
+  return Array.isArray(raw) ? raw : [raw];
 }
 
 // Cache configuration
@@ -134,8 +140,8 @@ export async function listSections(): Promise<SectionSummary[]> {
           description = parsed.section.description;
         }
 
-        // Extract default_scope (top-level field in both formats)
-        const defaultScope: Scope = parsed.default_scope || 'project';
+        // Extract default_scope (top-level field in both YAML formats)
+        const defaultScope = normalizeScope(parsed.default_scope, ['project']);
 
         // Extract goal from guide.md (pattern: "## The Goal: Goal Text")
         let goal: string | undefined;
@@ -282,8 +288,8 @@ export async function getSection(slug: string): Promise<Section> {
     description = parsed.section.description;
   }
 
-  // Extract default_scope (top-level field in both formats)
-  const defaultScope: Scope = parsed.default_scope || 'project';
+  // Extract default_scope (top-level field in both YAML formats)
+  const defaultScope = normalizeScope(parsed.default_scope, ['project']);
 
   // Normalize items - handle both description and summary fields
   const items: ChecklistItem[] = (parsed.items || []).map(item => ({
@@ -292,7 +298,7 @@ export async function getSection(slug: string): Promise<Section> {
     description: item.description || item.summary || '',
     severity: item.severity,
     category: item.category || 'uncategorized',
-    scope: item.scope || defaultScope,
+    scope: normalizeScope(item.scope, defaultScope),
   }));
 
   const section: Section = {

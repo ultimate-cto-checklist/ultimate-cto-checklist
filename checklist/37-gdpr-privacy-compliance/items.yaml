@@ -1,7 +1,7 @@
 section: 37-gdpr-privacy-compliance
 title: GDPR & Privacy Compliance
 description: User rights, consent management, and privacy documentation for regulatory compliance
-default_scope: org
+default_scope: [org, project]
 
 items:
   - id: GDPR-001
@@ -29,6 +29,7 @@ items:
     title: Deletion timelines defined
     question: "Deletion request arrives today — when is it done?"
     severity: critical
+    scope: org
     category: Right to Be Forgotten
     description: >
       GDPR requires response within one month. Define and communicate
@@ -95,6 +96,7 @@ items:
     title: Privacy policy current and complete
     question: "When was your privacy policy last updated?"
     severity: critical
+    scope: org
     category: Privacy Documentation
     description: >
       Privacy policy must exist, be current (updated within 12 months or after changes),
@@ -105,6 +107,7 @@ items:
     title: Data processing records maintained
     question: "List every place you process user data. All of them."
     severity: critical
+    scope: org
     category: Privacy Documentation
     description: >
       GDPR Article 30 requires Record of Processing Activities (ROPA).
@@ -119,6 +122,7 @@ items:
     title: Third-party processors documented
     question: "Which vendors touch your users' data — and are they GDPR-compliant?"
     severity: critical
+    scope: org
     category: Privacy Documentation
     description: >
       Maintain list of all third parties processing user data. Have DPAs

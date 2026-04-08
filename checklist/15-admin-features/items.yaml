@@ -3,7 +3,7 @@ section:
   name: Admin Features
   description: Admin feature parity and admin panel security controls
 
-default_scope: org
+default_scope: project
 
 items:
   - id: ADM-001
@@ -26,6 +26,7 @@ items:
     title: Admin access auditing
     question: "Who still has admin access that probably shouldn't?"
     severity: recommended
+    scope: [org, project]
     category: Admin Panel Security
     description: >
       Can enumerate all admin users, periodic process exists to review

@@ -68,7 +68,8 @@ function parseSection(dirName: string, data: Record<string, unknown>, guideConte
     description = String(data.description ?? '');
   }
 
-  const defaultScope = String(data.default_scope ?? 'project');
+  const rawScope = data.default_scope ?? 'project';
+  const defaultScope = Array.isArray(rawScope) ? rawScope.map(String) : [String(rawScope)];
   const rawItems = (data.items as Record<string, unknown>[]) ?? [];
   const items = rawItems.map(parseItem);
 

@@ -10,6 +10,7 @@ describe('ChecklistItem', () => {
     description: 'A README.md file should exist at the root of the repository with project overview, setup instructions, and basic documentation.',
     severity: 'critical',
     category: 'documentation',
+    scope: ['project'],
   };
 
   const mockRecommendedItem: ChecklistItemType = {
@@ -18,6 +19,7 @@ describe('ChecklistItem', () => {
     description: 'Follow the conventional commits specification for all commit messages to enable automated changelog generation.',
     severity: 'recommended',
     category: 'git-workflow',
+    scope: ['project'],
   };
 
   describe('Rendering', () => {

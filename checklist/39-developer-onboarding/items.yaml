@@ -1,7 +1,7 @@
 section: 39-developer-onboarding
 title: Developer Onboarding
 description: Audit developer onboarding experience - documentation, access, and day-one productivity
-default_scope: org
+default_scope: [org, project]
 
 items:
   - id: DEV-001
@@ -67,6 +67,7 @@ items:
     title: Architecture overview documented
     question: "Could a new hire explain your system after day one?"
     severity: recommended
+    scope: project
     category: Technical Documentation
     description: >
       New developers need to understand how the system fits together.
@@ -99,6 +100,7 @@ items:
     title: Key systems documented
     question: "Payments went wrong — where does a new dev start?"
     severity: recommended
+    scope: project
     category: Technical Documentation
     description: >
       Complex or critical systems (payments, auth, integrations) need
@@ -219,6 +221,7 @@ items:
     title: IDE/editor setup documented
     question: "New dev, fresh laptop — how long until their linter matches yours?"
     severity: optional
+    scope: project
     category: Access & Tooling
     description: >
       Shared IDE configuration ensures consistent developer experience
@@ -247,6 +250,7 @@ items:
     title: Troubleshooting FAQ documented
     question: "What's the most common new-hire question you answer twice a month?"
     severity: optional
+    scope: project
     category: Access & Tooling
     description: >
       Common issues and gotchas should be documented so new developers

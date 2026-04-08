@@ -1,7 +1,7 @@
 section: 24-data-retention
 title: Data Retention
 description: Soft delete implementation, data cleanup processes, and legal retention compliance
-default_scope: both
+default_scope: [org, project]
 
 items:
   - id: RET-001

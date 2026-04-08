@@ -18,7 +18,7 @@ You are jumping to a specific audit item.
 
 1. Parse the item ID from args
 2. Find the item in `checklist/checklist/*/items.yaml` files
-3. Determine if it's org-level or project-level (check `default_scope` and item `scope`)
+3. Determine if it's org-level or project-level (check `default_scope` and item `scope` — these are arrays like `[org, project]`, or single strings like `org`)
 4. If project-level, ask which project (if multiple configured in `projects/`)
 5. Show the item and run through the standard item workflow (same as `/audit-start`)
 6. Save result to appropriate audit folder:

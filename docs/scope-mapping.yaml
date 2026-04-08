@@ -4,9 +4,9 @@
 # Used when adding `default_scope` to each section's items.yaml.
 #
 # Scopes:
-#   org     - Audit once at the organization level (policies, tooling, standards)
-#   project - Audit per-project (code, config, deployments)
-#   both    - Org-level policy exists AND per-project compliance is verified
+#   org              - Audit once at the organization level (policies, tooling, standards)
+#   project          - Audit per-project (code, config, deployments)
+#   [org, project]   - Org sets policy/standard; each project audited for compliance
 
 sections:
   # Infrastructure & Setup - per-project
@@ -26,13 +26,13 @@ sections:
   10-deployments: project
 
   # Access & Security - mixed
-  11-access-control: both
+  11-access-control: [org, project]
   12-monitoring: project
-  13-infrastructure-security: both
+  13-infrastructure-security: [org, project]
 
   # Documentation & Admin - mixed
   14-documentation: project
-  15-admin-features: org
+  15-admin-features: project
   16-cto-workspace: org
 
   # Performance & Analytics - mostly per-project
@@ -47,16 +47,16 @@ sections:
   23-client-side-security: project
 
   # Data & Security - mixed
-  24-data-retention: both
+  24-data-retention: [org, project]
   25-intrusion-detection: org
 
   # HA & Database - mixed
-  26-high-availability-backups: both
+  26-high-availability-backups: [org, project]
   27-database-tooling: project
 
   # Code & Secrets - per-project
   28-code-architecture: project
-  29-secrets-management: both
+  29-secrets-management: [org, project]
 
   # API & Security - per-project
   30-rate-limiting: project
@@ -68,11 +68,11 @@ sections:
   34-rollback-recovery: project
   35-incident-response: org
   36-load-stress-testing: project
-  37-gdpr-privacy-compliance: org
+  37-gdpr-privacy-compliance: [org, project]
   38-cost-monitoring-budget-alerts: org
 
-  # Team & Development - mostly org level
-  39-developer-onboarding: org
-  40-technical-debt-tracking: org
+  # Team & Development - mixed
+  39-developer-onboarding: [org, project]
+  40-technical-debt-tracking: [org, project]
   41-accessibility: project
   42-internationalization: project

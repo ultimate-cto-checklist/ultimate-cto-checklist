@@ -1,7 +1,7 @@
 section: 40-technical-debt-tracking
 title: Technical Debt Tracking
 description: Audit technical debt visibility, management practices, and metrics
-default_scope: org
+default_scope: [org, project]
 
 items:
   - id: DEBT-001
@@ -131,6 +131,7 @@ items:
     title: Code complexity trends
     question: "Which file is your most complex — and is it getting worse?"
     severity: optional
+    scope: project
     category: metrics
     description: >
       Code complexity is measured and tracked over time to catch debt accumulation early.
@@ -156,6 +157,7 @@ items:
     title: Dependency age/health
     question: "Any dependencies more than two major versions behind?"
     severity: recommended
+    scope: project
     category: metrics
     description: >
       Dependency updates are automated, security vulnerabilities are tracked,
@@ -182,6 +184,7 @@ items:
     title: TODO/FIXME count in codebase
     question: "How many TODOs are older than your newest engineer?"
     severity: optional
+    scope: project
     category: metrics
     description: >
       TODO and FIXME comments are tracked as informal debt markers,

@@ -6,7 +6,7 @@ section:
     directly exposed, security headers are properly configured, and SSL certificate
     issuance is monitored.
 
-default_scope: both
+default_scope: [org, project]
 
 items:
   - id: SEC-001

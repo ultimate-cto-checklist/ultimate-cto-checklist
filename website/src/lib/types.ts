@@ -24,7 +24,7 @@ export interface Section {
   id: string;
   name: string;
   description: string;
-  defaultScope: string;
+  defaultScope: string[];
   items: Item[];
   guideContent: string;
   domain: string;
