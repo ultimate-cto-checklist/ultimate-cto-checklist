@@ -173,10 +173,6 @@ Generate instructions specific to their tooling:
 - Which sections are most relevant
 - Tool-specific commands they'll use
 
-### docs/commands.md
-
-List all available `/audit-*` commands with descriptions.
-
 ### docs/preferences.md
 
 ```markdown
@@ -205,14 +201,11 @@ See `org.yaml` for structured configuration.
 
 - `docs/org-context.md` - Organization context and setup
 - `docs/audit-workflow.md` - How to run audits
-- `docs/commands.md` - Available commands
 - `docs/preferences.md` - Your preferences
 
 ## Getting Started
 
-1. Add a project: `/audit-add-project`
-2. Start an audit: `/audit-start <project-name>`
-3. Check progress: `/audit-status`
+Run `/audit` — it detects your workspace state and guides you to the right action.
 
 ## Checklist Reference
 
@@ -249,15 +242,9 @@ Show:
 > - STATUS.md
 > - docs/org-context.md
 > - docs/audit-workflow.md
-> - docs/commands.md
 > - docs/preferences.md
 >
-> **Next steps:**
-> 1. Review the generated files
-> 2. Run `/audit-add-project` to add your first project
-> 3. Run `/audit-start <project>` to begin auditing
->
-> Would you like to add a project now?
+> **Next:** Run `/audit` to start your first audit.
 
 ## Error Handling
 
