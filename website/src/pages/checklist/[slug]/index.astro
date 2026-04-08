@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../../components/ChecklistSidebar.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import ItemCard from '../../../components/ItemCard.astro';
+import { loadAllSections, extractGuideIntro } from '../../../lib/content';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  const sections = loadAllSections();
+  return sections.map(s => ({
+    params: { slug: s.slug },
+    props: { section: s },
+  }));
+}
+
+const { section } = Astro.props;
+
+const allSections = loadAllSections();
+
+const categories = new Map<string, typeof section.items>();
+for (const item of section.items) {
+  const group = categories.get(item.category) ?? [];
+  group.push(item);
+  categories.set(item.category, group);
+}
+
+const guideIntroRaw = extractGuideIntro(section.guideContent);
+const guideIntroHtml = guideIntroRaw ? await marked.parse(guideIntroRaw) : '';
+
+const sectionIndex = allSections.findIndex(s => s.slug === section.slug);
+const prevSection = sectionIndex > 0 ? allSections[sectionIndex - 1] : null;
+const nextSection = sectionIndex < allSections.length - 1 ? allSections[sectionIndex + 1] : null;
+---
+
+<BaseLayout title={section.name} description={section.description}>
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug={section.slug} />
+    <main class="flex-1 py-8 px-8 max-w-4xl">
+      <SectionHeader section={section} />
+
+      {guideIntroHtml && (
+        <div class="mb-8 prose prose-sm prose-gray max-w-none
+          prose-headings:text-gray-900 prose-headings:font-bold prose-headings:text-base
+          prose-p:text-gray-600 prose-li:text-gray-600
+          prose-strong:text-gray-900
+          prose-code:text-gray-700 prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:before:content-none prose-code:after:content-none
+          prose-pre:bg-gray-900 prose-pre:text-gray-300 prose-pre:rounded-lg prose-pre:text-xs
+          [&_pre_code]:text-gray-300 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:rounded-none"
+          set:html={guideIntroHtml}
+        />
+      )}
+
+      {Array.from(categories).map(([category, items]) => (
+        <div class="mb-8">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1 border-l-2 border-[#16a34a] pl-3">
+            {category}
+          </h2>
+          {items.map(item => <ItemCard item={item} sectionSlug={section.slug} />)}
+        </div>
+      ))}
+
+      <!-- Section nav -->
+      <div class="flex justify-between items-stretch gap-4 pt-6 mt-4 border-t border-gray-200">
+        {prevSection ? (
+          <a href={`/checklist/${prevSection.slug}/`} class="flex-1 group border border-gray-200 rounded-lg p-4 hover:border-[#16a34a] transition-colors">
+            <span class="text-xs text-gray-400 group-hover:text-[#16a34a]">&larr; Previous section</span>
+            <p class="text-sm font-semibold text-gray-900 mt-1 group-hover:text-[#052e16]">{prevSection.name}</p>
+            <p class="text-xs text-gray-400 mt-0.5">{prevSection.items.length} items</p>
+          </a>
+        ) : <div class="flex-1" />}
+        {nextSection ? (
+          <a href={`/checklist/${nextSection.slug}/`} class="flex-1 group border border-gray-200 rounded-lg p-4 hover:border-[#16a34a] transition-colors text-right">
+            <span class="text-xs text-gray-400 group-hover:text-[#16a34a]">Next section &rarr;</span>
+            <p class="text-sm font-semibold text-gray-900 mt-1 group-hover:text-[#052e16]">{nextSection.name}</p>
+            <p class="text-xs text-gray-400 mt-0.5">{nextSection.items.length} items</p>
+          </a>
+        ) : <div class="flex-1" />}
+      </div>
+    </main>
+  </div>
+</BaseLayout>

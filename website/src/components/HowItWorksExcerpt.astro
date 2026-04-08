@@ -1,45 +1,48 @@
 <section class="bg-[#052e16] py-20 px-6">
   <div class="max-w-5xl mx-auto">
     <p class="text-xs uppercase tracking-widest text-[#4ade80] font-bold mb-3">How It Works</p>
-    <h2 class="text-3xl font-black text-[#ecfdf5] tracking-tight mb-2">Three steps to your first audit.</h2>
-    <p class="text-[#86efac] mb-12">No setup. No account. Just Claude and your codebase.</p>
+    <h2 class="text-3xl font-black text-[#ecfdf5] tracking-tight mb-2">Ship it. Audit it. Fix what breaks.</h2>
+    <p class="text-[#86efac] mb-12 max-w-2xl">Three commands between you and a full infrastructure audit. AI agents do the verification. You make the calls.</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="bg-white/5 border border-white/10 rounded-xl p-7">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Step 1 -->
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
         <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-[#052e16] rounded-lg font-black text-sm mb-4">1</div>
-        <h3 class="text-lg font-bold text-[#ecfdf5] mb-2">Copy the prompt</h3>
-        <p class="text-sm text-[#86efac] leading-relaxed mb-3">One prompt bootstraps the entire audit workflow — workspace setup, checklist loading, and section-by-section analysis.</p>
-        <code class="block bg-black/30 border border-white/10 rounded-md px-3 py-2.5 font-mono text-xs text-[#4ade80] leading-relaxed whitespace-pre">Audit my project against the
-CTO Checklist. Start a
-cto-workspace and follow
-the CLAUDE.md instructions.</code>
+        <h3 class="text-lg font-bold text-[#ecfdf5] mb-2">Clone and init</h3>
+        <p class="text-sm text-[#86efac] leading-relaxed mb-4">Add the checklist as a submodule, then run the interactive setup. It asks about your stack, cloud providers, and tooling, then generates your org config and registers projects.</p>
+        <code class="block bg-black/30 border border-white/10 rounded-md px-3 py-2.5 font-mono text-xs text-[#4ade80] leading-relaxed whitespace-pre"># Create your audit workspace, then
+> git submodule add cto-checklist
+> claude
+> /audit-init # org config</code>
       </div>
 
-      <div class="bg-white/5 border border-white/10 rounded-xl p-7">
+      <!-- Step 2 -->
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
         <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-[#052e16] rounded-lg font-black text-sm mb-4">2</div>
-        <h3 class="text-lg font-bold text-[#ecfdf5] mb-2">Run with Claude</h3>
-        <p class="text-sm text-[#86efac] leading-relaxed mb-3">Paste into Claude Code. It clones your repo, runs automated checks, and asks smart questions about what it can't verify.</p>
-        <code class="block bg-black/30 border border-white/10 rounded-md px-3 py-2.5 font-mono text-xs text-[#4ade80] leading-relaxed whitespace-pre">$ claude
-&gt; Paste audit prompt
-Scanning 42 sections...
-✓ 847 pass · ⚠ 203 partial</code>
+        <h3 class="text-lg font-bold text-[#ecfdf5] mb-2">Run the audit</h3>
+        <p class="text-sm text-[#86efac] leading-relaxed mb-4">AI agents check items in parallel, cloning your repo, inspecting configs, and calling GitHub APIs. You only review the items that need human judgment.</p>
+        <code class="block bg-black/30 border border-white/10 rounded-md px-3 py-2.5 font-mono text-xs text-[#4ade80] leading-relaxed whitespace-pre">> /audit-start my-api
+Cloning repo...
+Auto-checking 42 sections...
+Review: 12 items need input</code>
       </div>
 
-      <div class="bg-white/5 border border-white/10 rounded-xl p-7">
+      <!-- Step 3 -->
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
         <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-[#052e16] rounded-lg font-black text-sm mb-4">3</div>
-        <h3 class="text-lg font-bold text-[#ecfdf5] mb-2">Get your report</h3>
-        <p class="text-sm text-[#86efac] leading-relaxed mb-3">A structured audit report with pass/fail/partial for every item, evidence captured, and actionable recommendations.</p>
-        <code class="block bg-black/30 border border-white/10 rounded-md px-3 py-2.5 font-mono text-xs text-[#4ade80] leading-relaxed whitespace-pre">audits/2026-04-01/
-├── GIT-001.md  ✓ pass
-├── SEC-003.md  ⚠ partial
-├── MON-012.md  ✗ fail
-└── summary.md</code>
+        <h3 class="text-lg font-bold text-[#ecfdf5] mb-2">Track and improve</h3>
+        <p class="text-sm text-[#86efac] leading-relaxed mb-4">Get a structured report with scores by section. Run audits again to track improvements, compare over time, and close gaps.</p>
+        <code class="block bg-black/30 border border-white/10 rounded-md px-3 py-2.5 font-mono text-xs text-[#4ade80] leading-relaxed whitespace-pre">> /audit-summary  # full report
+> /audit-diff     # vs last audit
+> /audit-fix      # work failures</code>
       </div>
     </div>
 
     <div class="text-center mt-12">
-      <a href="/how-it-works/" class="text-[#4ade80] font-semibold border-b border-[#4ade80]/30 hover:border-[#4ade80] pb-0.5 transition-colors">
-        Learn more about the audit workflow →
+      <a href="/checklist/" class="inline-flex items-center gap-2 bg-[#16a34a] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#15803d] transition-colors">
+        Get started
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
       </a>
     </div>
   </div>

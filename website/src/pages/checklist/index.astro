@@ -1,6 +1,105 @@
 ---
-import { loadAllSections } from '../../lib/content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../components/ChecklistSidebar.astro';
+import { loadAllSections, computeStats } from '../../lib/content';
+import { getAllDomains } from '../../lib/domains';
+
 const sections = loadAllSections();
-const firstSlug = sections[0]?.slug ?? 'git-repo-setup';
-return Astro.redirect(`/checklist/${firstSlug}/`);
+const stats = computeStats(sections);
+const domains = getAllDomains();
+
+const sectionsByDomain = new Map<string, typeof sections>();
+for (const section of sections) {
+  const group = sectionsByDomain.get(section.domain) ?? [];
+  group.push(section);
+  sectionsByDomain.set(section.domain, group);
+}
 ---
+
+<BaseLayout title="The Checklist" description="42 sections, 300+ items. Every blind spot a CTO needs to cover, from git setup to GDPR compliance.">
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug="" />
+    <main class="flex-1 py-8 px-8 max-w-4xl">
+
+      <!-- Header -->
+      <div class="mb-10">
+        <p class="text-xs uppercase tracking-widest text-[#16a34a] font-bold mb-2">The Checklist</p>
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-3">
+          {stats.sectionCount} sections. {stats.itemCount} items. Zero blind spots.
+        </h1>
+        <p class="text-gray-500 max-w-2xl">
+          The Ultimate CTO Checklist is an open-source audit framework covering everything a technical leader needs to verify, guide, and automate in production-grade projects. Each section contains actionable items: things you can check, fix, and track.
+        </p>
+      </div>
+
+      <!-- Stats bar -->
+      <div class="flex gap-6 mb-10 pb-6 border-b border-gray-100">
+        <div>
+          <div class="text-2xl font-black text-gray-900">{stats.sectionCount}</div>
+          <div class="text-xs text-gray-400 uppercase tracking-wider">Sections</div>
+        </div>
+        <div>
+          <div class="text-2xl font-black text-gray-900">{stats.itemCount}</div>
+          <div class="text-xs text-gray-400 uppercase tracking-wider">Items</div>
+        </div>
+        <div>
+          <div class="text-2xl font-black text-amber-600">{stats.criticalCount}</div>
+          <div class="text-xs text-gray-400 uppercase tracking-wider">Critical</div>
+        </div>
+        <div>
+          <div class="text-2xl font-black text-gray-900">{domains.length}</div>
+          <div class="text-xs text-gray-400 uppercase tracking-wider">Domains</div>
+        </div>
+      </div>
+
+      <!-- How to use -->
+      <div class="mb-10 bg-gray-50 rounded-lg p-5 border border-gray-100">
+        <h2 class="text-sm font-bold text-gray-900 mb-2">How to use this checklist</h2>
+        <ol class="text-sm text-gray-600 space-y-1.5 list-decimal list-inside">
+          <li>Pick a section from the sidebar or the domains below</li>
+          <li>Review each item. <span class="text-amber-600 font-semibold">Critical</span> items are non-negotiable, <span class="text-green-600 font-semibold">recommended</span> items improve quality</li>
+          <li>Use the verification guide at the bottom of each section to actually check your project</li>
+          <li>Track progress across sections as you audit</li>
+        </ol>
+      </div>
+
+      <!-- Domains -->
+      {domains.map(domain => {
+        const group = sectionsByDomain.get(domain) ?? [];
+        if (group.length === 0) return null;
+        const domainItems = group.reduce((sum, s) => sum + s.items.length, 0);
+        const domainCritical = group.reduce((sum, s) => sum + s.items.filter(i => i.severity === 'critical').length, 0);
+        return (
+          <div class="mb-8">
+            <div class="flex items-baseline gap-3 mb-3">
+              <h2 class="text-lg font-black text-gray-900">{domain}</h2>
+              <span class="text-xs text-gray-400">{domainItems} items{domainCritical > 0 && ` · ${domainCritical} critical`}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {group.map(s => {
+                const critical = s.items.filter(i => i.severity === 'critical').length;
+                return (
+                  <a
+                    href={`/checklist/${s.slug}/`}
+                    class="flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:border-[#16a34a] hover:shadow-[0_2px_8px_rgba(22,163,74,0.08)] transition-all group"
+                  >
+                    <span class="text-xs font-mono text-gray-300 mt-0.5 shrink-0">{s.id}</span>
+                    <div class="min-w-0">
+                      <div class="text-sm font-bold text-gray-900 group-hover:text-[#052e16] transition-colors">{s.name}</div>
+                      <div class="text-xs text-gray-400 mt-0.5 line-clamp-1">{s.description}</div>
+                      <div class="flex gap-2 mt-1">
+                        <span class="text-xs text-gray-400">{s.items.length} items</span>
+                        {critical > 0 && <span class="text-xs text-amber-500">{critical} critical</span>}
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+    </main>
+  </div>
+</BaseLayout>

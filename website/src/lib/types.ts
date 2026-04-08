@@ -1,10 +1,15 @@
 export interface Item {
   id: string;
+  slug: string;
   title: string;
   description: string;
   severity: 'critical' | 'recommended';
   category: string;
   question?: string | string[];
+  checks?: string[];
+  passCriteria?: string[];
+  failCriteria?: string[];
+  crossReferences?: string[];
 }
 
 export interface FloatingQuestion {
@@ -23,6 +28,14 @@ export interface Section {
   items: Item[];
   guideContent: string;
   domain: string;
+}
+
+export interface Command {
+  slug: string;
+  name: string;
+  description: string;
+  content: string;
+  phase: 'setup' | 'running' | 'reporting' | 'findings';
 }
 
 export interface SiteStats {

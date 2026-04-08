@@ -1,23 +1,24 @@
 ---
 import { loadAllSections, computeStats } from '../lib/content';
-import CopyPromptButton from '../islands/CopyPromptButton';
 
 const sections = loadAllSections();
 const stats = computeStats(sections);
 ---
 
-<section class="py-20 px-6 max-w-3xl mx-auto text-center">
+<section class="relative pt-20 pb-8 md:pb-20 px-6 max-w-3xl mx-auto text-center">
   <span class="inline-block bg-[#f0fdf4] border border-[#bbf7d0] text-[#16a34a] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-    Open Source Audit Framework
+    For CTOs, founders, and teams who ship to production
   </span>
   <h1 class="text-5xl font-black text-gray-900 leading-tight tracking-tight mb-4">
-    {stats.itemCount} blind spots between you and <span class="text-[#16a34a]">production-ready</span>.
+    The Ultimate CTO Checklist: {stats.itemCount} blind spots between you and <span class="text-[#16a34a]">production-ready</span>.
   </h1>
   <p class="text-lg text-gray-500 max-w-xl mx-auto mb-8 leading-relaxed">
     The audit framework for CTOs, founders, and teams who ship to production. AI-powered. Ruthlessly comprehensive.
   </p>
   <div class="flex gap-3 justify-center">
-    <CopyPromptButton client:idle />
+    <a href="/checklist/" class="bg-[#052e16] text-[#ecfdf5] px-8 py-3 rounded-lg text-sm font-bold transition-all hover:bg-[#0a3d1f] hover:shadow-[0_4px_16px_rgba(5,46,22,0.3)]">
+      Get Started
+    </a>
     <a href="/checklist/" class="bg-[#f0fdf4] text-[#052e16] px-8 py-3 rounded-lg text-sm font-semibold border border-[#bbf7d0] hover:bg-[#dcfce7] transition-colors">
       Browse Checklist
     </a>

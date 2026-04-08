@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { FloatingQuestion } from '../lib/types';
 
-const MAX_VISIBLE = 7;
+const MAX_VISIBLE = 5;
 
 export default function FloatingItems({ questions }: { questions: FloatingQuestion[] }) {
   const areaRef = useRef<HTMLDivElement>(null);
@@ -26,10 +26,24 @@ export default function FloatingItems({ questions }: { questions: FloatingQuesti
       el.style.background = data.bg;
       el.style.border = `1px solid ${data.border}`;
       el.style.color = data.text;
+      el.style.fontStyle = 'italic';
       el.textContent = data.question;
       const rect = area.getBoundingClientRect();
-      el.style.left = `${30 + Math.random() * (rect.width - 350)}px`;
-      el.style.top = `${30 + Math.random() * (rect.height - 60)}px`;
+      // Bias positions toward edges, away from centered hero text
+      const edgeZones = [
+        // Left edge
+        () => ({ x: 10 + Math.random() * (rect.width * 0.18), y: 30 + Math.random() * (rect.height - 60) }),
+        // Right edge
+        () => ({ x: rect.width * 0.68 + Math.random() * (rect.width * 0.18), y: 30 + Math.random() * (rect.height - 60) }),
+        // Top edge (full width but above hero text)
+        () => ({ x: 30 + Math.random() * (rect.width - 350), y: 10 + Math.random() * (rect.height * 0.12) }),
+        // Bottom edge (full width but below hero text)
+        () => ({ x: 30 + Math.random() * (rect.width - 350), y: rect.height * 0.78 + Math.random() * (rect.height * 0.18) }),
+      ];
+      const zone = edgeZones[Math.floor(Math.random() * edgeZones.length)];
+      const pos = zone();
+      el.style.left = `${Math.max(10, Math.min(pos.x, rect.width - 350))}px`;
+      el.style.top = `${Math.max(10, Math.min(pos.y, rect.height - 50))}px`;
       area.appendChild(el);
       activeCount.current++;
       requestAnimationFrame(() => { requestAnimationFrame(() => { el.style.opacity = '1'; }); });
@@ -39,15 +53,12 @@ export default function FloatingItems({ questions }: { questions: FloatingQuesti
         setTimeout(() => { el.remove(); activeCount.current--; }, 1200);
       }, lifetime);
     }
-    const initTimers = Array.from({ length: 5 }, (_, i) => setTimeout(spawn, i * 500));
-    const interval = setInterval(spawn, 1400);
+    const initTimers = Array.from({ length: 3 }, (_, i) => setTimeout(spawn, i * 800));
+    const interval = setInterval(spawn, 2500);
     return () => { initTimers.forEach(clearTimeout); clearInterval(interval); };
   }, [questions]);
 
   return (
-    <div ref={areaRef} className="relative overflow-hidden" style={{ minHeight: '340px' }}>
-      <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#f8fffe] to-transparent z-10 pointer-events-none" />
-    </div>
+    <div ref={areaRef} className="w-full h-full pointer-events-none" />
   );
 }

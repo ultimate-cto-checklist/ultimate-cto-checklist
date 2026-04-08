@@ -24,7 +24,8 @@ const featured = FEATURED_SLUGS
   .filter(Boolean) as typeof sections;
 ---
 
-<section class="max-w-5xl mx-auto py-20 px-6">
+<section>
+<div class="max-w-5xl mx-auto py-20 px-6">
   <p class="text-xs uppercase tracking-widest text-[#16a34a] font-bold text-center mb-2">What's Inside</p>
   <h2 class="text-3xl font-black text-gray-900 tracking-tight text-center mb-2">{sections.length} sections. Every blind spot covered.</h2>
   <p class="text-gray-500 text-center mb-12">From git setup to GDPR compliance. From secrets management to developer onboarding.</p>
@@ -45,4 +46,5 @@ const featured = FEATURED_SLUGS
       View all 42 sections →
     </a>
   </div>
+</div>
 </section>

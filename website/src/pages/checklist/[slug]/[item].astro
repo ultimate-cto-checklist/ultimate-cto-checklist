@@ -1,0 +1,217 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../../components/ChecklistSidebar.astro';
+import SeverityBadge from '../../../components/SeverityBadge.astro';
+import { loadAllSections, extractItemGuide } from '../../../lib/content';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  const sections = loadAllSections();
+  const paths = [];
+  for (const section of sections) {
+    for (const item of section.items) {
+      paths.push({
+        params: { slug: section.slug, item: item.slug },
+        props: { section, item },
+      });
+    }
+  }
+  return paths;
+}
+
+const { section, item } = Astro.props;
+
+const itemIndex = section.items.findIndex(i => i.id === item.id);
+const prevItem = itemIndex > 0 ? section.items[itemIndex - 1] : null;
+const nextItem = itemIndex < section.items.length - 1 ? section.items[itemIndex + 1] : null;
+
+const allSections = loadAllSections();
+const sectionIndex = allSections.findIndex(s => s.slug === section.slug);
+const prevSection = sectionIndex > 0 ? allSections[sectionIndex - 1] : null;
+const nextSection = sectionIndex < allSections.length - 1 ? allSections[sectionIndex + 1] : null;
+
+const nextLink = nextItem
+  ? { href: `/checklist/${section.slug}/${nextItem.slug}/`, label: nextItem.id, title: nextItem.title }
+  : nextSection && nextSection.items.length > 0
+    ? { href: `/checklist/${nextSection.slug}/${nextSection.items[0].slug}/`, label: nextSection.items[0].id, title: nextSection.items[0].title }
+    : null;
+
+const prevLink = prevItem
+  ? { href: `/checklist/${section.slug}/${prevItem.slug}/`, label: prevItem.id, title: prevItem.title }
+  : prevSection && prevSection.items.length > 0
+    ? { href: `/checklist/${prevSection.slug}/${prevSection.items[prevSection.items.length - 1].slug}/`, label: prevSection.items[prevSection.items.length - 1].id, title: prevSection.items[prevSection.items.length - 1].title }
+    : null;
+
+// Extract guide content for this specific item
+const itemGuideRaw = extractItemGuide(section.guideContent, item.id);
+const itemGuideHtml = itemGuideRaw ? await marked.parse(itemGuideRaw) : '';
+
+// Resolve cross-reference titles
+const allItems = allSections.flatMap(s => s.items.map(i => ({ ...i, sectionSlug: s.slug })));
+const crossRefs = (item.crossReferences ?? []).map(refId => {
+  const ref = allItems.find(i => i.id === refId);
+  return ref
+    ? { id: refId, title: ref.title, href: `/checklist/${ref.sectionSlug}/${ref.slug}/` }
+    : { id: refId, title: null, href: null };
+});
+---
+
+<BaseLayout title={`${item.id}: ${item.title}`} description={item.description}>
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug={section.slug} />
+    <main class="flex-1 py-8 px-8 max-w-4xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+        <a href="/checklist/" class="hover:text-[#16a34a] transition-colors">Checklist</a>
+        <span>/</span>
+        <a href={`/checklist/${section.slug}/`} class="hover:text-[#16a34a] transition-colors">{section.name}</a>
+        <span>/</span>
+        <span class="text-gray-600 font-mono">{item.id}</span>
+      </nav>
+
+      <!-- Item Header -->
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="font-mono text-sm text-[#16a34a] font-bold bg-green-50 px-2.5 py-1 rounded">{item.id}</span>
+          <SeverityBadge severity={item.severity} />
+          <span class="text-xs text-gray-400 font-mono">{item.category}</span>
+        </div>
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-3">{item.title}</h1>
+        {item.description && (
+          <p class="text-gray-500 text-lg leading-relaxed">{item.description}</p>
+        )}
+      </div>
+
+      <!-- Question Card -->
+      {item.question && (
+        <div class="mb-8 bg-amber-50 border border-amber-200 rounded-lg p-5">
+          <p class="text-xs font-bold uppercase tracking-wider text-amber-600 mb-2">Question to ask</p>
+          {Array.isArray(item.question) ? (
+            <ul class="space-y-2">
+              {item.question.map(q => (
+                <li class="text-amber-900 font-medium italic text-lg">"{q}"</li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-amber-900 font-medium italic text-lg">"{item.question}"</p>
+          )}
+        </div>
+      )}
+
+      <!-- Checks -->
+      {item.checks && item.checks.length > 0 && (
+        <div class="mb-6">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">What to check</h2>
+          <ul class="space-y-2">
+            {item.checks.map(check => (
+              <li class="flex items-start gap-2.5 text-sm text-gray-700">
+                <span class="text-[#16a34a] mt-0.5 shrink-0">&#9744;</span>
+                <span>{check}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <!-- Pass / Fail Criteria -->
+      {(item.passCriteria || item.failCriteria) && (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {item.passCriteria && item.passCriteria.length > 0 && (
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <p class="text-xs font-bold uppercase tracking-wider text-green-700 mb-2">Pass criteria</p>
+              <ul class="space-y-1.5">
+                {item.passCriteria.map(c => (
+                  <li class="flex items-start gap-2 text-sm text-green-800">
+                    <span class="shrink-0 mt-0.5">&#10003;</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {item.failCriteria && item.failCriteria.length > 0 && (
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p class="text-xs font-bold uppercase tracking-wider text-red-700 mb-2">Fail criteria</p>
+              <ul class="space-y-1.5">
+                {item.failCriteria.map(c => (
+                  <li class="flex items-start gap-2 text-sm text-red-800">
+                    <span class="shrink-0 mt-0.5">&#10007;</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      <!-- Cross References -->
+      {crossRefs.length > 0 && (
+        <div class="mb-6">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Related items</h2>
+          <div class="flex flex-wrap gap-2">
+            {crossRefs.map(ref => (
+              ref.href ? (
+                <a href={ref.href} class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm hover:border-[#16a34a] hover:bg-green-50 transition-colors">
+                  <span class="font-mono text-xs text-[#16a34a] font-semibold">{ref.id}</span>
+                  <span class="text-gray-600">{ref.title}</span>
+                </a>
+              ) : (
+                <span class="inline-flex items-center px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm">
+                  <span class="font-mono text-xs text-gray-400 font-semibold">{ref.id}</span>
+                </span>
+              )
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Verification Guide (from guide.md) -->
+      {itemGuideHtml && (
+        <div class="mb-8">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Verification guide</h2>
+          <div class="prose prose-sm prose-gray max-w-none
+            prose-headings:text-gray-900 prose-headings:font-bold
+            prose-h3:text-base prose-h4:text-sm
+            prose-code:text-gray-700 prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:before:content-none prose-code:after:content-none
+            prose-pre:bg-gray-900 prose-pre:text-gray-300 prose-pre:rounded-lg prose-pre:text-xs
+            [&_pre_code]:text-gray-300 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:rounded-none
+            prose-strong:text-gray-900
+            prose-li:text-gray-600
+            prose-p:text-gray-600
+            prose-a:text-[#16a34a] prose-a:no-underline hover:prose-a:underline
+            border border-gray-200 rounded-lg p-6"
+            set:html={itemGuideHtml}
+          />
+        </div>
+      )}
+
+      <!-- Section Context -->
+      <div class="mb-8 bg-gray-50 border border-gray-200 rounded-lg p-5">
+        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Section</p>
+        <a href={`/checklist/${section.slug}/`} class="text-gray-900 font-semibold hover:text-[#16a34a] transition-colors">
+          {section.id}. {section.name}
+        </a>
+        <p class="text-sm text-gray-500 mt-1">{section.domain}</p>
+      </div>
+
+      <!-- Prev / Next Navigation -->
+      <div class="flex justify-between items-stretch gap-4 pt-6 border-t border-gray-200">
+        {prevLink ? (
+          <a href={prevLink.href} class="flex-1 group border border-gray-200 rounded-lg p-4 hover:border-[#16a34a] transition-colors">
+            <span class="text-xs text-gray-400 group-hover:text-[#16a34a]">&larr; Previous</span>
+            <p class="font-mono text-sm text-[#16a34a] font-semibold mt-1">{prevLink.label}</p>
+            <p class="text-sm text-gray-600 mt-0.5 line-clamp-1">{prevLink.title}</p>
+          </a>
+        ) : <div class="flex-1" />}
+        {nextLink ? (
+          <a href={nextLink.href} class="flex-1 group border border-gray-200 rounded-lg p-4 hover:border-[#16a34a] transition-colors text-right">
+            <span class="text-xs text-gray-400 group-hover:text-[#16a34a]">Next &rarr;</span>
+            <p class="font-mono text-sm text-[#16a34a] font-semibold mt-1">{nextLink.label}</p>
+            <p class="text-sm text-gray-600 mt-0.5 line-clamp-1">{nextLink.title}</p>
+          </a>
+        ) : <div class="flex-1" />}
+      </div>
+    </main>
+  </div>
+</BaseLayout>

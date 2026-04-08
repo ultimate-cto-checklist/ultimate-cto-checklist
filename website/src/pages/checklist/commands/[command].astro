@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../../components/ChecklistSidebar.astro';
+import { loadAllCommands, getPhaseLabel } from '../../../lib/content';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  const commands = loadAllCommands();
+  return commands.map(cmd => ({
+    params: { command: cmd.slug },
+    props: { command: cmd },
+  }));
+}
+
+const { command } = Astro.props;
+const allCommands = loadAllCommands();
+const currentIndex = allCommands.findIndex(c => c.slug === command.slug);
+const prevCommand = currentIndex > 0 ? allCommands[currentIndex - 1] : null;
+const nextCommand = currentIndex < allCommands.length - 1 ? allCommands[currentIndex + 1] : null;
+
+const contentHtml = await marked.parse(command.content);
+---
+
+<BaseLayout title={`/${command.name}`} description={command.description}>
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug="commands" />
+    <main class="flex-1 py-8 px-8 max-w-4xl">
+
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+        <a href="/checklist/" class="hover:text-[#16a34a] transition-colors">Checklist</a>
+        <span>/</span>
+        <a href="/checklist/commands/" class="hover:text-[#16a34a] transition-colors">Commands</a>
+        <span>/</span>
+        <span class="text-gray-600 font-mono">/{command.name}</span>
+      </nav>
+
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-3">
+          <code class="font-mono text-sm text-[#16a34a] font-bold bg-green-50 px-2.5 py-1 rounded">/{command.name}</code>
+          <span class="text-xs text-gray-400 uppercase tracking-wider font-bold">{getPhaseLabel(command.phase)}</span>
+        </div>
+        <p class="text-gray-500 text-lg leading-relaxed">{command.description}</p>
+      </div>
+
+      <!-- Content from SKILL.md -->
+      <div class="prose prose-sm prose-gray max-w-none
+        prose-headings:text-gray-900 prose-headings:font-bold
+        prose-h1:text-2xl prose-h1:font-black prose-h1:tracking-tight
+        prose-h2:text-lg prose-h2:mt-8 prose-h2:mb-3
+        prose-h3:text-base prose-h4:text-sm
+        prose-code:text-gray-700 prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:before:content-none prose-code:after:content-none
+        prose-pre:bg-gray-900 prose-pre:text-gray-300 prose-pre:rounded-lg prose-pre:text-xs
+        [&_pre_code]:text-gray-300 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:rounded-none
+        prose-strong:text-gray-900
+        prose-li:text-gray-600
+        prose-p:text-gray-600
+        prose-a:text-[#16a34a] prose-a:no-underline hover:prose-a:underline
+        prose-blockquote:border-[#16a34a] prose-blockquote:text-gray-600"
+        set:html={contentHtml}
+      />
+
+      <!-- Prev / Next Navigation -->
+      <div class="flex justify-between items-stretch gap-4 pt-6 mt-8 border-t border-gray-200">
+        {prevCommand ? (
+          <a href={`/checklist/commands/${prevCommand.slug}/`} class="flex-1 group border border-gray-200 rounded-lg p-4 hover:border-[#16a34a] transition-colors">
+            <span class="text-xs text-gray-400 group-hover:text-[#16a34a]">&larr; Previous</span>
+            <p class="font-mono text-sm text-[#16a34a] font-semibold mt-1">/{prevCommand.name}</p>
+            <p class="text-xs text-gray-400 mt-0.5">{getPhaseLabel(prevCommand.phase)}</p>
+          </a>
+        ) : <div class="flex-1" />}
+        {nextCommand ? (
+          <a href={`/checklist/commands/${nextCommand.slug}/`} class="flex-1 group border border-gray-200 rounded-lg p-4 hover:border-[#16a34a] transition-colors text-right">
+            <span class="text-xs text-gray-400 group-hover:text-[#16a34a]">Next &rarr;</span>
+            <p class="font-mono text-sm text-[#16a34a] font-semibold mt-1">/{nextCommand.name}</p>
+            <p class="text-xs text-gray-400 mt-0.5">{getPhaseLabel(nextCommand.phase)}</p>
+          </a>
+        ) : <div class="flex-1" />}
+      </div>
+
+    </main>
+  </div>
+</BaseLayout>

@@ -5,15 +5,36 @@ import HowItWorksExcerpt from '../components/HowItWorksExcerpt.astro';
 import DomainGrid from '../components/DomainGrid.astro';
 import EmailCapture from '../components/EmailCapture.astro';
 import FloatingItems from '../islands/FloatingItems';
+import RollingQuestions from '../islands/RollingQuestions';
 import { loadAllQuestions } from '../lib/content';
 
 const questions = loadAllQuestions();
 ---
 
 <BaseLayout title="Home" description="The open-source audit framework for technical leaders. AI-powered, ruthlessly comprehensive.">
-  <Hero />
-  <FloatingItems client:idle questions={questions} />
+  <!-- Desktop: questions float behind hero -->
+  <div class="hidden md:block relative">
+    <div class="absolute inset-0 overflow-hidden">
+      <FloatingItems client:idle questions={questions} />
+    </div>
+    <div class="relative z-10" style="background: radial-gradient(ellipse at center, white 30%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 80%)">
+      <Hero />
+    </div>
+  </div>
+  <!-- Mobile: hero then rolling credits -->
+  <div class="md:hidden">
+    <Hero />
+    <div class="px-4 pb-8">
+      <RollingQuestions client:idle questions={questions} />
+    </div>
+  </div>
   <HowItWorksExcerpt />
+  <div class="bg-[#edf5f0] border-y border-[#d5e5db] py-14 px-6 text-center">
+    <p class="text-xl text-[#166534] max-w-2xl mx-auto leading-relaxed">
+      Every production stack has gaps. Most teams find them during incidents.<br/>
+      <span class="font-bold">This finds them before.</span>
+    </p>
+  </div>
   <DomainGrid />
   <EmailCapture />
 </BaseLayout>

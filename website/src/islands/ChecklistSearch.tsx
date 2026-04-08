@@ -7,6 +7,7 @@ interface SearchItem {
   severity: 'critical' | 'recommended';
   sectionSlug: string;
   sectionName: string;
+  itemSlug: string;
 }
 
 interface Props {
@@ -33,7 +34,7 @@ export default function ChecklistSearch({ items }: Props) {
       {results.length > 0 && (
         <div className="mt-2 border border-gray-200 rounded-lg bg-white divide-y divide-gray-100 max-h-80 overflow-y-auto">
           {results.map(item => (
-            <a key={item.id} href={`/checklist/${item.sectionSlug}/`} className="block px-4 py-2.5 hover:bg-gray-50 transition-colors">
+            <a key={item.id} href={`/checklist/${item.sectionSlug}/${item.itemSlug}/`} className="block px-4 py-2.5 hover:bg-gray-50 transition-colors">
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs text-[#16a34a] font-semibold">{item.id}</span>
                 <span className="text-sm text-gray-900">{item.title}</span>

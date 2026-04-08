@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../../components/ChecklistSidebar.astro';
+import { loadAllCommands, getPhaseLabel } from '../../../lib/content';
+import type { Command } from '../../../lib/types';
+
+const commands = loadAllCommands();
+const phases: Command['phase'][] = ['setup', 'running', 'reporting', 'findings'];
+const commandsByPhase = new Map<Command['phase'], Command[]>();
+for (const cmd of commands) {
+  const group = commandsByPhase.get(cmd.phase) ?? [];
+  group.push(cmd);
+  commandsByPhase.set(cmd.phase, group);
+}
+---
+
+<BaseLayout title="Commands" description="All 14 audit commands for the CTO Checklist: setup, running audits, reporting, and managing findings.">
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug="commands" />
+    <main class="flex-1 py-8 px-8 max-w-4xl">
+
+      <div class="mb-10">
+        <p class="text-xs uppercase tracking-widest text-[#16a34a] font-bold mb-2">Reference</p>
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-3">
+          Audit Commands
+        </h1>
+        <p class="text-gray-500 max-w-2xl">
+          These are Claude Code slash commands. Launch <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">claude</code> in your audit workspace and type any command below to run it.
+        </p>
+      </div>
+
+      {phases.map(phase => {
+        const group = commandsByPhase.get(phase) ?? [];
+        if (group.length === 0) return null;
+        return (
+          <div class="mb-8">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 border-l-2 border-[#16a34a] pl-3">
+              {getPhaseLabel(phase)}
+            </h2>
+            <div class="space-y-2">
+              {group.map(cmd => (
+                <a
+                  href={`/checklist/commands/${cmd.slug}/`}
+                  class="block p-4 border border-gray-100 rounded-lg hover:border-[#16a34a] hover:shadow-[0_2px_8px_rgba(22,163,74,0.08)] transition-all group"
+                >
+                  <div class="flex items-start gap-3">
+                    <code class="font-mono text-sm text-[#16a34a] font-semibold shrink-0 mt-0.5">/{cmd.name}</code>
+                    <p class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{cmd.description}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+    </main>
+  </div>
+</BaseLayout>

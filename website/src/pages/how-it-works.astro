@@ -1,112 +1,388 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CopyPromptButton from '../islands/CopyPromptButton';
+import { loadAllSections, computeStats } from '../lib/content';
+
+const sections = loadAllSections();
+const stats = computeStats(sections);
 ---
 
-<BaseLayout title="How It Works" description="Three steps to audit your project against the CTO Checklist using Claude.">
+<BaseLayout title="How It Works" description="Set up a workspace, run AI-powered audits, and track improvements. Here's the full workflow.">
 
   <section class="py-20 px-6 max-w-3xl mx-auto text-center">
     <h1 class="text-4xl font-black text-gray-900 tracking-tight mb-4">How It Works</h1>
-    <p class="text-lg text-gray-500 leading-relaxed">
-      The CTO Checklist is an open-source audit framework. You run it with Claude Code against your codebase. Here's what that looks like.
+    <p class="text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto">
+      Set up a CTO workspace. Let AI discover your projects and run {stats.itemCount}+ checks across {stats.sectionCount} sections, right inside your Claude Code. When it needs your judgment, it asks. Here's what that looks like in practice.
     </p>
   </section>
 
+  <!-- Step 1: Workspace -->
   <section class="bg-[#052e16] py-16 px-6">
     <div class="max-w-3xl mx-auto">
       <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-[#052e16] rounded-lg font-black text-sm mb-4">1</div>
-      <h2 class="text-2xl font-bold text-[#ecfdf5] mb-2">Copy the audit prompt</h2>
+      <h2 class="text-2xl font-bold text-[#ecfdf5] mb-2">Create your audit workspace</h2>
       <p class="text-[#86efac] mb-6 leading-relaxed">
-        One prompt bootstraps everything. It tells Claude to set up a workspace, load the checklist, and start auditing your project section by section.
+        The checklist lives as a git submodule inside your own workspace. Your org config, project definitions, and audit results stay separate from the checklist itself.
       </p>
-      <div class="bg-black/30 border border-white/10 rounded-lg p-6 font-mono text-sm text-[#4ade80] leading-relaxed mb-6">
-        Audit my project against the CTO Checklist. Start a cto-workspace, set up the checklist for audits, and follow the CLAUDE.md instructions.
+      <div class="bg-black/30 border border-white/10 rounded-lg p-5 font-mono text-sm text-[#4ade80] leading-relaxed mb-6">
+        <pre class="whitespace-pre">mkdir my-company-audits && cd my-company-audits
+git init
+git submodule add https://github.com/rodricCTO/ultimate-cto-checklist checklist</pre>
       </div>
-      <CopyPromptButton client:idle />
+      <p class="text-[#86efac] mb-4 leading-relaxed">
+        Then launch Claude Code and run the interactive setup. It asks about your cloud providers, source control, CI/CD, monitoring stack, and secrets management, then generates everything.
+      </p>
+      <div class="bg-black/30 border border-white/10 rounded-lg p-5 font-mono text-sm text-[#4ade80] leading-relaxed">
+        <pre class="whitespace-pre">claude
+> /audit-init</pre>
+      </div>
+      <p class="text-xs text-[#86efac]/60 mt-3">Creates org.yaml, STATUS.md, and docs/ with your org context. ~5 minutes.</p>
     </div>
   </section>
 
+  <!-- Step 2: Register projects -->
   <section class="py-16 px-6">
     <div class="max-w-3xl mx-auto">
       <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-white rounded-lg font-black text-sm mb-4">2</div>
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Claude runs the audit</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Register your projects</h2>
       <p class="text-gray-500 mb-6 leading-relaxed">
-        Claude Code clones your repo, scans 42 sections, runs automated checks (git config, CI status, file structure), and asks targeted questions about what it can't verify automatically.
+        Add each codebase you want to audit. The system auto-detects your tech stack from the repo and creates a project config with environments, URLs, and scope.
       </p>
-      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
-        <h3 class="font-bold text-sm text-gray-900 mb-4">What a workspace looks like:</h3>
-        <pre class="font-mono text-xs text-gray-600 leading-relaxed">cto-workspace/
-├── org.yaml              # Your organization config
-├── projects/
-│   └── my-app.yaml       # Project config + repo URL
-├── checklist/            # CTO Checklist (submodule)
-│   ├── 01-git-repo-setup/
-│   ├── 02-dependencies/
-│   └── ... (42 sections)
-└── audits/
-    └── my-app/
-        └── 2026-04-01/   # Dated audit results
-            ├── GIT-001.md
-            ├── SEC-003.md
-            └── summary.md</pre>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-5 font-mono text-sm text-gray-300 leading-relaxed mb-6">
+        <pre class="whitespace-pre">> /audit-add-project</pre>
+      </div>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-5">
+        <h3 class="font-bold text-sm text-gray-900 mb-3">What gets generated:</h3>
+        <pre class="font-mono text-xs text-gray-600 leading-relaxed">projects/my-api.yaml
+├── name: my-api
+├── repo: acme-corp/my-api
+├── type: backend
+├── stack: [node, typescript, postgres]
+├── environments: [dev, staging, prod]
+└── urls:
+    ├── production: https://api.acme.com
+    └── health: https://api.acme.com/health</pre>
       </div>
     </div>
   </section>
 
+  <!-- Step 3: Run audit -->
   <section class="bg-gray-50 py-16 px-6">
     <div class="max-w-3xl mx-auto">
       <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-white rounded-lg font-black text-sm mb-4">3</div>
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Get your audit report</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Run the audit</h2>
       <p class="text-gray-500 mb-6 leading-relaxed">
-        Every item gets a structured result: pass, fail, or partial. Evidence is captured, failures include recommendations, and the summary gives you the full picture.
+        Start an audit and pick a flow. The system clones your repo, spins up parallel agents, and auto-checks every item it can: file structure, git config, CI status, GitHub API, HTTP headers, DNS records. You only review what needs human judgment.
       </p>
-      <div class="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 class="font-bold text-sm text-gray-900 mb-4">Sample audit result:</h3>
-        <pre class="font-mono text-xs text-gray-600 leading-relaxed">---
-item_id: GIT-001
-status: pass
----
-
-## Summary
-Repository clones cleanly and runs with a single
-`pnpm install &amp;&amp; pnpm dev` command. All sandbox
-env vars provided in .env.example.
-
-## Evidence
-- Clone: ✓ completed in 4.2s
-- Install: ✓ pnpm install (no errors)
-- Dev server: ✓ starts on port 3000
-- .env.example: ✓ present with 12 variables</pre>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-5 font-mono text-sm text-gray-300 leading-relaxed mb-6">
+        <pre class="whitespace-pre">> /audit-start my-api</pre>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div class="border border-gray-200 bg-white rounded-lg p-4">
+          <h4 class="font-bold text-sm text-gray-900 mb-1">Sequential</h4>
+          <p class="text-xs text-gray-500">Sections 1 through 42 in order. Best for your first audit.</p>
+        </div>
+        <div class="border border-gray-200 bg-white rounded-lg p-4">
+          <h4 class="font-bold text-sm text-gray-900 mb-1">Priority</h4>
+          <p class="text-xs text-gray-500">All critical items first, then recommended. Quick wins.</p>
+        </div>
+        <div class="border border-gray-200 bg-white rounded-lg p-4">
+          <h4 class="font-bold text-sm text-gray-900 mb-1">Section</h4>
+          <p class="text-xs text-gray-500">Pick one section at a time. Focused deep-dives.</p>
+        </div>
+        <div class="border border-gray-200 bg-white rounded-lg p-4">
+          <h4 class="font-bold text-sm text-gray-900 mb-1">Free-form</h4>
+          <p class="text-xs text-gray-500">Jump around freely. The system tracks progress.</p>
+        </div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-bold text-sm text-gray-900 mb-3">What happens during auto-check:</h3>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-[#16a34a] shrink-0 mt-0.5">&#10003;</span> Clones repo from project config</li>
+          <li class="flex items-start gap-2"><span class="text-[#16a34a] shrink-0 mt-0.5">&#10003;</span> Parallel agents check all {stats.sectionCount} sections simultaneously</li>
+          <li class="flex items-start gap-2"><span class="text-[#16a34a] shrink-0 mt-0.5">&#10003;</span> Runs file checks, git analysis, GitHub API calls</li>
+          <li class="flex items-start gap-2"><span class="text-[#16a34a] shrink-0 mt-0.5">&#10003;</span> Items marked pass, fail, partial, or needs-review</li>
+          <li class="flex items-start gap-2"><span class="text-[#16a34a] shrink-0 mt-0.5">&#10003;</span> You review only the ~5-10% that need judgment</li>
+        </ul>
       </div>
     </div>
   </section>
 
+  <!-- Step 4: Results -->
   <section class="py-16 px-6">
     <div class="max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Built for how you work</h2>
+      <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-white rounded-lg font-black text-sm mb-4">4</div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Review results</h2>
+      <p class="text-gray-500 mb-6 leading-relaxed">
+        Every item produces a structured markdown file with evidence, pass/fail status, and actionable recommendations. Results live in your workspace as dated snapshots you can diff over time.
+      </p>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 mb-6">
+        <h3 class="font-bold text-sm text-gray-900 mb-3">Workspace after an audit:</h3>
+        <pre class="font-mono text-xs text-gray-600 leading-relaxed">my-company-audits/
+├── org.yaml
+├── projects/
+│   └── my-api.yaml
+├── checklist/              # submodule
+├── audits/
+│   └── my-api/
+│       └── 2026-04-03/
+│           ├── GIT-001.md  # pass
+│           ├── GIT-002.md  # pass
+│           ├── SEC-001.md  # fail
+│           ├── SEC-003.md  # partial
+│           └── ...
+└── waivers/
+    └── SEC-007.md          # item doesn't apply</pre>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-bold text-sm text-gray-900 mb-3">Sample result file:</h3>
+        <pre class="font-mono text-xs text-gray-600 leading-relaxed">---
+item_id: GIT-001
+status: pass
+severity: critical
+section: 01-git-repo-setup
+audited_at: 2026-04-03
+---
+
+## Summary
+Repository clones cleanly and runs with
+`pnpm install && pnpm dev`. All sandbox
+env vars provided in .env.example.
+
+## Evidence
+- Clone: completed in 4.2s
+- Install: pnpm install (no errors)
+- Dev server: starts on port 3000
+- .env.example: present with 12 variables</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard preview -->
+  <section class="bg-gray-50 py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">See it all in the dashboard</h2>
+        <p class="text-gray-500">Browse results, track progress by section, and drill into individual items.</p>
+      </div>
+
+      <!-- Dashboard mockup -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+        <!-- Title bar -->
+        <div class="bg-[#052e16] px-4 py-2.5 flex items-center gap-2">
+          <div class="flex gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+          </div>
+          <span class="text-[#86efac] text-xs font-mono ml-2">CTO Checklist Dashboard</span>
+        </div>
+        <!-- Content -->
+        <div class="p-5">
+          <!-- Stats row -->
+          <div class="flex gap-4 mb-5">
+            <div class="flex-1 bg-green-50 border border-green-100 rounded-lg p-3 text-center">
+              <div class="text-2xl font-black text-green-700">187</div>
+              <div class="text-[10px] text-green-600 uppercase tracking-wider font-bold">Pass</div>
+            </div>
+            <div class="flex-1 bg-red-50 border border-red-100 rounded-lg p-3 text-center">
+              <div class="text-2xl font-black text-red-700">23</div>
+              <div class="text-[10px] text-red-600 uppercase tracking-wider font-bold">Fail</div>
+            </div>
+            <div class="flex-1 bg-amber-50 border border-amber-100 rounded-lg p-3 text-center">
+              <div class="text-2xl font-black text-amber-700">14</div>
+              <div class="text-[10px] text-amber-600 uppercase tracking-wider font-bold">Partial</div>
+            </div>
+            <div class="flex-1 bg-gray-50 border border-gray-100 rounded-lg p-3 text-center">
+              <div class="text-2xl font-black text-gray-500">28</div>
+              <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Skipped</div>
+            </div>
+          </div>
+          <!-- Section bars -->
+          <div class="space-y-2.5">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-gray-700">Git Repo Setup</span>
+                <span class="text-gray-400">18/20 pass</span>
+              </div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: 90%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-gray-700">Infrastructure Security</span>
+                <span class="text-gray-400">5/7 pass</span>
+              </div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: 71%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-gray-700">Secrets Management</span>
+                <span class="text-amber-600 font-semibold">3/8 pass</span>
+              </div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-400 rounded-full" style="width: 38%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-gray-700">Access Control</span>
+                <span class="text-red-600 font-semibold">0/3 pass</span>
+              </div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-red-400 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Sample items -->
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Recent findings</div>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
+                <span class="font-mono text-red-600 font-semibold">SEC-003</span>
+                <span class="text-gray-600">No HSTS header on production</span>
+                <span class="ml-auto text-red-500 font-bold text-[10px] uppercase">fail</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                <span class="font-mono text-amber-600 font-semibold">ENV-002</span>
+                <span class="text-gray-600">Production env vars accessible to all developers</span>
+                <span class="ml-auto text-amber-500 font-bold text-[10px] uppercase">partial</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>
+                <span class="font-mono text-green-600 font-semibold">GIT-001</span>
+                <span class="text-gray-600">Clone and run in under 10 minutes</span>
+                <span class="ml-auto text-green-500 font-bold text-[10px] uppercase">pass</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 5: All commands -->
+  <section id="commands" class="bg-[#052e16] py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center justify-center w-8 h-8 bg-[#16a34a] text-[#052e16] rounded-lg font-black text-sm mb-4">5</div>
+      <h2 class="text-2xl font-bold text-[#ecfdf5] mb-2">All audit commands</h2>
+      <p class="text-[#86efac] mb-8 leading-relaxed">
+        These are Claude Code slash commands. Type them after launching <code class="text-[#4ade80] bg-black/30 px-1.5 py-0.5 rounded text-xs">claude</code> in your audit workspace. Grouped by workflow phase.
+      </p>
+
+      <!-- Setup -->
+      <h3 class="text-xs font-bold uppercase tracking-wider text-[#4ade80] mb-3">Setup</h3>
+      <div class="space-y-2 mb-8">
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-tutorial</code>
+          <p class="text-sm text-[#86efac]">Interactive first-time walkthrough. Detects your setup state and explains concepts before you start.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-init</code>
+          <p class="text-sm text-[#86efac]">One-time org setup. Asks about cloud providers, tooling, and infrastructure, then generates <code class="text-[#4ade80] text-xs">org.yaml</code> and supporting docs.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-add-project</code>
+          <p class="text-sm text-[#86efac]">Register a project. Creates <code class="text-[#4ade80] text-xs">projects/name.yaml</code> with repo URL, tech stack, environments, and audit scope.</p>
+        </div>
+      </div>
+
+      <!-- Running audits -->
+      <h3 class="text-xs font-bold uppercase tracking-wider text-[#4ade80] mb-3">Running audits</h3>
+      <div class="space-y-2 mb-8">
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-start</code>
+          <p class="text-sm text-[#86efac]">Begin a new audit. Pick a flow (sequential, priority, section, or free-form), then auto-check runs in parallel.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-continue</code>
+          <p class="text-sm text-[#86efac]">Resume an interrupted audit. Recovers state from <code class="text-[#4ade80] text-xs">.audit-state.yaml</code> and picks up where you left off.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-status</code>
+          <p class="text-sm text-[#86efac]">Check progress at any time: items completed, pass rate, blockers, and what's remaining.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-section</code>
+          <p class="text-sm text-[#86efac]">Focus on a specific section by number. Auto-checks all items in that section in parallel.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-item</code>
+          <p class="text-sm text-[#86efac]">Jump to a specific item by ID (e.g. <code class="text-[#4ade80] text-xs">GIT-001</code>). Re-audit a single item standalone or within an active audit.</p>
+        </div>
+      </div>
+
+      <!-- Results & reporting -->
+      <h3 class="text-xs font-bold uppercase tracking-wider text-[#4ade80] mb-3">Results & reporting</h3>
+      <div class="space-y-2 mb-8">
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-summary</code>
+          <p class="text-sm text-[#86efac]">Full report with overall score, section breakdown, action items, and regressions from the previous audit.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-diff</code>
+          <p class="text-sm text-[#86efac]">Compare two audits side by side. Highlights improvements, regressions, and items still failing.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-history</code>
+          <p class="text-sm text-[#86efac]">View all past audits for a project with dates, pass rates, and trends over time.</p>
+        </div>
+      </div>
+
+      <!-- Managing findings -->
+      <h3 class="text-xs font-bold uppercase tracking-wider text-[#4ade80] mb-3">Managing findings</h3>
+      <div class="space-y-2">
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-fix</code>
+          <p class="text-sm text-[#86efac]">Work through failed and partial items interactively. Gather better evidence, resolve findings, or create waivers.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-skip</code>
+          <p class="text-sm text-[#86efac]">Skip an item with documented reasoning. Marked for later revisit, not permanently excluded.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-4 flex items-start gap-4">
+          <code class="font-mono text-sm text-[#4ade80] shrink-0 mt-0.5 w-40">/audit-waiver</code>
+          <p class="text-sm text-[#86efac]">Permanently exempt an item that doesn't apply. Stored in <code class="text-[#4ade80] text-xs">waivers/</code> with a review date, excluded from future audits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Audience -->
+  <section class="py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Built for technical leaders</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="border border-gray-200 rounded-lg p-6">
           <h3 class="font-bold text-gray-900 mb-2">For CTOs</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Run a comprehensive audit across all 42 sections. Delegate to your team with clear pass/fail criteria. Track improvements over time with dated reports.</p>
+          <p class="text-sm text-gray-500 leading-relaxed">Run comprehensive audits across all {stats.sectionCount} sections. Delegate to your team with clear pass/fail criteria. Track improvements over time with dated reports.</p>
         </div>
         <div class="border border-gray-200 rounded-lg p-6">
           <h3 class="font-bold text-gray-900 mb-2">For Founders</h3>
           <p class="text-sm text-gray-500 leading-relaxed">Get CTO-level infrastructure review without hiring one yet. Identify critical gaps in security, monitoring, and deployment before they become incidents.</p>
         </div>
         <div class="border border-gray-200 rounded-lg p-6">
-          <h3 class="font-bold text-gray-900 mb-2">For CEOs & VPs</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Verify your technical team isn't missing critical items. Get a structured report you can read without deep technical knowledge. Evidence-based confidence.</p>
+          <h3 class="font-bold text-gray-900 mb-2">For Tech Leads</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Systematic verification of your stack against industry best practices. Evidence-based, not opinion-based. Run it quarterly to catch drift.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- CTA -->
   <section class="bg-[#f0fdf4] border-y border-[#bbf7d0] py-16 px-6 text-center">
-    <h2 class="text-2xl font-extrabold text-[#052e16] mb-4">Ready to audit your project?</h2>
+    <h2 class="text-2xl font-extrabold text-[#052e16] mb-2">Find your blind spots before they find you.</h2>
+    <p class="text-sm text-[#166534] mb-6">Three commands. Full audit. No excuses.</p>
     <div class="flex gap-3 justify-center">
-      <CopyPromptButton client:idle />
-      <a href="/checklist/" class="bg-white text-[#052e16] px-8 py-3 rounded-lg text-sm font-semibold border border-[#bbf7d0] hover:bg-[#dcfce7] transition-colors">
-        Browse the Checklist
+      <a href="/checklist/" class="bg-[#052e16] text-[#ecfdf5] px-8 py-3 rounded-lg text-sm font-bold transition-all hover:bg-[#0a3d1f] hover:shadow-[0_4px_16px_rgba(5,46,22,0.3)]">
+        Start auditing
+      </a>
+      <a href="/checklist/commands/" class="bg-white text-[#052e16] px-8 py-3 rounded-lg text-sm font-semibold border border-[#bbf7d0] hover:bg-[#dcfce7] transition-colors">
+        See all commands
       </a>
     </div>
   </section>
