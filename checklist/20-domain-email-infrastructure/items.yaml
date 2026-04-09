@@ -79,6 +79,7 @@ items:
     title: SSL certificate lifecycle managed
     question: "Any certs expiring in the next 30 days that nobody's watching?"
     severity: recommended
+    scope: [org, project]
     category: Domain Management
     description: >
       SSL/TLS certificates for all domains are auto-renewed (Cloudflare, Let's Encrypt, cert-manager)
@@ -96,6 +97,7 @@ items:
     title: Unused domains and subdomains identified
     question: "Any domains you're paying for that point to a server that no longer exists?"
     severity: recommended
+    scope: [org, project]
     category: Domain Management
     description: >
       Stale DNS records and unused domains/subdomains are identified and cleaned up.
