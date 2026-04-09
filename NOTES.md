@@ -369,7 +369,7 @@
 
 ---
 
-## 20. Email Infrastructure
+## 20. Domain & Email Infrastructure
 
 ### DNS Records
 - [ ] Proper MX records

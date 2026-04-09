@@ -39,7 +39,7 @@ sections:
   17-performance-monitoring: project
   18-analytics: project
   19-error-reporting: project
-  20-email-infrastructure: org
+  20-domain-email-infrastructure: org
 
   # Frontend & Caching - per-project
   21-caching: project

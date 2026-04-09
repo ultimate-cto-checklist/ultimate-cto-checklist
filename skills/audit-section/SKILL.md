@@ -51,7 +51,7 @@ If no section specified, show available sections grouped by domain:
 > 17. Performance Monitoring ([count] items)
 > 18. Analytics ([count] items)
 > 19. Error Reporting ([count] items)
-> 20. Email Infrastructure ([count] items)
+> 20. Domain & Email Infrastructure ([count] items)
 >
 > **Frontend & Caching**
 > 21. Caching ([count] items)

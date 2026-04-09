@@ -98,7 +98,7 @@ Walk through these concepts one at a time. After each one, pause and ask if they
 > | Deployment & Operations | Deploy pipelines, access control |
 > | Observability | Monitoring, security, documentation |
 > | Performance & Analytics | Performance monitoring, analytics |
-> | Error Tracking | Error reporting, email infrastructure |
+> | Error Tracking | Error reporting, domain & email infrastructure |
 > | Security | Secrets, rate limiting, API design, CSP, feature flags |
 > | Compliance | GDPR, cost monitoring |
 > | Team | Onboarding, tech debt, accessibility, i18n |

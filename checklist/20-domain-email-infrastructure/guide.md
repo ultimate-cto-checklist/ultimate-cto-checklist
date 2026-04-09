@@ -1,30 +1,36 @@
-# Email Infrastructure Audit Guide
+# Domain & Email Infrastructure Audit Guide
 
-This guide walks you through auditing a project's email infrastructure, covering DNS authentication (MX, SPF, DKIM, DMARC), deliverability testing, and email logging for both transactional and marketing emails.
+This guide walks you through auditing domain management (inventory, registrar, DNS, SSL) and email infrastructure (MX, SPF, DKIM, DMARC, deliverability, logging). Domain inventory is the foundation — it feeds into email, security, and infrastructure audits.
 
-## The Goal: Trusted, Visible Email
+## The Goal: Known, Secured, Authenticated
 
-Email infrastructure should be authenticated, monitored, and auditable. Every email your domain sends should be trusted by receivers and visible to your team.
+Every domain your organization owns should be inventoried, secured at the registrar, and — if it sends email — fully authenticated.
 
+- **Inventoried** — all domains and subdomains documented with purpose, registrar, DNS provider, and expiry
+- **Secured** — registrar accounts locked down with 2FA and multi-person access
+- **Monitored** — expiry alerts set, SSL lifecycle managed, stale records cleaned up
 - **Authenticated** — SPF, DKIM, and DMARC configured with enforcement enabled
-- **Routable** — MX records correctly configured with reachable mail servers
-- **Visible** — transactional and marketing emails flow through providers with full delivery and engagement metrics
-- **Tested** — periodic deliverability testing prevents inbox placement degradation
-- **Retained** — email log retention policies intentionally defined and documented
+- **Visible** — email flows through providers with full delivery and engagement metrics
 
 ## Before You Start
 
-1. **Get domain inventory from user**:
-   - Root domain(s)
-   - Subdomains that send email (e.g., mail.example.com, transactional.example.com)
+1. **Build domain inventory** (DNS-001 is the first item — start here):
+   - Root domain(s) — the ones you own at the registrar
+   - Subdomains per root domain — enumerate from DNS provider
+   - Purpose for each (production, staging, email, marketing, redirect, etc.)
 
 2. **Get DNS read access**:
    - Cloudflare API token (read-only) OR
    - AWS Route53 access OR
    - Other DNS provider API access
-   - This enables automated discovery of all email-related DNS records
+   - This enables automated discovery of all DNS records
 
-3. **Identify email providers**:
+3. **Get registrar access** (or ask someone who has it):
+   - Which registrar(s) are used
+   - Expiry dates and auto-renewal status
+   - Who has login access
+
+4. **Identify email providers**:
    - Transactional email provider (SendGrid, Mailgun, Postmark, SES, etc.)
    - Marketing email provider (Mailchimp, Klaviyo, HubSpot, etc.)
 
@@ -37,7 +43,262 @@ Work through each item below. For each item:
 
 ---
 
-## DNS Authentication
+## Domain Management
+
+### DNS-001: Domain inventory maintained
+**Severity**: Critical
+
+A domain inventory is the foundation of infrastructure auditing. You can't secure, monitor, or authenticate what you don't know you own.
+
+**Check automatically**:
+
+1. **If Cloudflare API access available** (preferred):
+```bash
+# List all zones (domains) in Cloudflare account
+curl -X GET "https://api.cloudflare.com/client/v4/zones?per_page=50" \
+  -H "Authorization: Bearer $CF_API_TOKEN" | jq '.result[] | {name, status}'
+
+# For each zone, list all DNS records
+curl -X GET "https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records?per_page=100" \
+  -H "Authorization: Bearer $CF_API_TOKEN" | jq '.result[] | {type, name, content}'
+```
+
+2. **WHOIS check for each known domain**:
+```bash
+whois example.com | grep -iE "registrar|expir|creat|name server"
+```
+
+**Ask user**:
+- "List all root domains your organization owns"
+- "For each domain, what's its purpose?" (production, staging, marketing, redirect, parked)
+- "Which registrar(s) do you use?"
+- "Which DNS provider(s) do you use?"
+- "Is there a single document listing all your domains?"
+
+**Pass criteria**:
+- Centralized inventory exists (document, spreadsheet, or structured file)
+- Includes all root domains and active subdomains
+- Each entry has: purpose, registrar, DNS provider, expiry date, owner
+- Updated within the last 6 months
+
+**Fail criteria**:
+- No inventory — domains are "in people's heads"
+- Inventory exists but incomplete (missing domains discovered during audit)
+- No owner assigned to domains
+
+**Evidence to capture**:
+- Complete domain list with purpose and registrar
+- Where the inventory lives (doc URL, file path)
+- When it was last updated
+- Any domains discovered during audit that weren't in the inventory
+
+---
+
+### DNS-002: Domain expiry monitoring
+**Severity**: Critical
+
+A domain expiring takes down everything — website, email, API, the lot. This is a single point of failure that's entirely preventable.
+
+**Check automatically**:
+
+1. **WHOIS expiry check for each domain**:
+```bash
+whois example.com | grep -i "expir"
+# Look for "Registry Expiry Date" or "Expiration Date"
+```
+
+2. **Bulk check with dig** (nameserver delegation still works = not expired):
+```bash
+dig NS example.com +short
+```
+
+**Ask user**:
+- "Is auto-renewal enabled for all domains?"
+- "Who gets notified when a domain is approaching expiry?"
+- "Has a domain ever accidentally expired?"
+
+**Pass criteria**:
+- Auto-renewal enabled on all domains, OR
+- Expiry alerts configured (30+ days before) with a named recipient
+- More than one person aware of expiry dates
+
+**Fail criteria**:
+- Auto-renewal not enabled and no expiry alerts
+- Only one person knows about domain renewals
+- Domain expires within 60 days and nobody flagged it
+
+**Evidence to capture**:
+- Expiry dates for all domains
+- Auto-renewal status
+- Who receives expiry notifications
+
+---
+
+### DNS-003: Registrar account security
+**Severity**: Critical
+
+Registrar compromise is game over — attacker can redirect your domain anywhere. This is one of the highest-impact account takeovers possible.
+
+**Ask user**:
+- "Which registrar(s) do you use?" (Cloudflare, Namecheap, GoDaddy, Google Domains, etc.)
+- "Is 2FA/MFA enabled on the registrar account?"
+- "How many people have access to the registrar?"
+- "Where are registrar credentials stored?"
+- "Is registrar lock (clientTransferProhibited) enabled on critical domains?"
+
+**Check automatically**:
+```bash
+# Check if registrar lock is enabled via WHOIS
+whois example.com | grep -i "status"
+# Look for: clientTransferProhibited, serverTransferProhibited
+```
+
+**Pass criteria**:
+- 2FA enabled on all registrar accounts
+- At least 2 people have access (bus factor > 1)
+- Credentials in a shared secret manager (not one person's email)
+- Registrar lock enabled on production domains
+
+**Fail criteria**:
+- No 2FA on registrar
+- Single person has access
+- Credentials in personal email only
+- No registrar lock on critical domains
+
+**Evidence to capture**:
+- Registrar(s) used
+- 2FA status
+- Number of people with access
+- Registrar lock status for critical domains
+
+---
+
+### DNS-004: DNS provider consolidated and access audited
+**Severity**: Recommended
+
+Scattered DNS across multiple providers makes auditing harder and increases the risk of stale records or misconfiguration.
+
+**Ask user**:
+- "How many DNS providers do you use?"
+- "Who has write access to DNS records?"
+- "Is there an audit log of DNS changes?"
+- "When was the last time you reviewed DNS access?"
+
+**Pass criteria**:
+- DNS consolidated to one provider (or documented reason for multiple)
+- Write access limited to specific people/roles
+- DNS changes logged (Cloudflare does this by default)
+
+**Fail criteria**:
+- DNS spread across 3+ providers with no documentation
+- Everyone in the org has DNS write access
+- No way to see who changed what
+
+**Evidence to capture**:
+- DNS provider(s) and domains per provider
+- Who has write access
+- Whether audit logs exist
+
+---
+
+### DNS-005: SSL certificate lifecycle managed
+**Severity**: Recommended
+
+Expired SSL certificates cause browser warnings and service outages. Auto-renewal should be the default; manual certs need monitoring.
+
+**Check automatically**:
+
+1. **Check certificate expiry for each domain**:
+```bash
+# Check cert expiry (works for any HTTPS domain)
+echo | openssl s_client -servername example.com -connect example.com:443 2>/dev/null | openssl x509 -noout -dates
+```
+
+2. **Bulk check across inventory**:
+```bash
+# For each domain in inventory
+for domain in example.com app.example.com api.example.com; do
+  expiry=$(echo | openssl s_client -servername $domain -connect $domain:443 2>/dev/null | openssl x509 -noout -enddate 2>/dev/null)
+  echo "$domain: $expiry"
+done
+```
+
+**Ask user**:
+- "How are SSL certificates managed?" (Cloudflare auto, Let's Encrypt, cert-manager, manual)
+- "Are there any manually managed certificates?"
+- "Do you have alerts for certificate expiry?"
+
+**Pass criteria**:
+- Auto-renewal configured for all domains (Cloudflare, Let's Encrypt, cert-manager)
+- No certificates expiring within 30 days without renewal plan
+- Manual certificates inventoried with renewal owner
+
+**Fail criteria**:
+- Certificates expiring within 30 days with no auto-renewal
+- Manual certificates with no monitoring or owner
+- No one knows how certs are renewed
+
+**Evidence to capture**:
+- Certificate expiry dates per domain
+- Renewal method (auto vs manual)
+- Any certificates expiring soon
+
+---
+
+### DNS-006: Unused domains and subdomains identified
+**Severity**: Recommended
+
+Stale DNS records are subdomain takeover risks. A CNAME pointing to a decommissioned Heroku app or S3 bucket can be claimed by an attacker.
+
+**Check automatically**:
+
+1. **List all DNS records** (requires API access):
+```bash
+# Cloudflare
+curl -X GET "https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records?per_page=100" \
+  -H "Authorization: Bearer $CF_API_TOKEN" | jq '.result[] | {type, name, content, proxied}'
+```
+
+2. **Check for dangling CNAMEs**:
+```bash
+# For each CNAME record, verify the target still resolves
+dig CNAME subdomain.example.com +short
+# Then check if the target resolves
+dig A <target> +short
+```
+
+3. **Check for known takeover-vulnerable services**:
+```bash
+# Common patterns for subdomain takeover
+# - CNAME to *.herokuapp.com (app deleted)
+# - CNAME to *.s3.amazonaws.com (bucket deleted)
+# - CNAME to *.github.io (repo deleted)
+# - CNAME to *.azurewebsites.net (app deleted)
+```
+
+**Ask user**:
+- "Are there any domains you're not actively using?"
+- "When was the last time someone cleaned up DNS records?"
+- "Are there any subdomains from decommissioned projects?"
+
+**Pass criteria**:
+- DNS records reviewed within last 6 months
+- No dangling CNAMEs to decommissioned services
+- Unused domains/subdomains documented or removed
+
+**Fail criteria**:
+- DNS records never reviewed
+- Dangling CNAMEs found (subdomain takeover risk)
+- Domains pointing to infrastructure that no longer exists
+
+**Evidence to capture**:
+- Total DNS record count per domain
+- Any dangling or suspicious records found
+- Unused domains/subdomains identified
+
+---
+
+## Email Authentication
 
 ### EMAIL-001: MX records configured
 **Severity**: Critical
@@ -75,7 +336,7 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records?ty
 ```
 
 **Ask user**:
-- "What domains should have email infrastructure?" (build inventory)
+- "What domains should have email infrastructure?" (cross-reference DNS-001 inventory)
 - "What mail provider do you use?" (Google Workspace, Microsoft 365, etc.)
 
 **Pass criteria**:
@@ -90,7 +351,7 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records?ty
 - MX hosts unreachable on port 25
 
 **Evidence to capture**:
-- Domain inventory (root + subdomains)
+- Domain inventory (from DNS-001)
 - MX records per domain
 - Mail provider identified
 - Reachability status for each MX host
@@ -296,9 +557,6 @@ grep -riE "spam.*score|deliverability|placement.*test" --include="*.md" --includ
 - Placement tests with fresh accounts performed (at minimum: Gmail, Outlook)
 - Testing cadence defined (monthly or quarterly minimum)
 
-**Recommended (bonus)**:
-- Automated spam scoring in CI/CD or scheduled job
-
 **Fail criteria**:
 - No spam scoring tool
 - Never tested placement with fresh accounts
@@ -448,14 +706,9 @@ Email logs should be retained long enough to investigate issues but not indefini
 After checking all items:
 
 1. **Summarize results**:
-   - EMAIL-001: PASS/FAIL (Critical)
-   - EMAIL-002: PASS/FAIL (Critical)
-   - EMAIL-003: PASS/FAIL (Critical)
-   - EMAIL-004: PASS/FAIL (Critical)
-   - EMAIL-005: PASS/FAIL (Recommended)
-   - EMAIL-006: PASS/FAIL (Critical)
-   - EMAIL-007: PASS/FAIL (Recommended)
-   - EMAIL-008: PASS/FAIL (Recommended)
+   - DNS-001 through DNS-006: Domain management
+   - EMAIL-001 through EMAIL-004: Email authentication
+   - EMAIL-005 through EMAIL-008: Email monitoring
 
 2. **List failures with**:
    - What was found (evidence)
@@ -463,6 +716,8 @@ After checking all items:
    - Priority
 
 3. **Common recommendations**:
+   - If no domain inventory: Create a structured document listing all domains with purpose, registrar, expiry
+   - If no expiry monitoring: Enable auto-renewal at registrar immediately
    - If no SPF: Add `v=spf1 include:<provider> -all` TXT record immediately
    - If no DKIM: Configure DKIM in email provider and add DNS records
    - If no DMARC: Start with `v=DMARC1; p=none; rua=mailto:dmarc@example.com` then progress to `p=reject`
@@ -472,9 +727,9 @@ After checking all items:
    - If no transactional logging: Migrate to dedicated provider (SendGrid, Postmark, etc.)
 
 4. **Maturity assessment**:
-   - **Level 1**: No email authentication (SPF/DKIM/DMARC missing or misconfigured)
-   - **Level 2**: DNS authentication complete (SPF, DKIM, DMARC with enforcement)
-   - **Level 3**: Full logging and monitoring (transactional + marketing with metrics)
-   - **Level 4**: Proactive testing (automated deliverability checks, defined retention policies)
+   - **Level 1**: No domain inventory, no email authentication
+   - **Level 2**: Domain inventory exists, DNS authentication complete (SPF, DKIM, DMARC with enforcement)
+   - **Level 3**: Registrar secured, SSL managed, full email logging and monitoring
+   - **Level 4**: Proactive — stale records cleaned, automated deliverability checks, defined retention policies
 
 5. **Record audit date** and auditor

@@ -1,0 +1,223 @@
+section:
+  id: "20"
+  name: Domain & Email Infrastructure
+  description: Domain inventory, registrar management, DNS hygiene, SSL lifecycle, and email authentication (MX, SPF, DKIM, DMARC)
+
+default_scope: org
+
+items:
+  # --- Domain Inventory & Management ---
+
+  - id: DNS-001
+    title: Domain inventory maintained
+    question: "List every domain your org owns. All of them. Sure you got them all?"
+    severity: critical
+    category: Domain Management
+    description: >
+      A centralized, up-to-date list of all domains and subdomains owned by the organization.
+      Includes purpose, registrar, DNS provider, expiry date, and owner for each domain.
+      This inventory feeds into email, security, and infrastructure audits.
+    checks:
+      - Ask user for all owned domains (root + subdomains)
+      - Cross-check with Cloudflare zones if API access available
+      - Cross-check with registrar account(s)
+      - Verify inventory includes purpose and owner for each domain
+    cross_references:
+      - EMAIL-001
+      - SEC-001
+
+  - id: DNS-002
+    title: Domain expiry monitoring
+    question: "When does your main domain expire — and who gets the alert?"
+    severity: critical
+    category: Domain Management
+    description: >
+      All domains have auto-renewal enabled or expiry alerts set.
+      At least one person is notified 30+ days before any domain expires.
+      Domain expiry is a single point of failure that takes down everything.
+    checks:
+      - Check WHOIS expiry dates for all domains in inventory
+      - Verify auto-renewal is enabled at registrar
+      - Verify alert/notification is configured for expiry
+    cross_references:
+      - DNS-001
+
+  - id: DNS-003
+    title: Registrar account security
+    question: "Who has access to your registrar — and is it just one person?"
+    severity: critical
+    category: Domain Management
+    description: >
+      Registrar accounts have 2FA enabled, access is limited to more than one person,
+      and credentials are stored in a shared secret manager (not one person's email).
+      Registrar compromise = total domain takeover.
+    checks:
+      - Ask which registrar(s) are used
+      - Verify 2FA is enabled on registrar accounts
+      - Verify more than one person has access
+      - Check if registrar lock is enabled on critical domains
+    cross_references:
+      - DNS-001
+
+  - id: DNS-004
+    title: DNS provider consolidated and access audited
+    question: "How many DNS dashboards does your team need to check?"
+    severity: recommended
+    category: Domain Management
+    description: >
+      All domains use a single DNS provider (or documented few) with
+      audited access control. DNS changes are traceable to a person.
+    checks:
+      - Ask which DNS provider(s) are used
+      - Verify who has write access to DNS
+      - Check if DNS change audit log exists
+    cross_references:
+      - DNS-001
+      - SEC-001
+
+  - id: DNS-005
+    title: SSL certificate lifecycle managed
+    question: "Any certs expiring in the next 30 days that nobody's watching?"
+    severity: recommended
+    category: Domain Management
+    description: >
+      SSL/TLS certificates for all domains are auto-renewed (Cloudflare, Let's Encrypt, cert-manager)
+      or have expiry monitoring with 30-day alerts. Manual certificates are inventoried.
+    checks:
+      - Check certificate expiry for all domains in inventory
+      - Verify auto-renewal is configured (Cloudflare, Let's Encrypt, cert-manager)
+      - Identify any manually managed certificates
+      - Verify monitoring/alerting for expiry
+    cross_references:
+      - SEC-007
+      - DNS-001
+
+  - id: DNS-006
+    title: Unused domains and subdomains identified
+    question: "Any domains you're paying for that point to a server that no longer exists?"
+    severity: recommended
+    category: Domain Management
+    description: >
+      Stale DNS records and unused domains/subdomains are identified and cleaned up.
+      Dangling CNAMEs and unused subdomains are subdomain takeover risks.
+    checks:
+      - List all DNS records for each domain
+      - Identify records pointing to decommissioned infrastructure
+      - Check for dangling CNAMEs (target no longer resolves)
+      - Identify domains with no active use
+    cross_references:
+      - DNS-001
+      - SEC-001
+
+  # --- Email DNS Authentication ---
+
+  - id: EMAIL-001
+    title: MX records configured
+    question: "Are you sure mail to your domain actually lands somewhere?"
+    severity: critical
+    category: Email Authentication
+    description: >
+      MX records exist, resolve, and are reachable on port 25 for all domains
+      in the domain inventory that receive email.
+    checks:
+      - Query MX records for each domain in inventory
+      - Verify MX hosts resolve
+      - Verify MX hosts are reachable on port 25
+    cross_references:
+      - DNS-001
+
+  - id: EMAIL-002
+    title: SPF configured
+    question: "Could someone send email as you@yourdomain.com right now?"
+    severity: critical
+    category: Email Authentication
+    description: >
+      SPF records exist with authorized senders and hard fail (-all) or
+      documented soft fail (~all) for all sending domains/subdomains.
+    checks:
+      - Query SPF TXT records for each sending domain
+      - Verify authorized senders match actual providers
+      - Check enforcement level (-all vs ~all)
+
+  - id: EMAIL-003
+    title: DKIM configured
+    question: "Are your emails actually cryptographically signed?"
+    severity: critical
+    category: Email Authentication
+    description: >
+      DKIM records exist with valid public keys for all sending domains/subdomains.
+      Selectors match configured email providers.
+    checks:
+      - Discover DKIM selectors via DNS API or common selector names
+      - Verify records contain valid public keys
+      - Match selectors to known email providers
+
+  - id: EMAIL-004
+    title: DMARC configured
+    question: "What's your DMARC policy — p=none is basically nothing."
+    severity: critical
+    category: Email Authentication
+    description: >
+      DMARC records with enforcement policy (quarantine/reject), reporting configured,
+      and reports actively reviewed.
+    checks:
+      - Query _dmarc TXT records for each domain
+      - Check policy level (none/quarantine/reject)
+      - Verify reporting address configured (rua=)
+      - Ask if reports are reviewed
+    cross_references:
+      - EMAIL-002
+      - EMAIL-003
+
+  # --- Email Monitoring ---
+
+  - id: EMAIL-005
+    title: Email deliverability testing
+    question: "When did you last check if your emails hit Gmail's spam folder?"
+    severity: recommended
+    category: Email Monitoring
+    description: >
+      Spam scoring tool and periodic placement tests with fresh accounts
+      (Gmail, Outlook minimum).
+    checks:
+      - Ask which spam scoring tool is used
+      - Ask testing cadence and which providers tested
+      - Check for automated deliverability checks in CI/CD
+
+  - id: EMAIL-006
+    title: Transactional email control and logging
+    question: "Can you prove a specific user received a specific email last month?"
+    severity: critical
+    category: Email Monitoring
+    description: >
+      Dedicated provider with dashboard access, bounce tracking,
+      open/click tracking (or documented exceptions).
+    checks:
+      - Identify transactional email provider
+      - Verify dashboard access with send logs
+      - Check bounce and engagement tracking
+
+  - id: EMAIL-007
+    title: Marketing email logging
+    question: "What's your unsubscribe rate, and is it trending up?"
+    severity: recommended
+    category: Email Monitoring
+    description: >
+      Marketing platform with send logs, engagement metrics, and
+      individual recipient tracking.
+    checks:
+      - Identify marketing email platform
+      - Verify send logs and engagement metrics available
+      - Check individual recipient tracking
+
+  - id: EMAIL-008
+    title: Email log retention
+    question: "How far back can you prove what emails you sent and to whom?"
+    severity: recommended
+    category: Email Monitoring
+    description: >
+      Intentionally defined retention period (typically 2-4 weeks) for
+      transactional and marketing logs.
+    checks:
+      - Ask retention period for transactional and marketing logs
+      - Verify it's an intentional decision (not just provider default)
