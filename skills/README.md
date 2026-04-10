@@ -17,7 +17,6 @@ Skills for running structured audits against the Ultimate CTO Checklist.
 | `/audit-start` | Begin a new audit |
 | `/audit-continue` | Resume in-progress audit |
 | `/audit-item` | Jump to specific item |
-| `/audit-skip` | Skip item with reason |
 | `/audit-section` | Focus on one section |
 
 ## Reporting Skills

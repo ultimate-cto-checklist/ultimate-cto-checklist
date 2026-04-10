@@ -17,6 +17,7 @@ interface AuditDashboardProps {
   project: string;
   date: string;
   sectionDescriptions: Record<string, string>;
+  displayName?: string;
 }
 
 const ALL_STATUSES = new Set([
@@ -24,7 +25,7 @@ const ALL_STATUSES = new Set([
   "fail",
   "partial",
   "blocked",
-  "not-applicable",
+  "waived",
 ]);
 
 export default function AuditDashboard({
@@ -32,6 +33,7 @@ export default function AuditDashboard({
   project,
   date,
   sectionDescriptions,
+  displayName,
 }: AuditDashboardProps) {
   const [activeStatuses, setActiveStatuses] = useState<Set<string>>(
     new Set(ALL_STATUSES)
@@ -109,10 +111,10 @@ export default function AuditDashboard({
 
           {/* Stats Breakdown */}
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">{project}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{displayName ?? project}</h1>
             <p className="text-sm text-gray-500 mb-4">{date}</p>
 
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
               <StatPill
                 count={overall.pass}
                 label="Pass"
@@ -138,15 +140,9 @@ export default function AuditDashboard({
                 bg="bg-orange-50"
               />
               <StatPill
-                count={overall.na}
-                label="N/A"
+                count={overall.waived}
+                label="Waived"
                 color="text-gray-500"
-                bg="bg-gray-50"
-              />
-              <StatPill
-                count={overall.skip}
-                label="Skip"
-                color="text-gray-400"
                 bg="bg-gray-50"
               />
             </div>

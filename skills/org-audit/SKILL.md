@@ -98,13 +98,13 @@ For EACH item in the list:
 1. Follow the guide's verification steps
 2. Run auto_checks commands from items.yaml if available
 3. Use `gh api` for GitHub checks where applicable
-4. Determine status: pass / fail / partial / skip
+4. Determine status: pass / fail / partial / blocked
 5. Write result to audits/_org/<date>/<ITEM-ID>.md
 6. Validate: npx tsx checklist/schema/validate.ts <path> --fix
 
 If you CANNOT determine the result autonomously (needs user judgment,
-needs access you don't have), set status to "skip" with skip_reason
-explaining what you need from the user.
+needs access you don't have), set status to "blocked" and explain
+what you need from the user in the ## Summary.
 
 Return a summary: {item_id, status, one-line description} for each item.
 ```
@@ -122,25 +122,44 @@ YAML frontmatter + markdown body per `checklist/schema/audit-result.schema.yaml`
 - `## Reason for Partial` required for partial
 - `## Recommendations` and `## Notes` optional
 
+## Resolve Blocked Items
+
+After all subagent batches complete, collect items with `status: blocked`. These need user input before the audit can finish.
+
+For each blocked item:
+
+1. **Present it:**
+   ```
+   ## <ITEM-ID>: <Title>
+   **Status:** Blocked — needs your input
+   **What the auditor found:** <summary from the result file>
+   ```
+
+2. **Ask the user** the relevant questions (from `ask_user` in items.yaml, or based on what the subagent couldn't determine)
+
+3. **Resolve it:** Based on the user's answer, update the result file to `pass`, `fail`, or `partial` with proper evidence and required sections
+
+4. **Or leave blocked:** If the user can't answer right now (e.g., needs to check with someone else), leave as `blocked`
+
+5. **Or waive:** If the user decides the item doesn't apply, use `/audit-waiver`
+
 ## Review Results
 
-After all checks complete, present a summary:
+After all checks complete (including interactive resolution of blocked items), present a summary:
 
 ```
 ## Org Audit Results — <date>
 
-Pass: X | Fail: Y | Partial: Z | Skipped: W
+Pass: X | Fail: Y | Partial: Z | Blocked: W
 
 ### Failures (need attention):
 - <ITEM-ID>: <title> (FAIL)
 
-### Skipped (need your input):
-- <ITEM-ID>: <what's needed from the user>
+### Still Blocked (couldn't resolve):
+- <ITEM-ID>: <what's still needed>
 
-Want to review the failures in detail, or address the skipped items first?
+Want to review the failures in detail?
 ```
-
-For skipped items, ask the user the relevant questions from `ask_user` in items.yaml, then update the result files.
 
 ## Commit and Push
 

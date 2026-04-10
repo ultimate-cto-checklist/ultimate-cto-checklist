@@ -121,12 +121,11 @@ Walk through these concepts one at a time. After each one, pause and ask if they
 > - **Critical** — Non-negotiable. Security, data integrity, production stability. Fix before shipping.
 > - **Recommended** — Best practices. Improves reliability and developer experience. Address as you grow.
 
-### Waivers vs. skips
+### Waivers
 
-> Not every item applies to every project. You have two options:
+> Not every item applies to every project. If something doesn't apply:
 >
-> - **Skip** (`/audit-skip`) — "Can't check this right now, will come back later." Temporary.
-> - **Waiver** (`/audit-waiver`) — "This item doesn't apply to us, and here's why." Permanent, with a review date. Excluded from future audits.
+> - **Waiver** (`/audit-waiver`) — "This item doesn't apply to us, and here's why." Sets the status to `waived`, with a review date. Excluded from future audits.
 
 ### Audit flows
 

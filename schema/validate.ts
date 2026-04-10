@@ -19,9 +19,8 @@ const VALID_STATUSES = [
   "pass",
   "fail",
   "partial",
-  "skip",
-  "not-applicable",
   "blocked",
+  "waived",
 ] as const;
 type Status = (typeof VALID_STATUSES)[number];
 
@@ -32,16 +31,11 @@ const REQUIRED_HEADINGS_BY_STATUS: Record<string, string[]> = {
   pass: ["## Summary", "## Evidence"],
   fail: ["## Summary", "## Evidence", "## Reason for Failure"],
   partial: ["## Summary", "## Evidence", "## Reason for Partial"],
-  skip: ["## Summary"],
-  "not-applicable": ["## Summary"],
   blocked: ["## Summary"],
+  waived: ["## Summary"],
 };
 
-const STATUS_ALIASES: Record<string, string> = {
-  "n/a": "not-applicable",
-  na: "not-applicable",
-  "not applicable": "not-applicable",
-};
+const STATUS_ALIASES: Record<string, string> = {};
 
 // --- Types ---
 
@@ -290,7 +284,7 @@ function validateFile(
       "audited_at",
       "auditor",
       "category",
-      "skip_reason",
+      "waiver_ref",
     ];
     for (const key of fieldOrder) {
       if (data[key] !== undefined) ordered[key] = data[key];

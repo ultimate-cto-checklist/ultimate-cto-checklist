@@ -81,13 +81,13 @@ Before walking through items interactively, run the parallel auto-check phase on
 
 ### Interactive Item Workflow
 
-For items marked `needs-review` by subagents (or items the user wants to revisit):
+For items marked `blocked` by subagents (or items the user wants to revisit):
 
 1. **Present the item** - Show ID, title, severity, section, description
 2. **Show the guide** - Extract from `checklist/checklist/[section]/guide.md`
 3. **Run auto-checks** - Run checks against the clone, don't ask the user for evidence
 4. **Ask follow-up questions** - Only if you genuinely cannot determine the answer from the codebase
-5. **Determine status** - Pass/Fail/Partial/Skip/Not Applicable/Blocked
+5. **Determine status** - Pass/Fail/Partial/Blocked/Waived
 6. **Capture notes** - Optional user notes
 7. **Write result file** - Create `audits/[project]/[date]/[ITEM-ID].md` per `checklist/schema/audit-result.schema.yaml` (item_id not id, lowercase status, always include ## Summary, required headings per status)
 8. **Validate result file** - Run `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fix any errors before continuing

@@ -122,10 +122,10 @@ After listing items and cloning the repo, launch a **single subagent** to auto-c
 
 1. The subagent reads the section's `guide.md` and `items.yaml`
 2. It runs all verification commands against the cloned repo
-3. For each item, it determines: **pass** / **fail** / **partial** / **needs-review**
+3. For each item, it determines: **pass** / **fail** / **partial** / **blocked**
 4. It writes result files per `checklist/schema/audit-result.schema.yaml` (item_id not id, lowercase status, ## Summary required, required headings per status)
 5. It validates each result file by running `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fixes any errors
-6. Items requiring user judgment are marked `needs-review`
+6. Items requiring user judgment are marked `blocked`
 
 Present a section summary:
 
@@ -133,12 +133,12 @@ Present a section summary:
 ## Section [N] Auto-Check Results
 
 **Completed:** X/Y items
-**Pass:** A | **Fail:** B | **Partial:** C | **Needs Review:** D
+**Pass:** A | **Fail:** B | **Partial:** C | **Blocked:** D
 
 ### Failures:
 - [ID]: [reason] (FAIL)
 
-### Needs Your Input:
+### Blocked — Needs Your Input:
 - [ID]: [what's needed from user]
 
 Review results? (y = review details / n = accept and continue to interactive items)
@@ -148,7 +148,7 @@ The user can accept, review, or override any auto-checked result.
 
 ### Interactive Items
 
-Then proceed through remaining `needs-review` items sequentially using the Interactive Item Workflow from `/audit-start`.
+Then proceed through remaining `blocked` items sequentially using the Interactive Item Workflow from `/audit-start`.
 
 ## Cross-References
 
@@ -170,6 +170,6 @@ When section is complete:
 > Results:
 > - Pass: [count]
 > - Fail: [count]
-> - Skip: [count]
+> - Blocked: [count]
 >
 > Continue to another section? Run `/audit-section` to pick one.

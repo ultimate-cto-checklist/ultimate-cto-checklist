@@ -20,8 +20,8 @@ You are showing audit history.
 
 > ## Audit History: [project-name]
 >
-> | Date | Items | Pass | Fail | Skip | Rate |
-> |------|-------|------|------|------|------|
+> | Date | Items | Pass | Fail | Blocked | Rate |
+> |------|-------|------|------|---------|------|
 > | 2026-02-04 | 45 | 41 | 2 | 2 | 91.1% |
 > | 2026-01-15 | 42 | 32 | 8 | 2 | 76.2% |
 > | 2025-12-01 | 38 | 25 | 10 | 3 | 65.8% |
@@ -68,7 +68,7 @@ Show all projects:
 
 1. List date folders in `audits/[project]/` (matching YYYY-MM-DD pattern)
 2. For each date folder, read all result `.md` files
-3. Parse YAML frontmatter to count pass/fail/skip
+3. Parse YAML frontmatter to count pass/fail/blocked
 4. Sort by date descending
 5. Calculate trend (difference between first and last audit)
 6. Find items that fail across multiple audits (consistently failing)

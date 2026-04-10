@@ -22,10 +22,10 @@ const statusConfig = {
   partial: { label: "Partial", bg: "bg-amber-100", border: "border-amber-300", text: "text-amber-700" },
   pass: { label: "Pass", bg: "bg-green-100", border: "border-green-300", text: "text-green-700" },
   blocked: { label: "Blocked", bg: "bg-orange-100", border: "border-orange-300", text: "text-orange-700" },
-  "not-applicable": { label: "N/A", bg: "bg-gray-100", border: "border-gray-300", text: "text-gray-600" },
+  waived: { label: "Waived", bg: "bg-gray-100", border: "border-gray-300", text: "text-gray-600" },
 };
 
-const allStatuses = ["fail", "partial", "pass", "blocked", "not-applicable"];
+const allStatuses = ["fail", "partial", "pass", "blocked", "waived"];
 
 export default function FilterBar({
   activeStatuses,

@@ -1,16 +1,16 @@
 ---
 item_id: DEPLOY-001
 title: Automated deployment pipeline
-status: skip
+status: blocked
 severity: critical
 section: 10-deployments
 audited_at: 2026-01-15T15:30:00Z
 auditor: claude-session
 ---
 
-## Evidence
+## Summary
 
-Skipped - will audit in next session. Need access to GitHub Actions config.
+Cannot verify deployment pipeline — need access to GitHub Actions workflow files.
 
 ## Notes
 

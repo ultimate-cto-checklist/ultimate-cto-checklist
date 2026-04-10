@@ -19,11 +19,8 @@ frontmatter:
 
     status:
       type: string
-      enum: [pass, fail, partial, skip, not-applicable, blocked]
-      description: >
-        Always lowercase. Normalized values:
-        - "N/A" → "not-applicable"
-        - "PASS"/"FAIL" etc. → lowercase
+      enum: [pass, fail, partial, blocked, waived]
+      description: always lowercase
 
     severity:
       type: string
@@ -48,16 +45,12 @@ frontmatter:
       type: string
       description: Sub-category within the section
 
-    skip_reason:
-      type: string
-      description: Only for status=skip. Why the item was skipped.
-
 body_headings:
   # Headings must appear in this order when present.
   # "required_when" specifies which statuses require the heading.
 
   - heading: "## Summary"
-    required_when: [pass, fail, partial, skip, not-applicable, blocked]
+    required_when: [pass, fail, partial, blocked, waived]
     description: >
       1-3 sentences explaining the result at a glance.
       This is the primary display text in the dashboard.

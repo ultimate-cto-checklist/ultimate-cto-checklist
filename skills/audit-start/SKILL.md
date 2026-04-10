@@ -130,7 +130,7 @@ For EACH item:
 1. Read the guide.md section for this item
 2. Run the verification commands in [clone_dir]
 3. Use `gh api repos/[owner]/[repo]/...` for GitHub API checks
-4. Determine status: pass / fail / partial / needs-review
+4. Determine status: pass / fail / partial / blocked
 5. Write result to audits/[project]/[date]/[ITEM-ID].md following
    checklist/schema/audit-result.schema.yaml (item_id not id, lowercase
    status, ## Summary required, ## Evidence required, ## Reason for
@@ -140,7 +140,7 @@ For EACH item:
 
 If you CANNOT determine the result autonomously (needs user judgment,
 needs access you don't have, subjective quality call), set status
-to `needs-review` and explain what you need from the user in the notes.
+to `blocked` and explain what you need from the user in the Summary.
 
 Return a summary: {item_id, status, one-line evidence} for each item.
 ```
@@ -151,13 +151,13 @@ Return a summary: {item_id, status, one-line evidence} for each item.
 ## Auto-Check Results
 
 **Completed:** X items across Y sections
-**Pass:** A | **Fail:** B | **Partial:** C | **Needs Review:** D
+**Pass:** A | **Fail:** B | **Partial:** C | **Blocked:** D
 
 ### Failures (require attention):
 - SEC-005: HSTS header missing (FAIL)
 - GIT-017: Found potential secrets (FAIL)
 
-### Needs Your Input (Z items):
+### Blocked — Needs Your Input (Z items):
 - PERF-003: Is this response time acceptable?
 - PROC-002: What's your deployment approval process?
 
@@ -166,10 +166,10 @@ Review auto-check results? (y = review details / n = accept and continue)
 
 After collecting all subagent results, update `.audit-state.yaml`:
 ```yaml
-phase: interactive       # or 'complete' if no needs-review items remain
+phase: interactive       # or 'complete' if no blocked items remain
 active_sections: []
 items_completed: [updated count from result files on disk]
-items_remaining: [only needs-review items]
+items_remaining: [only blocked items]
 ```
 
 ### 5. User reviews
@@ -181,13 +181,13 @@ The user can:
 
 ### 6. Continue to interactive items
 
-Items marked `needs-review` are processed sequentially using the Interactive Item Workflow below.
+Items marked `blocked` are processed sequentially using the Interactive Item Workflow below.
 
 ---
 
 ## Interactive Item Workflow
 
-For items that couldn't be auto-resolved (marked `needs-review` or skipped by subagents):
+For items that couldn't be auto-resolved (marked `blocked` or skipped by subagents):
 
 ### 1. Present the item
 
@@ -220,9 +220,8 @@ If item has `ask_user` questions, ask them.
 > 1. **Pass** - Meets all criteria
 > 2. **Fail** - Does not meet criteria
 > 3. **Partial** - Some criteria met
-> 4. **Skip** - Skip for now (will revisit)
-> 5. **Not Applicable** - Doesn't apply (consider creating waiver)
-> 6. **Blocked** - Can't verify (access issue, dependency)
+> 4. **Waived** - Doesn't apply (requires waiver via `/audit-waiver`)
+> 5. **Blocked** - Can't verify (access issue, dependency)
 
 ### 6. Capture notes
 
@@ -234,7 +233,7 @@ Create `audits/[project]/[date]/[ITEM-ID].md` following `checklist/schema/audit-
 
 Key rules:
 - Use `item_id` (not `id`) in frontmatter
-- Status must be **lowercase**: `pass`, `fail`, `partial`, `skip`, `not-applicable`, `blocked`
+- Status must be **lowercase**: `pass`, `fail`, `partial`, `blocked`, `waived`
 - Filename must match `item_id` (e.g., `GIT-001.md`)
 - `## Summary` is **required for all statuses** — 1-3 sentences explaining the result
 - `## Evidence` is required for pass/fail/partial

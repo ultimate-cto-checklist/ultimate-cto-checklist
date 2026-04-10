@@ -29,8 +29,8 @@ If an active audit is found (`.audit-state.yaml` exists):
 > - Pass: [count]
 > - Fail: [count]
 > - Partial: [count]
-> - Skip: [count]
 > - Blocked: [count]
+> - Waived: [count]
 > - Remaining: [count]
 >
 > ### By Severity

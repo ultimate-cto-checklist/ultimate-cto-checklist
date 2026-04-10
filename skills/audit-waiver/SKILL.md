@@ -77,7 +77,7 @@ Create file based on scope:
 ---
 item_id: [ID]
 title: [Title]
-status: not-applicable
+status: waived
 applies_to:
   - [project list or "all"]
 approved_by: [Name (Title)]

@@ -50,7 +50,7 @@ Same as `/audit-start`:
 2. **Show the guide** - Extract from `checklist/checklist/[section]/guide.md`
 3. **Run auto-checks** - Clone the repo and run checks yourself, don't ask the user for evidence
 4. **Ask follow-up questions** - Only if you genuinely cannot determine the answer from the codebase
-5. **Determine status** - Pass/Fail/Partial/Skip/Not Applicable/Blocked
+5. **Determine status** - Pass/Fail/Partial/Blocked/Waived
 6. **Capture notes** - Optional user notes
 7. **Write result file** - Per `checklist/schema/audit-result.schema.yaml` (item_id not id, lowercase status, always include ## Summary, required headings per status)
 8. **Validate result file** - Run `npx tsx checklist/schema/validate.ts <result-file-path> --fix` and fix any errors before continuing

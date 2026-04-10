@@ -7,8 +7,7 @@ export interface SectionStats {
   fail: number;
   partial: number;
   blocked: number;
-  na: number;
-  skip: number;
+  waived: number;
   passRate: number;
   criticalFails: number;
   items: AuditResult[];
@@ -20,8 +19,7 @@ export interface OverallStats {
   fail: number;
   partial: number;
   blocked: number;
-  na: number;
-  skip: number;
+  waived: number;
   passRate: number;
   criticalFails: number;
   recommendedFails: number;
@@ -52,8 +50,7 @@ export function computeSectionStats(results: AuditResult[]): SectionStats[] {
     let fail = 0;
     let partial = 0;
     let blocked = 0;
-    let na = 0;
-    let skip = 0;
+    let waived = 0;
     let criticalFails = 0;
 
     // Single pass through items
@@ -74,17 +71,14 @@ export function computeSectionStats(results: AuditResult[]): SectionStats[] {
         case 'blocked':
           blocked++;
           break;
-        case 'not-applicable':
-          na++;
-          break;
-        case 'skip':
-          skip++;
+        case 'waived':
+          waived++;
           break;
       }
     }
 
     const total = items.length;
-    const actionableCount = total - na - skip - blocked;
+    const actionableCount = total - waived - blocked;
     const passRate = actionableCount > 0 ? pass / actionableCount : 0;
 
     sections.push({
@@ -94,8 +88,7 @@ export function computeSectionStats(results: AuditResult[]): SectionStats[] {
       fail,
       partial,
       blocked,
-      na,
-      skip,
+      waived,
       passRate,
       criticalFails,
       items,
@@ -173,8 +166,7 @@ export function computeOverallStats(results: AuditResult[]): OverallStats {
       fail: 0,
       partial: 0,
       blocked: 0,
-      na: 0,
-      skip: 0,
+      waived: 0,
       passRate: 0,
       criticalFails: 0,
       recommendedFails: 0,
@@ -185,8 +177,7 @@ export function computeOverallStats(results: AuditResult[]): OverallStats {
   let fail = 0;
   let partial = 0;
   let blocked = 0;
-  let na = 0;
-  let skip = 0;
+  let waived = 0;
   let criticalFails = 0;
   let recommendedFails = 0;
 
@@ -210,17 +201,14 @@ export function computeOverallStats(results: AuditResult[]): OverallStats {
       case 'blocked':
         blocked++;
         break;
-      case 'not-applicable':
-        na++;
-        break;
-      case 'skip':
-        skip++;
+      case 'waived':
+        waived++;
         break;
     }
   }
 
   const total = results.length;
-  const actionableCount = total - na - skip - blocked;
+  const actionableCount = total - waived - blocked;
   const passRate = actionableCount > 0 ? pass / actionableCount : 0;
 
   return {
@@ -229,8 +217,7 @@ export function computeOverallStats(results: AuditResult[]): OverallStats {
     fail,
     partial,
     blocked,
-    na,
-    skip,
+    waived,
     passRate,
     criticalFails,
     recommendedFails,
@@ -249,13 +236,12 @@ export function calculateSectionStats(
   const fail = items.filter((i) => i.status === 'fail').length;
   const partial = items.filter((i) => i.status === 'partial').length;
   const blocked = items.filter((i) => i.status === 'blocked').length;
-  const na = items.filter((i) => i.status === 'not-applicable').length;
-  const skip = items.filter((i) => i.status === 'skip').length;
+  const waived = items.filter((i) => i.status === 'waived').length;
   const criticalFails = items.filter(
     (i) => i.status === 'fail' && i.severity === 'critical'
   ).length;
 
-  const scorableTotal = total - na - skip - blocked;
+  const scorableTotal = total - waived - blocked;
   const passRate = scorableTotal > 0 ? pass / scorableTotal : 0;
 
   return {
@@ -265,8 +251,7 @@ export function calculateSectionStats(
     fail,
     partial,
     blocked,
-    na,
-    skip,
+    waived,
     passRate,
     criticalFails,
     items,

@@ -20,12 +20,11 @@ interface AuditItemProps {
 }
 
 const statusIndicator: Record<string, { icon: string; color: string; label: string }> = {
-  pass:             { icon: "✓", color: "text-green-600", label: "Pass" },
-  fail:             { icon: "✗", color: "text-red-600",   label: "Fail" },
-  partial:          { icon: "◐", color: "text-amber-600", label: "Partial" },
-  skip:             { icon: "–", color: "text-gray-400",  label: "Skip" },
-  "not-applicable": { icon: "–", color: "text-gray-300",  label: "N/A" },
-  blocked:          { icon: "⊘", color: "text-orange-500", label: "Blocked" },
+  pass:    { icon: "✓", color: "text-green-600", label: "Pass" },
+  fail:    { icon: "✗", color: "text-red-600",   label: "Fail" },
+  partial: { icon: "◐", color: "text-amber-600", label: "Partial" },
+  blocked: { icon: "⊘", color: "text-orange-500", label: "Blocked" },
+  waived:  { icon: "–", color: "text-gray-400",  label: "Waived" },
 };
 
 const severityStyle: Record<string, string> = {
@@ -35,7 +34,7 @@ const severityStyle: Record<string, string> = {
 };
 
 export default function AuditItem({ result }: AuditItemProps) {
-  const [showEvidence, setShowEvidence] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const indicator = statusIndicator[result.status] || statusIndicator.blocked;
 
   return (
@@ -63,10 +62,15 @@ export default function AuditItem({ result }: AuditItemProps) {
           }`}>
             {result.severity}
           </span>
+          {result.status === 'waived' && result.hasWaiver === false && (
+            <span className="flex-shrink-0 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 ring-1 ring-amber-300">
+              Missing waiver
+            </span>
+          )}
         </div>
 
-        {/* Notes (markdown) */}
-        {result.notes && (
+        {/* Summary (always visible) */}
+        {result.summary && (
           <div className="mt-1.5 text-sm text-gray-600 prose prose-sm max-w-none">
             <ReactMarkdown
               components={{
@@ -75,39 +79,42 @@ export default function AuditItem({ result }: AuditItemProps) {
                 ol: ({ children }) => <ol className="my-1 ml-4">{children}</ol>,
                 li: ({ children }) => <li className="my-0.5">{children}</li>,
                 code: ({ children }) => (
-                  <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">
-                    {children}
-                  </code>
+                  <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">{children}</code>
                 ),
                 strong: ({ children }) => (
                   <strong className="font-semibold">{children}</strong>
                 ),
               }}
             >
-              {result.notes}
+              {result.summary}
             </ReactMarkdown>
           </div>
         )}
 
-        {/* Evidence toggle */}
-        {result.evidence && (
+        {/* Details toggle (everything except summary) */}
+        {result.body && (
           <div className="mt-1.5">
             <button
-              onClick={() => setShowEvidence(!showEvidence)}
+              onClick={() => setShowDetails(!showDetails)}
               className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium"
             >
-              {showEvidence ? (
+              {showDetails ? (
                 <ChevronDown className="w-3 h-3" />
               ) : (
                 <ChevronRight className="w-3 h-3" />
               )}
-              {showEvidence ? "Hide" : "Show"} evidence
+              {showDetails ? "Hide" : "Show"} details
             </button>
 
-            {showEvidence && (
-              <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-700 prose prose-sm max-w-none">
+            {showDetails && (
+              <div className="mt-2 p-3 bg-gray-50 rounded text-sm text-gray-700 prose prose-sm max-w-none">
                 <ReactMarkdown
                   components={{
+                    h2: ({ children }) => (
+                      <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mt-4 mb-1.5 first:mt-0">
+                        {children}
+                      </h2>
+                    ),
                     p: ({ children }) => <p className="my-1">{children}</p>,
                     ul: ({ children }) => (
                       <ul className="my-1 ml-4">{children}</ul>
@@ -116,13 +123,16 @@ export default function AuditItem({ result }: AuditItemProps) {
                       <ol className="my-1 ml-4">{children}</ol>
                     ),
                     li: ({ children }) => <li className="my-0.5">{children}</li>,
-                    code: ({ children }) => (
-                      <code className="px-1 py-0.5 bg-white rounded">
-                        {children}
-                      </code>
-                    ),
+                    code: ({ children, className }) => {
+                      const isBlock = className?.includes('language-');
+                      return isBlock ? (
+                        <code className={className}>{children}</code>
+                      ) : (
+                        <code className="px-1 py-0.5 bg-gray-200 rounded text-xs text-gray-900">{children}</code>
+                      );
+                    },
                     pre: ({ children }) => (
-                      <pre className="my-2 p-2 bg-white rounded overflow-x-auto">
+                      <pre className="my-2 p-3 bg-gray-800 text-gray-100 rounded overflow-x-auto text-xs">
                         {children}
                       </pre>
                     ),
@@ -131,7 +141,7 @@ export default function AuditItem({ result }: AuditItemProps) {
                     ),
                   }}
                 >
-                  {result.evidence}
+                  {result.body}
                 </ReactMarkdown>
               </div>
             )}

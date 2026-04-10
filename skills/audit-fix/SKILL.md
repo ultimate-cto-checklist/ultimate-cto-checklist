@@ -123,8 +123,7 @@ Read `checklist/checklist/[section]/guide.md` and extract the relevant verificat
 How do you want to resolve this?
 
 1. Provide evidence (guide Claude to find it or attach proof)
-2. Waive this item
-3. Skip for now
+2. Waive this item (hands off to `/audit-waiver`)
 ```
 
 ### If "Provide evidence"
@@ -156,10 +155,6 @@ Evidence: Cloudflare HSTS enabled with max-age=31536000, includeSubDomains...
 
 Hand off to the `/audit-waiver` flow for this item. After the waiver is created, auto-advance.
 
-### If "Skip"
-
-Move to the next item. This item stays as-is in the audit results.
-
 ---
 
 ## Auto-Advance
@@ -176,7 +171,6 @@ Fix session complete.
 Progress: 3/3 items resolved
 - Re-audited as pass: 2
 - Waived: 1
-- Skipped: 0
 
 Remaining unresolved across this scope: 9 items
 Resume with /audit-fix

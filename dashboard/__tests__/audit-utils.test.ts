@@ -46,7 +46,7 @@ describe('audit-utils', () => {
     {
       itemId: 'GIT-005',
       title: 'Git LFS setup',
-      status: 'not-applicable',
+      status: 'waived',
       severity: 'recommended',
       section: '01-git-repo-setup',
       auditedAt: '2026-02-10',
@@ -70,7 +70,7 @@ describe('audit-utils', () => {
     {
       itemId: 'DB-003',
       title: 'Query optimization',
-      status: 'skip',
+      status: 'blocked',
       severity: 'recommended',
       section: '05-database',
       auditedAt: '2026-02-10',
@@ -106,29 +106,28 @@ describe('audit-utils', () => {
       expect(gitSection?.fail).toBe(1);
       expect(gitSection?.partial).toBe(1);
       expect(gitSection?.blocked).toBe(1);
-      expect(gitSection?.na).toBe(1);
-      expect(gitSection?.skip).toBe(0);
+      expect(gitSection?.waived).toBe(1);
     });
 
     it('should calculate pass rate correctly', () => {
       const stats = computeSectionStats(mockResults);
 
       const gitSection = stats.find(s => s.section === '01-git-repo-setup');
-      // Pass rate = pass / (total - na - skip - blocked)
-      // = 1 / (5 - 1 - 0 - 1) = 1/3 = 0.33
+      // Pass rate = pass / (total - waived - blocked)
+      // = 1 / (5 - 1 - 1) = 1/3 = 0.33
       expect(gitSection?.passRate).toBeCloseTo(0.33, 2);
 
       const dbSection = stats.find(s => s.section === '05-database');
-      // Pass rate = 1 / (3 - 0 - 1 - 0) = 1/2 = 0.5
+      // Pass rate = 1 / (3 - 0 - 1) = 1/2 = 0.5
       expect(dbSection?.passRate).toBeCloseTo(0.5, 2);
     });
 
-    it('should handle sections with no actionable items (all na/skip/blocked)', () => {
+    it('should handle sections with no actionable items (all waived/blocked)', () => {
       const allNaResults: AuditResult[] = [
         {
           itemId: 'TEST-001',
           title: 'Test',
-          status: 'not-applicable',
+          status: 'waived',
           severity: 'recommended',
           section: 'test-section',
           auditedAt: '2026-02-10',
@@ -136,7 +135,7 @@ describe('audit-utils', () => {
         {
           itemId: 'TEST-002',
           title: 'Test',
-          status: 'skip',
+          status: 'blocked',
           severity: 'recommended',
           section: 'test-section',
           auditedAt: '2026-02-10',
@@ -187,8 +186,7 @@ describe('audit-utils', () => {
           fail: 2,
           partial: 0,
           blocked: 0,
-          na: 0,
-          skip: 0,
+          waived: 0,
           passRate: 0.8,
           criticalFails: 0,
           items: [],
@@ -200,8 +198,7 @@ describe('audit-utils', () => {
           fail: 8,
           partial: 0,
           blocked: 0,
-          na: 0,
-          skip: 0,
+          waived: 0,
           passRate: 0.2,
           criticalFails: 0,
           items: [],
@@ -213,8 +210,7 @@ describe('audit-utils', () => {
           fail: 5,
           partial: 0,
           blocked: 0,
-          na: 0,
-          skip: 0,
+          waived: 0,
           passRate: 0.5,
           criticalFails: 0,
           items: [],
@@ -237,8 +233,7 @@ describe('audit-utils', () => {
           fail: 5,
           partial: 0,
           blocked: 0,
-          na: 0,
-          skip: 0,
+          waived: 0,
           passRate: 0.5,
           criticalFails: 1,
           items: [],
@@ -250,8 +245,7 @@ describe('audit-utils', () => {
           fail: 5,
           partial: 0,
           blocked: 0,
-          na: 0,
-          skip: 0,
+          waived: 0,
           passRate: 0.5,
           criticalFails: 3,
           items: [],
@@ -297,7 +291,7 @@ describe('audit-utils', () => {
 
     it('should filter by severity: critical', () => {
       const filters = {
-        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'not-applicable', 'skip']),
+        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'waived']),
         severity: 'critical' as const,
         search: '',
       };
@@ -309,7 +303,7 @@ describe('audit-utils', () => {
 
     it('should filter by severity: recommended', () => {
       const filters = {
-        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'not-applicable', 'skip']),
+        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'waived']),
         severity: 'recommended' as const,
         search: '',
       };
@@ -321,7 +315,7 @@ describe('audit-utils', () => {
 
     it('should search by itemId (case-insensitive)', () => {
       const filters = {
-        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'not-applicable', 'skip']),
+        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'waived']),
         severity: 'all' as const,
         search: 'git-002',
       };
@@ -333,7 +327,7 @@ describe('audit-utils', () => {
 
     it('should search by title (case-insensitive)', () => {
       const filters = {
-        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'not-applicable', 'skip']),
+        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'waived']),
         severity: 'all' as const,
         search: 'branch protection',
       };
@@ -345,7 +339,7 @@ describe('audit-utils', () => {
 
     it('should handle partial search matches', () => {
       const filters = {
-        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'not-applicable', 'skip']),
+        statuses: new Set(['pass', 'fail', 'partial', 'blocked', 'waived']),
         severity: 'all' as const,
         search: 'git',
       };
@@ -397,16 +391,15 @@ describe('audit-utils', () => {
       expect(stats.pass).toBe(3);
       expect(stats.fail).toBe(3);
       expect(stats.partial).toBe(1);
-      expect(stats.blocked).toBe(1);
-      expect(stats.na).toBe(1);
-      expect(stats.skip).toBe(1);
+      expect(stats.blocked).toBe(2);
+      expect(stats.waived).toBe(1);
     });
 
     it('should calculate overall pass rate correctly', () => {
       const stats = computeOverallStats(mockResults);
 
-      // Pass rate = pass / (total - na - skip - blocked)
-      // = 3 / (10 - 1 - 1 - 1) = 3/7 = 0.428
+      // Pass rate = pass / (total - waived - blocked)
+      // = 3 / (10 - 1 - 2) = 3/7 = 0.428
       expect(stats.passRate).toBeCloseTo(0.43, 2);
     });
 
@@ -433,7 +426,7 @@ describe('audit-utils', () => {
         {
           itemId: 'TEST-001',
           title: 'Test',
-          status: 'not-applicable',
+          status: 'waived',
           severity: 'recommended',
           section: 'test-section',
           auditedAt: '2026-02-10',

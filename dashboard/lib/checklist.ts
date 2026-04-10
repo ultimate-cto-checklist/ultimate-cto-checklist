@@ -349,12 +349,13 @@ export interface Project {
 export interface AuditResult {
   itemId: string;
   title: string;
-  status: 'pass' | 'fail' | 'partial' | 'skip' | 'not-applicable' | 'blocked';
+  status: 'pass' | 'fail' | 'partial' | 'blocked' | 'waived';
   severity: 'critical' | 'recommended';
   section: string;
   auditedAt: string;
-  evidence?: string;
-  notes?: string;
+  summary?: string;
+  body?: string;
+  hasWaiver?: boolean;
 }
 
 export interface AuditHistoryEntry {
@@ -362,7 +363,6 @@ export interface AuditHistoryEntry {
   total: number;
   pass: number;
   fail: number;
-  skip: number;
   score: number;
 }
 
@@ -414,9 +414,39 @@ export async function listProjects(): Promise<Project[]> {
 
 function normalizeStatus(raw: string | undefined): AuditResult['status'] {
   if (!raw) return 'blocked';
-  const s = raw.toLowerCase().trim();
-  if (s === 'n/a') return 'not-applicable';
-  return s as AuditResult['status'];
+  return raw.toLowerCase().trim() as AuditResult['status'];
+}
+
+/** List item IDs that have a waiver file (global or project-specific). */
+async function listWaiverIds(project: string): Promise<Set<string>> {
+  if (!WORKSPACE_PATH) return new Set();
+  const ids = new Set<string>();
+
+  // Global waivers: waivers/<ITEM-ID>.md
+  const globalDir = path.join(WORKSPACE_PATH, 'waivers');
+  try {
+    const files = await fs.readdir(globalDir);
+    for (const f of files) {
+      if (f.endsWith('.md') && !f.startsWith('.') && !f.startsWith('_')) {
+        ids.add(f.replace(/\.md$/, ''));
+      }
+    }
+  } catch { /* no waivers dir */ }
+
+  // Project-specific waivers: waivers/<project>/<ITEM-ID>.md
+  if (project !== '_org') {
+    const projectDir = path.join(WORKSPACE_PATH, 'waivers', project);
+    try {
+      const files = await fs.readdir(projectDir);
+      for (const f of files) {
+        if (f.endsWith('.md') && !f.startsWith('.') && !f.startsWith('_')) {
+          ids.add(f.replace(/\.md$/, ''));
+        }
+      }
+    } catch { /* no project waivers dir */ }
+  }
+
+  return ids;
 }
 
 export async function getAuditResults(
@@ -427,7 +457,10 @@ export async function getAuditResults(
 
   const auditDir = path.join(WORKSPACE_PATH, 'audits', project, date);
   try {
-    const files = await fs.readdir(auditDir);
+    const [files, waiverIds] = await Promise.all([
+      fs.readdir(auditDir),
+      listWaiverIds(project),
+    ]);
     const resultFiles = files.filter(f => f.endsWith('.md') && !f.startsWith('_') && !f.startsWith('.'));
 
     return Promise.all(resultFiles.map(async (file) => {
@@ -439,19 +472,23 @@ export async function getAuditResults(
         console.warn(`[audit] ${file}: uses 'id' instead of 'item_id' — run validate.ts --fix`);
       }
 
+      const itemId = data.item_id || data.id || '';
+      const status = normalizeStatus(data.status);
+
+      // Extract summary separately; body gets everything after summary
+      const summary = extractMarkdownSection(body, 'Summary');
+      const bodyWithoutSummary = body.replace(/## Summary\n[\s\S]*?(?=\n## |$)/, '').trim();
+
       return {
-        itemId: data.item_id || data.id || '',
+        itemId,
         title: data.title || '',
-        status: normalizeStatus(data.status),
+        status,
         severity: data.severity || 'recommended',
         section: data.section || '',
         auditedAt: data.audited_at || '',
-        evidence: extractMarkdownSection(body, 'Evidence'),
-        notes: extractMarkdownSection(body, 'Summary')
-          || extractMarkdownSection(body, 'Notes')
-          || extractMarkdownSection(body, 'Reason for Failure')
-          || extractMarkdownSection(body, 'Reason for Partial')
-          || undefined,
+        summary,
+        body: bodyWithoutSummary || undefined,
+        hasWaiver: status === 'waived' ? waiverIds.has(itemId) : undefined,
       };
     }));
   } catch {
@@ -474,14 +511,12 @@ export async function getAuditHistory(project: string): Promise<AuditHistoryEntr
       const results = await getAuditResults(project, date);
       const pass = results.filter(r => r.status === 'pass').length;
       const fail = results.filter(r => r.status === 'fail').length;
-      const skip = results.filter(r => r.status === 'skip').length;
 
       return {
         date,
         total: results.length,
         pass,
         fail,
-        skip,
         score: results.length > 0 ? Math.round((pass / results.length) * 100) : 0,
       };
     }));
@@ -510,5 +545,36 @@ function extractMarkdownSection(content: string, heading: string): string | unde
   const regex = new RegExp(`## ${heading}\\n([\\s\\S]*?)(?=\\n## |$)`);
   const match = content.match(regex);
   return match ? match[1].trim() || undefined : undefined;
+}
+
+// === Org-Level Audit Support ===
+
+export interface OrgInfo {
+  name: string;
+  slug: string;
+}
+
+export interface OrgAuditSummary {
+  lastAudit: string;
+  lastAuditScore: number;
+}
+
+export async function getOrgInfo(): Promise<OrgInfo | null> {
+  if (!WORKSPACE_PATH) return null;
+  try {
+    const content = await fs.readFile(path.join(WORKSPACE_PATH, 'org.yaml'), 'utf-8');
+    const data = YAML.parse(content);
+    return { name: data.name || 'Organization', slug: data.slug || '' };
+  } catch {
+    return null;
+  }
+}
+
+export async function getOrgAuditSummary(): Promise<OrgAuditSummary | null> {
+  if (!WORKSPACE_PATH) return null;
+  const history = await getAuditHistory('_org');
+  if (history.length === 0) return null;
+  const latest = history[0]; // Already sorted descending
+  return { lastAudit: latest.date, lastAuditScore: latest.score };
 }
 

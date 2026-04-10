@@ -50,8 +50,8 @@ Read all result files from the audit folder and create `audits/[project]/[date]/
 
 ## Section Breakdown
 
-| Section | Pass | Fail | Skip | Score |
-|---------|------|------|------|-------|
+| Section | Pass | Fail | Blocked | Score |
+|---------|------|------|---------|-------|
 | 01 Git Repo Setup | 18 | 2 | 0 | 90% |
 | 02 Dependencies | 6 | 1 | 0 | 86% |
 | ... | | | | |

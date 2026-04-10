@@ -60,7 +60,7 @@ Markdown with YAML frontmatter:
 ---
 item_id: GIT-001
 title: Clone and run immediately
-status: pass            # pass, fail, partial, skip, not-applicable, blocked
+status: pass            # pass, fail, partial, blocked, waived
 severity: critical      # critical, recommended
 section: 01-git-repo-setup
 audited_at: 2026-02-01T10:00:00Z

@@ -1,4 +1,4 @@
-import { getAuditHistory } from "@/lib/checklist";
+import { getAuditHistory, getOrgInfo } from "@/lib/checklist";
 import Link from "next/link";
 
 interface Props {
@@ -7,7 +7,15 @@ interface Props {
 
 export default async function ProjectAuditsPage({ params }: Props) {
   const { project } = await params;
-  const history = await getAuditHistory(project);
+  const isOrg = project === '_org';
+  const [history, orgInfo] = await Promise.all([
+    getAuditHistory(project),
+    isOrg ? getOrgInfo() : Promise.resolve(null),
+  ]);
+
+  const displayName = isOrg
+    ? `${orgInfo?.name ?? 'Organization'} (Organization)`
+    : project;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
@@ -15,7 +23,7 @@ export default async function ProjectAuditsPage({ params }: Props) {
         ← Back to projects
       </Link>
 
-      <h1 className="text-2xl font-bold mb-6">Audit History: {project}</h1>
+      <h1 className="text-2xl font-bold mb-6">Audit History: {displayName}</h1>
 
       {history.length === 0 ? (
         <p className="text-gray-500">No audits yet for this project.</p>
