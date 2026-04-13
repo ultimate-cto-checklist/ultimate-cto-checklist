@@ -63,6 +63,67 @@ const stats = computeStats(sections);
         </ul>
       </section>
 
+      <!-- Org vs Project -->
+      <section class="mb-10">
+        <h2 class="text-lg font-black text-gray-900 mb-3">Org vs. project items</h2>
+        <p class="text-sm text-gray-600 mb-4">
+          Every checklist item is scoped to one of two levels. Understanding this distinction helps you plan your audit and assign the right people.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#16a34a] bg-green-50 px-2 py-0.5 rounded">Org</span>
+              <span class="text-sm font-bold text-gray-900">Organization-level</span>
+            </div>
+            <p class="text-xs text-gray-600 mb-3">
+              Items that apply once across your entire company, regardless of how many projects you have. These are typically owned by a platform team, SRE, or the CTO directly.
+            </p>
+            <p class="text-xs font-bold text-gray-700 mb-1">Examples:</p>
+            <ul class="text-xs text-gray-500 space-y-1 list-disc list-inside">
+              <li>Domain & email infrastructure (SPF, DKIM, DMARC)</li>
+              <li>Intrusion detection & SIEM setup</li>
+              <li>Incident response playbooks</li>
+              <li>Cost monitoring & budget alerts</li>
+              <li>CTO workspace & tooling</li>
+            </ul>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Project</span>
+              <span class="text-sm font-bold text-gray-900">Project-level</span>
+            </div>
+            <p class="text-xs text-gray-600 mb-3">
+              Items checked per codebase. Each project you register gets its own audit, and results are tracked independently. These are owned by the team that ships the project.
+            </p>
+            <p class="text-xs font-bold text-gray-700 mb-1">Examples:</p>
+            <ul class="text-xs text-gray-500 space-y-1 list-disc list-inside">
+              <li>Git repo setup & branch protections</li>
+              <li>Test coverage & code quality</li>
+              <li>Health endpoints & monitoring</li>
+              <li>Deployment pipeline configuration</li>
+              <li>API design & rate limiting</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#16a34a] bg-green-50 px-2 py-0.5 rounded">Org</span>
+            <span class="text-[#16a34a] text-xs font-bold">+</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Project</span>
+            <span class="text-sm font-bold text-gray-900">Both levels</span>
+          </div>
+          <p class="text-xs text-gray-600">
+            Some sections span both levels. For example, <strong>Access Control</strong> has org-wide policies (SSO, MFA enforcement) and project-specific checks (repo permissions, environment secrets). <strong>Secrets Management</strong>, <strong>Data Retention</strong>, and <strong>GDPR Compliance</strong> work the same way — org-level policy, project-level enforcement.
+          </p>
+        </div>
+
+        <p class="text-xs text-gray-400 mt-3">
+          Of the {stats.sectionCount} sections, most are project-scoped. A handful are org-only, and about 8 sections apply at both levels. When you run <code class="text-xs bg-gray-100 px-1 py-0.5 rounded">/audit-start</code>, the system automatically filters items to the right scope based on whether you're auditing your org or a specific project.
+        </p>
+      </section>
+
       <!-- Step-by-step -->
       <section class="mb-10">
         <h2 class="text-lg font-black text-gray-900 mb-4">Step-by-step</h2>
@@ -79,7 +140,7 @@ const stats = computeStats(sections);
           <div class="bg-gray-950 rounded-lg p-4 ml-7 overflow-x-auto">
             <pre class="text-sm text-gray-300 font-mono"><code>mkdir my-company-audits && cd my-company-audits
 git init
-git submodule add https://github.com/rodricCTO/ultimate-cto-checklist checklist</code></pre>
+git submodule add https://github.com/ultimate-cto-checklist/ultimate-cto-checklist checklist</code></pre>
           </div>
         </div>
 
@@ -275,7 +336,7 @@ claude   # launch Claude Code
           Browse the checklist
         </a>
         <a
-          href="https://github.com/rodricCTO/ultimate-cto-checklist"
+          href="https://github.com/ultimate-cto-checklist/ultimate-cto-checklist"
           class="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-200 text-gray-700 text-sm font-bold rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors"
           target="_blank"
         >
