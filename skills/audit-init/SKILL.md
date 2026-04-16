@@ -11,9 +11,10 @@ You are configuring a CTO's audit workspace. This is an interactive setup wizard
 
 ## Pre-flight Checks
 
-1. Verify we're in a valid workspace (not inside checklist repo)
-2. Ensure `checklist/` submodule exists or can be added
-3. Check if `org.yaml` already exists and is fully configured (has cloud_providers, source_control, monitoring, etc. — not just name/slug/created_at):
+1. **Run environment check:** Read and follow `checklist/skills/audit-preflight/SKILL.md` to verify core tools (git, node, gh) are installed and authenticated. Do NOT proceed if core tools are missing — guide the user through fixing them first.
+2. Verify we're in a valid workspace (not inside checklist repo)
+3. Ensure `checklist/` submodule exists or can be added
+4. Check if `org.yaml` already exists and is fully configured (has cloud_providers, source_control, monitoring, etc. — not just name/slug/created_at):
    - **Fully configured:** Show a summary and ask if they want to reconfigure. If not, tell them they're ready and suggest `/audit` to start.
    - **Minimal (just name/slug):** Tell them you'll fill in the rest, skip Step 1 (use the existing name), start from Step 2.
    - **Missing:** Start from Step 1.
@@ -192,6 +193,8 @@ Generate instructions specific to their tooling:
 # [Org Name] Audit Workspace
 
 This workspace is configured for auditing [org name]'s technical infrastructure.
+
+Also follow instructions in `checklist/CLAUDE.md`.
 
 ## Quick Reference
 

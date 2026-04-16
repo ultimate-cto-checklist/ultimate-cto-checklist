@@ -26,6 +26,7 @@ for (const section of sections) {
 
 const isIntroActive = currentSlug === '';
 const isGettingStartedActive = currentSlug === 'getting-started';
+const isEnvironmentSetupActive = currentSlug === 'environment-setup';
 ---
 <nav class="w-56 shrink-0 overflow-y-auto max-h-[calc(100vh-3.5rem)] sticky top-14 border-r border-gray-100">
   <div class="py-5 pl-5 pr-3">
@@ -64,6 +65,21 @@ const isGettingStartedActive = currentSlug === 'getting-started';
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         Getting Started
+      </a>
+      <a
+        href="/checklist/environment-setup/"
+        class:list={[
+          'flex items-center gap-2 px-2.5 py-1.5 text-[13px] rounded-md transition-all mt-0.5',
+          isEnvironmentSetupActive
+            ? 'bg-[#052e16] text-white font-semibold shadow-sm'
+            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
+        ]}
+      >
+        <svg class:list={['w-3.5 h-3.5 shrink-0', isEnvironmentSetupActive ? 'text-[#4ade80]' : 'text-gray-300']} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Environment Setup
       </a>
       <a
         href="/checklist/commands/"

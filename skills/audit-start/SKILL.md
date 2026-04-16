@@ -18,10 +18,11 @@ You are starting a new audit for a project.
 
 ## Pre-flight Checks
 
-1. Verify `org.yaml` exists — if not, read and follow `checklist/skills/audit-init/SKILL.md` first
-2. Verify project exists in `projects/` — if not, read and follow `checklist/skills/audit-add-project/SKILL.md`
-3. Check for in-progress audit (warn if exists)
-4. **Read the project config** (`projects/<name>.yaml`) and extract the `repo` field
+1. **Run environment check:** Read and follow `checklist/skills/audit-preflight/SKILL.md` to verify tools are installed and authenticated. Check both core tools and cloud CLIs (based on `org.yaml`). If core tools fail, stop and help the user fix them. If only cloud tools are missing, warn and offer to continue (cloud-dependent items will be marked blocked).
+2. Verify `org.yaml` exists — if not, read and follow `checklist/skills/audit-init/SKILL.md` first
+3. Verify project exists in `projects/` — if not, read and follow `checklist/skills/audit-add-project/SKILL.md`
+4. Check for in-progress audit (warn if exists)
+5. **Read the project config** (`projects/<name>.yaml`) and extract the `repo` field
 
 ## Autonomous Evidence Gathering
 

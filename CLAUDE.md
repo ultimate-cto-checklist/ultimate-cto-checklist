@@ -104,6 +104,18 @@ pm2 logs cto-checklist-dashboard-dev
 
 Runs on **http://localhost:6555**.
 
+## Workspace Behavior
+
+When working inside a workspace that uses this checklist as a submodule, always commit and push audit changes before ending a session:
+
+```bash
+git add audits/ waivers/ org.yaml projects/
+git commit -m "audit({project}): {date}"
+git push
+```
+
+This applies after any audit activity — running audits, fixing items, updating waivers, or adding notes. The dashboard reads from the remote repo, so unpushed results won't appear.
+
 ## Conventions
 
 - Checklist items should be actionable (start with verbs)

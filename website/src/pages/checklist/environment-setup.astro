@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChecklistSidebar from '../../components/ChecklistSidebar.astro';
+---
+
+<BaseLayout title="Environment Setup" description="Install and configure the tools needed to run CTO Checklist audits. Covers GitHub CLI, cloud CLIs, and authentication.">
+  <div class="flex min-h-screen">
+    <ChecklistSidebar currentSlug="environment-setup" />
+    <main class="flex-1 py-8 px-8 max-w-3xl">
+
+      <div class="mb-10">
+        <p class="text-xs uppercase tracking-widest text-[#16a34a] font-bold mb-2">Environment Setup</p>
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-3">
+          Set up your tools
+        </h1>
+        <p class="text-gray-500 max-w-2xl">
+          The audit system verifies your infrastructure by calling real APIs and inspecting real repos. That means it needs the same CLI tools you use day-to-day &mdash; installed and authenticated.
+        </p>
+      </div>
+
+      <!-- Preflight check -->
+      <section class="mb-10 bg-gray-50 rounded-lg p-5 border border-gray-100">
+        <div class="flex items-start gap-3">
+          <div class="bg-[#052e16] text-white text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-gray-900 mb-1">Automatic environment check</p>
+            <p class="text-sm text-gray-600">
+              You don't need to manually verify all of this. Run <code class="text-xs bg-white px-1.5 py-0.5 rounded border border-gray-200">/audit-preflight</code> in Claude Code and it will check every tool, report what's missing, and tell you exactly how to fix it.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Core tools -->
+      <section class="mb-10">
+        <h2 class="text-lg font-black text-gray-900 mb-2">Core tools</h2>
+        <p class="text-sm text-gray-500 mb-4">Required for every audit, regardless of your stack.</p>
+
+        <!-- Git -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Required</span>
+            Git
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">Repos are cloned and analyzed during audits. You almost certainly have this already.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Check</span>
+git --version
+
+<span class="text-gray-500"># Install (macOS)</span>
+brew install git</code></pre>
+          </div>
+        </div>
+
+        <!-- Node.js -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Required</span>
+            Node.js
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">Used for schema validation during audits. Version 18 or later recommended.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Check</span>
+node --version
+npx --version
+
+<span class="text-gray-500"># Install (macOS)</span>
+brew install node
+
+<span class="text-gray-500"># Or with nvm</span>
+nvm install --lts</code></pre>
+          </div>
+        </div>
+
+        <!-- Claude Code -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Required</span>
+            Claude Code
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">The AI CLI that runs audit skills. This is the engine behind the entire system.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Install</span>
+npm install -g @anthropic-ai/claude-code
+
+<span class="text-gray-500"># Verify</span>
+claude --version</code></pre>
+          </div>
+        </div>
+
+        <!-- GitHub CLI -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Required</span>
+            GitHub CLI
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">Used heavily for checking branch protections, CI status, repo settings, and org configuration. Must be authenticated with <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">repo</code> and <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">read:org</code> scopes.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Install</span>
+brew install gh
+
+<span class="text-gray-500"># Authenticate</span>
+gh auth login
+
+<span class="text-gray-500"># Verify</span>
+gh auth status
+
+<span class="text-gray-500"># If missing scopes</span>
+gh auth refresh -s repo,read:org</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cloud provider tools -->
+      <section class="mb-10">
+        <h2 class="text-lg font-black text-gray-900 mb-2">Cloud provider tools</h2>
+        <p class="text-sm text-gray-500 mb-4">Install the CLIs for cloud providers you use. These are checked based on what you configure in <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">org.yaml</code> during <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded">/audit-init</code>.</p>
+
+        <!-- AWS -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-100 px-2 py-0.5 rounded">If using AWS</span>
+            AWS CLI
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">Checks RDS backups, S3 replication, EC2 availability zones, load balancer configs, and more.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Install</span>
+brew install awscli
+
+<span class="text-gray-500"># Authenticate</span>
+aws configure
+<span class="text-gray-500"># Or with SSO</span>
+aws sso login
+
+<span class="text-gray-500"># Verify</span>
+aws sts get-caller-identity</code></pre>
+          </div>
+        </div>
+
+        <!-- GCP -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-100 px-2 py-0.5 rounded">If using GCP</span>
+            Google Cloud CLI
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">Checks Cloud SQL HA, compute zones, backup policies, and GCP-specific infrastructure items.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Install</span>
+brew install --cask google-cloud-sdk
+
+<span class="text-gray-500"># Authenticate</span>
+gcloud auth login
+
+<span class="text-gray-500"># Set project</span>
+gcloud config set project YOUR_PROJECT_ID
+
+<span class="text-gray-500"># Verify</span>
+gcloud auth list --filter=status:ACTIVE</code></pre>
+          </div>
+        </div>
+
+        <!-- Azure -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-100 px-2 py-0.5 rounded">If using Azure</span>
+            Azure CLI
+          </h3>
+          <p class="text-sm text-gray-600 mb-2">Checks SQL zone redundancy, availability sets, and Azure-specific infrastructure.</p>
+          <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+            <pre class="text-sm text-gray-300 font-mono"><code><span class="text-gray-500"># Install</span>
+brew install azure-cli
+
+<span class="text-gray-500"># Authenticate</span>
+az login
+
+<span class="text-gray-500"># Verify</span>
+az account show</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- What happens without cloud tools -->
+      <section class="mb-10">
+        <h2 class="text-lg font-black text-gray-900 mb-3">What if I skip a cloud CLI?</h2>
+        <p class="text-sm text-gray-600 mb-3">
+          The audit won't break. Items that need a missing tool are marked <strong class="text-gray-700">blocked</strong> instead of failing. You'll see them in your results with a clear note about what access is needed.
+        </p>
+        <p class="text-sm text-gray-600">
+          This means you can start auditing immediately with just the core tools and add cloud CLIs later when you're ready to check infrastructure-level items.
+        </p>
+      </section>
+
+      <!-- Org access -->
+      <section class="mb-10">
+        <h2 class="text-lg font-black text-gray-900 mb-3">Org and repo access</h2>
+        <p class="text-sm text-gray-600 mb-3">
+          Beyond having the CLI tools installed, the authenticated user needs the right permissions:
+        </p>
+        <div class="space-y-3">
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <p class="text-sm font-bold text-gray-900 mb-1">GitHub org membership</p>
+            <p class="text-xs text-gray-600">The <code class="text-xs bg-white px-1 py-0.5 rounded border border-gray-200">gh</code> user must be a member (ideally admin) of the GitHub org being audited. Org-level checks (branch protection defaults, security settings, team structure) require this.</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <p class="text-sm font-bold text-gray-900 mb-1">Repo read access</p>
+            <p class="text-xs text-gray-600">The audit clones repos and calls the GitHub API. You need at least read access to every repo you're auditing. The preflight check verifies this per-project.</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+            <p class="text-sm font-bold text-gray-900 mb-1">Cloud IAM permissions</p>
+            <p class="text-xs text-gray-600">Cloud CLI checks need read access to the services being audited (RDS, Cloud SQL, EC2, etc.). A read-only IAM role or viewer role is sufficient for audit purposes.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Preflight command -->
+      <section class="mb-10 bg-[#f0fdf4] rounded-lg p-5 border border-green-100">
+        <h2 class="text-sm font-bold text-gray-900 mb-2">Run the preflight check</h2>
+        <p class="text-sm text-gray-600 mb-3">
+          Instead of checking everything manually, let Claude do it for you. The preflight command checks every tool, verifies authentication, and gives you copy-paste commands to fix any gaps.
+        </p>
+        <div class="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+          <pre class="text-sm text-gray-300 font-mono"><code>claude                  <span class="text-gray-500"># launch Claude Code in your workspace</span>
+&gt; /audit-preflight      <span class="text-gray-500"># check everything</span></code></pre>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">This also runs automatically before <code class="text-xs bg-white px-1 py-0.5 rounded border border-gray-200">/audit-init</code> and <code class="text-xs bg-white px-1 py-0.5 rounded border border-gray-200">/audit-start</code>, so you'll be prompted if anything is missing.</p>
+      </section>
+
+      <!-- CTA -->
+      <div class="flex gap-3">
+        <a
+          href="/checklist/getting-started/"
+          class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#052e16] text-white text-sm font-bold rounded-lg hover:bg-[#14532d] transition-colors"
+        >
+          Getting started guide
+        </a>
+        <a
+          href="/checklist/commands/"
+          class="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-200 text-gray-700 text-sm font-bold rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors"
+        >
+          All commands
+        </a>
+      </div>
+
+    </main>
+  </div>
+</BaseLayout>
