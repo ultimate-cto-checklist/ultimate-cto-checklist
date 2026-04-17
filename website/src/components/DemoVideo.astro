@@ -52,6 +52,23 @@
     video.muted = true;
     (video as HTMLVideoElement & { playsInline?: boolean }).playsInline = true;
 
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (!isMobile) {
+      // Desktop gets native controls; mobile plays clean + tap to fullscreen.
+      video.setAttribute('controls', '');
+    } else {
+      video.addEventListener('click', () => {
+        const v = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+        if (typeof v.webkitEnterFullscreen === 'function') {
+          // iOS Safari: standard Fullscreen API isn't supported on <video>,
+          // but webkitEnterFullscreen enters the native video player.
+          v.webkitEnterFullscreen();
+        } else if (typeof video.requestFullscreen === 'function') {
+          void video.requestFullscreen();
+        }
+      });
+    }
+
     let ended = false;
 
     const tryPlay = () => {
