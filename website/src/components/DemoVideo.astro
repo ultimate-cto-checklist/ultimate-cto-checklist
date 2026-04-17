@@ -3,7 +3,7 @@
     <div class="text-center mb-10 md:mb-12">
       <p class="text-xs uppercase tracking-widest text-[#16a34a] font-bold mb-3">See it in action</p>
       <h2 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-3">
-        From cold clone to a full audit in <span class="text-[#16a34a]">35 seconds</span>.
+        From cold clone to a full audit in <span class="text-[#16a34a]">30 seconds</span>.
       </h2>
       <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
         Run the audit locally with Claude. Browse results in a dashboard. Ask follow-ups inline when a check fails — and let Claude fix it.
@@ -17,29 +17,60 @@
         src="/videos/demo.mp4"
         poster="/videos/demo-poster.jpg"
         muted
-        loop
         playsinline
         preload="metadata"
         controls
         aria-label="CTO Checklist demo — running an audit and asking Claude to fix a failing check"
       ></video>
+
+      <button
+        id="demo-replay"
+        type="button"
+        class="absolute inset-0 hidden items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity cursor-pointer"
+        aria-label="Replay demo video"
+      >
+        <span class="inline-flex items-center gap-2.5 rounded-full bg-[#052e16] text-[#ecfdf5] px-6 py-3 font-bold text-sm shadow-[0_8px_24px_rgba(5,46,22,0.4)]">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 9a9 9 0 0114.5-4.5L20 9M20 15a9 9 0 01-14.5 4.5L4 15" />
+          </svg>
+          Replay
+        </span>
+      </button>
     </div>
   </div>
 </section>
 
 <script>
   const video = document.getElementById('demo-video') as HTMLVideoElement | null;
+  const replay = document.getElementById('demo-replay') as HTMLButtonElement | null;
+
   if (video) {
+    let ended = false;
+
+    video.addEventListener('ended', () => {
+      ended = true;
+      replay?.classList.remove('hidden');
+      replay?.classList.add('flex');
+    });
+
+    replay?.addEventListener('click', () => {
+      replay.classList.add('hidden');
+      replay.classList.remove('flex');
+      ended = false;
+      video.currentTime = 0;
+      void video.play().catch(() => {
+        /* play may be blocked — user can still use native controls */
+      });
+    });
+
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduced) {
       const io = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
-            if (entry.isIntersecting) {
-              video.play().catch(() => {
-                /* autoplay may still be blocked — controls remain available */
-              });
-            } else {
+            if (entry.isIntersecting && !ended) {
+              void video.play().catch(() => {});
+            } else if (!entry.isIntersecting) {
               video.pause();
             }
           }
