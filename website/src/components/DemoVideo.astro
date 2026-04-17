@@ -18,7 +18,9 @@
         poster="/videos/demo-poster.jpg"
         muted
         playsinline
-        preload="metadata"
+        webkit-playsinline
+        disableRemotePlayback
+        preload="auto"
         controls
         aria-label="CTO Checklist demo — running an audit and asking Claude to fix a failing check"
       ></video>
@@ -45,7 +47,23 @@
   const replay = document.getElementById('demo-replay') as HTMLButtonElement | null;
 
   if (video) {
+    // Defensive: some iOS configurations require muted to be set as a JS
+    // property, not just the HTML attribute, for inline autoplay to work.
+    video.muted = true;
+    (video as HTMLVideoElement & { playsInline?: boolean }).playsInline = true;
+
     let ended = false;
+
+    const tryPlay = () => {
+      const attempt = video.play();
+      if (attempt && typeof attempt.then === 'function') {
+        attempt.catch((err: unknown) => {
+          // Surface the real reason so we can diagnose iOS autoplay refusals
+          // (e.g., Low Power Mode, per-site autoplay block).
+          console.warn('[demo-video] autoplay blocked:', err);
+        });
+      }
+    };
 
     video.addEventListener('ended', () => {
       ended = true;
@@ -58,9 +76,7 @@
       replay.classList.remove('flex');
       ended = false;
       video.currentTime = 0;
-      void video.play().catch(() => {
-        /* play may be blocked — user can still use native controls */
-      });
+      tryPlay();
     });
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -69,7 +85,7 @@
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting && !ended) {
-              void video.play().catch(() => {});
+              tryPlay();
             } else if (!entry.isIntersecting) {
               video.pause();
             }
