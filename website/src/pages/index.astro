@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import DemoVideo from '../components/DemoVideo.astro';
 import HowItWorksExcerpt from '../components/HowItWorksExcerpt.astro';
 import DomainGrid from '../components/DomainGrid.astro';
 import EmailCapture from '../components/EmailCapture.astro';
@@ -28,6 +29,7 @@ const questions = loadAllQuestions();
       <RollingQuestions client:idle questions={questions} />
     </div>
   </div>
+  <DemoVideo />
   <HowItWorksExcerpt />
   <div class="bg-[#edf5f0] border-y border-[#d5e5db] py-14 px-6 text-center">
     <p class="text-xl text-[#166534] max-w-2xl mx-auto leading-relaxed">

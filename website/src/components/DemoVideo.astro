@@ -1,0 +1,38 @@
+<section class="bg-[#f6faf7] border-y border-[#e3ede7] py-16 md:py-24 px-6">
+  <div class="max-w-[1100px] mx-auto">
+    <div class="text-center mb-10 md:mb-12">
+      <p class="text-xs uppercase tracking-widest text-[#16a34a] font-bold mb-3">See it in action</p>
+      <h2 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-3">
+        From cold clone to a full audit in <span class="text-[#16a34a]">35 seconds</span>.
+      </h2>
+      <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+        Run the audit locally with Claude. Browse results in a dashboard. Ask follow-ups inline when a check fails — and let Claude fix it.
+      </p>
+    </div>
+
+    <div class="relative rounded-2xl overflow-hidden border border-[#e3ede7] shadow-[0_10px_40px_rgba(5,46,22,0.08)] bg-white">
+      <video
+        class="block w-full h-auto aspect-video"
+        src="/videos/demo.mp4"
+        poster="/videos/demo-poster.jpg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        controls
+        aria-label="CTO Checklist demo — running an audit and asking Claude to fix a failing check"
+      ></video>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Respect prefers-reduced-motion: pause autoplay so only the poster shows
+  // until the user opts in via the controls.
+  const video = document.querySelector<HTMLVideoElement>('section video[src="/videos/demo.mp4"]');
+  if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.removeAttribute('autoplay');
+    video.pause();
+  }
+</script>
