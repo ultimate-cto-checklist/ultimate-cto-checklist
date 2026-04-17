@@ -12,10 +12,10 @@
 
     <div class="relative rounded-2xl overflow-hidden border border-[#e3ede7] shadow-[0_10px_40px_rgba(5,46,22,0.08)] bg-white">
       <video
+        id="demo-video"
         class="block w-full h-auto aspect-video"
         src="/videos/demo.mp4"
         poster="/videos/demo-poster.jpg"
-        autoplay
         muted
         loop
         playsinline
@@ -28,11 +28,25 @@
 </section>
 
 <script>
-  // Respect prefers-reduced-motion: pause autoplay so only the poster shows
-  // until the user opts in via the controls.
-  const video = document.querySelector<HTMLVideoElement>('section video[src="/videos/demo.mp4"]');
-  if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    video.removeAttribute('autoplay');
-    video.pause();
+  const video = document.getElementById('demo-video') as HTMLVideoElement | null;
+  if (video) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              video.play().catch(() => {
+                /* autoplay may still be blocked — controls remain available */
+              });
+            } else {
+              video.pause();
+            }
+          }
+        },
+        { threshold: 0.5 },
+      );
+      io.observe(video);
+    }
   }
 </script>
