@@ -76,6 +76,9 @@
       const onExitFullscreen = () => {
         video.removeEventListener('click', onTapFullscreen);
         video.setAttribute('controls', '');
+        // iOS auto-pauses when the native fullscreen player is dismissed.
+        // Resume inline playback so the demo keeps running unless it ended.
+        if (!ended) tryPlay();
       };
       video.addEventListener('webkitbeginfullscreen', () => {
         wasFullscreen = true;
