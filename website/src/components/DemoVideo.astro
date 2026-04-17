@@ -57,7 +57,7 @@
       // Desktop gets native controls; mobile plays clean + tap to fullscreen.
       video.setAttribute('controls', '');
     } else {
-      video.addEventListener('click', () => {
+      const onTapFullscreen = () => {
         const v = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
         if (typeof v.webkitEnterFullscreen === 'function') {
           // iOS Safari: standard Fullscreen API isn't supported on <video>,
@@ -65,6 +65,27 @@
           v.webkitEnterFullscreen();
         } else if (typeof video.requestFullscreen === 'function') {
           void video.requestFullscreen();
+        }
+      };
+      video.addEventListener('click', onTapFullscreen);
+
+      // Once the user has gone fullscreen at least once, they're engaged —
+      // swap the tap-to-fullscreen gesture for native controls so they can
+      // scrub, pause, etc. inline without having to re-open fullscreen.
+      let wasFullscreen = false;
+      const onExitFullscreen = () => {
+        video.removeEventListener('click', onTapFullscreen);
+        video.setAttribute('controls', '');
+      };
+      video.addEventListener('webkitbeginfullscreen', () => {
+        wasFullscreen = true;
+      });
+      video.addEventListener('webkitendfullscreen', onExitFullscreen);
+      document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement === video) {
+          wasFullscreen = true;
+        } else if (wasFullscreen) {
+          onExitFullscreen();
         }
       });
     }
